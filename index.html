@@ -10,7 +10,10 @@
 <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,500..900;1,6..96,500..900&family=Oswald:wght@600;700&family=Manrope:wght@300;400;500;600;700&family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+<link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@500,700,800&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=erode@400,500,600&display=swap" rel="stylesheet">
 
 <style>
 /* ============================================================
@@ -36,9 +39,9 @@
   --radius:22px;
   --radius-sm:14px;
   --shadow:0 30px 60px -20px rgba(0,0,0,.65);
-  --ff-display:"Bodoni Moda",Didot,"Times New Roman",serif;
-  --ff-body:"Manrope",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
-  --ff-num:"Montserrat","Manrope",system-ui,sans-serif;
+  --ff-display:"Cabinet Grotesk",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;  /* titles, buttons, labels, numbers */
+  --ff-body:"Erode",Georgia,"Times New Roman",serif;                                /* running text */
+  --ff-num:var(--ff-display);
   --maxw:1220px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -55,13 +58,14 @@ button,input,select{font:inherit;color:inherit}
 ::selection{background:var(--gold);color:#fff}
 
 /* ---------- utilities ---------- */
+.btn,.nav-links,.mobile-menu a,.eyebrow,.hero-kicker,.chip,.car-type,.car-badge,.car-brand,.field label,.mbar a,.hero-stats span,.form-sub,.toast span{font-family:var(--ff-display)}
 .eyebrow{
   display:inline-flex;align-items:center;gap:10px;
   font-size:.74rem;letter-spacing:.32em;text-transform:uppercase;color:var(--gold);font-weight:600;
 }
 .eyebrow::before{content:"";width:28px;height:1px;background:var(--gold)}
 .h-display{
-  font-family:var(--ff-display);font-weight:700;line-height:1.05;letter-spacing:-.01em;color:var(--ivory);
+  font-family:var(--ff-display);font-weight:800;line-height:1.02;letter-spacing:-.02em;color:var(--ivory);
 }
 .gold-text{background:var(--gold-grad);-webkit-background-clip:text;background-clip:text;color:transparent}
 .section{padding:110px 0;position:relative}
@@ -120,7 +124,7 @@ button,input,select{font:inherit;color:inherit}
 .lang{display:flex;border:1px solid var(--line);border-radius:999px;padding:3px;background:rgba(255,255,255,.02)}
 .lang button{
   border:0;background:transparent;cursor:pointer;height:32px;min-width:38px;padding:0 10px;border-radius:999px;
-  font-size:.78rem;font-weight:700;color:var(--muted);letter-spacing:.06em;transition:.25s;font-family:"Manrope",sans-serif;
+  font-size:.78rem;font-weight:700;color:var(--muted);letter-spacing:.06em;transition:.25s;font-family:var(--ff-display);
 }
 .lang button.active{background:var(--gold-grad);color:var(--on-accent)}
 .nav .btn{--h:42px;padding:0 20px;font-size:.85rem}
@@ -144,7 +148,15 @@ button,input,select{font:inherit;color:inherit}
 .aura-2{background:radial-gradient(ellipse 35% 40% at 70% 35%,rgba(153,27,27,.7) 0%,transparent 65%);filter:blur(198px)}
 .aura-3{background:radial-gradient(ellipse 30% 35% at 25% 70%,rgba(239,68,68,.5) 0%,transparent 55%);filter:blur(162px)}
 .aura-4{background:radial-gradient(ellipse 22% 25% at 60% 80%,rgba(185,28,28,.4) 0%,transparent 60%);filter:blur(126px)}
-@media (max-width:640px){.aura-1{filter:blur(150px)}.aura-2{filter:blur(138px)}.aura-3{filter:blur(113px)}.aura-4{filter:blur(88px)}}
+/* phones: four blurred, blended full-screen layers make scrolling heavy, so paint the same glow as one plain background */
+@media (max-width:640px){
+  .aura i{display:none}
+  .aura{background:
+    radial-gradient(ellipse 85% 60% at 40% 45%,rgba(220,38,38,.30),transparent 72%),
+    radial-gradient(ellipse 70% 50% at 75% 30%,rgba(153,27,27,.26),transparent 72%),
+    radial-gradient(ellipse 65% 45% at 25% 72%,rgba(239,68,68,.16),transparent 72%),
+    radial-gradient(ellipse 55% 40% at 60% 85%,rgba(185,28,28,.14),transparent 72%)}
+}
 .trust{background:rgba(16,14,11,.45)}
 .reserve{background:rgba(16,14,11,.3)}
 .nav.scrolled{background:rgba(16,14,11,.78)}
@@ -169,7 +181,7 @@ button,input,select{font:inherit;color:inherit}
 .hero-grid{display:block;max-width:none;padding:0;position:relative;z-index:1}
 .hero-copy{margin-inline-start:var(--copy-start);max-width:var(--avail)}
 .hero-kicker{display:block;font-size:.72rem;letter-spacing:.34em;text-transform:uppercase;color:#d6d6db;font-weight:600;line-height:1.9}
-.hero h1{margin:18px 0 22px;text-transform:uppercase;font-weight:800;line-height:.88;letter-spacing:-.015em}
+.hero h1{margin:18px 0 22px;text-transform:uppercase;font-weight:800;line-height:.9;letter-spacing:-.025em}
 .hero h1 .l1{display:block;white-space:nowrap;color:var(--gold);font-size:min(7vw,calc(var(--avail) / 4.8))}
 .hero h1 .l2{display:block;white-space:nowrap;color:var(--ivory);font-size:min(4.7vw,calc(var(--avail) / 6.4));margin-top:.08em}
 .hero p.lead{font-size:1rem;color:#d0d0d5;max-width:min(400px,var(--avail));margin-bottom:28px;line-height:1.7}
@@ -215,17 +227,6 @@ button,input,select{font:inherit;color:inherit}
 }
 .car:hover{transform:translateY(-6px);border-color:var(--line);box-shadow:var(--shadow)}
 .car.hide{display:none}
-/* mobile "flip stack": cards wait under each other; scrolling lifts and tilts the top one away */
-.fleet-grid.stack{display:block;position:relative}
-.stack-stage{position:sticky;top:84px;perspective:1100px;transform-origin:50% 0}
-.stack .car-stage{aspect-ratio:2/1}
-.stack .car-body{padding:16px 18px 18px}
-.stack .car-tags{margin-bottom:10px}
-.stack .car-desc{min-height:0;margin:8px 0 12px;font-size:.86rem}
-.stack .specs{margin-bottom:12px}
-.stack .opts{margin-bottom:14px}
-.stack .car{position:absolute;left:0;right:0;top:0;transform-origin:50% 100%;transition:none;will-change:transform,opacity;backface-visibility:hidden}
-.stack .car:hover{transform:none}
 .fleet-grid.all .car:last-child:nth-child(3n+1){grid-column:2}
 .car-stage{position:relative;aspect-ratio:16/9;max-width:100%;overflow:hidden;background:#0d0d10;border-bottom:1px solid var(--line)}
 .car-stage::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,transparent 70%,rgba(13,13,16,.55))}
@@ -922,6 +923,7 @@ const $$ = (s, r=document) => [...r.querySelectorAll(s)];
 const t = k => (I18N[lang] && I18N[lang][k]) || I18N.fr[k] || k;
 const carById = id => CARS.find(c => c.id === id);
 const state = { filter:"all" };
+const animateCards = matchMedia("(min-width:641px)").matches;
 CARS.forEach(c => { if (PHOTOS[c.id]) c.photo = PHOTOS[c.id]; });
 
 /* --- car imagery: studio render → your own photo → elegant silhouette --- */
@@ -972,12 +974,11 @@ function renderFilters(){
 function applyFilter(){
   $("#fleetGrid").classList.toggle("all", state.filter==="all");
   $$(".car").forEach(el => el.classList.toggle("hide", state.filter!=="all" && el.dataset.type!==state.filter));
-  if (typeof io !== "undefined") layoutFleet();
 }
 function renderFleet(){
   const grid = $("#fleetGrid");
   grid.innerHTML = CARS.map(c => `
-    <article class="car reveal" data-id="${c.id}" data-type="${c.type}">
+    <article class="car${animateCards ? " reveal" : ""}" data-id="${c.id}" data-type="${c.type}">
       <div class="car-stage">
         <img loading="lazy" style="opacity:0">
       </div>
@@ -1012,53 +1013,14 @@ function renderFleet(){
     $(".js-reserve", el).onclick = () => { selectCar(car.id); };
   });
   applyFilter();
+  revealCards();
 }
 
-/* desktop: cards rise in row by row; mobile: flip stack */
-const mqStack = matchMedia("(max-width:640px)");
-let stack = null;
-function layoutFleet(){
-  const grid = $("#fleetGrid");
-  const cards = $$(".car", grid);
-  const shown = cards.filter(c => !c.classList.contains("hide"));
-  grid.querySelector(".stack-stage")?.replaceWith(...cards);
-  cards.forEach(c => { c.style.cssText = ""; });
-  stack = null; grid.style.height = "";
-  grid.classList.toggle("stack", mqStack.matches);
-  if (!mqStack.matches){
-    shown.forEach((c,i) => { c.style.transitionDelay = (i%3)*110 + "ms"; c.classList.remove("in"); io.observe(c); });
-    return;
-  }
-  const stage = document.createElement("div");
-  stage.className = "stack-stage";
-  grid.prepend(stage); stage.append(...cards);
-  shown.forEach(c => c.classList.add("in"));
-  const h = Math.max(...shown.map(c => c.offsetHeight));
-  const step = Math.round(h * .85);
-  // shrink the whole stack a little on short phones so a card always fits between the bars
-  const room = innerHeight - 84 - 84;
-  const k = Math.min(1, room / h);
-  shown.forEach(c => { c.style.height = h + "px"; });
-  stage.style.height = h + "px";
-  stage.style.transform = k < 1 ? `scale(${k.toFixed(3)})` : "";
-  grid.style.height = h*k + (shown.length-1)*step + "px";
-  stack = { grid, shown, step };
-  paintStack();
+/* desktop: cards rise in row by row; mobile: no card animation, so scrolling stays light */
+function revealCards(){
+  if (!animateCards) return;
+  $$(".car.reveal:not(.in)").forEach((c,i) => { c.style.transitionDelay = (i%3)*110 + "ms"; io.observe(c); });
 }
-function paintStack(){
-  if (!stack) return;
-  const { grid, shown, step } = stack;
-  const p = Math.min(Math.max((84 - grid.getBoundingClientRect().top) / step, 0), shown.length-1);
-  shown.forEach((c,i) => {
-    const t = Math.min(Math.max(p - i, 0), 1);
-    c.style.zIndex = shown.length - i;
-    c.style.visibility = t >= 1 ? "hidden" : "visible";
-    c.style.opacity = t > .55 ? Math.max(0, 1 - (t-.55)/.45) : 1;
-    c.style.transform = t ? `translateY(${-t*95}%) rotateX(${t*32}deg) scale(${1 + t*.06})` : "";
-  });
-}
-addEventListener("scroll", () => requestAnimationFrame(paintStack), {passive:true});
-let rz; addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(layoutFleet, 150); });
 
 /* --- reservation form --- */
 const fCar=$("#fCar"), fName=$("#fName"), fPhone=$("#fPhone"), fFrom=$("#fFrom"), fTo=$("#fTo");
