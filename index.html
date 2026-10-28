@@ -1,0 +1,1448 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Super Fast Car — Location de voitures à Casablanca</title>
+<meta name="description" content="Super Fast Car — location de voitures à Casablanca, 24h/24. Dacia, Renault, Hyundai, Volkswagen, Citroën dès 199 DH/jour. Réservez en quelques minutes sur WhatsApp.">
+<meta name="theme-color" content="#0b0b0d">
+<link rel="icon" type="image/svg+xml" href="images/favicon.svg">
+<link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,500..900;1,6..96,500..900&family=Oswald:wght@600;700&family=Manrope:wght@300;400;500;600;700&family=Montserrat:wght@500;600;700&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   DIRECTION CAR — design tokens
+   ============================================================ */
+:root{
+  --bg:#0b0b0d;
+  --bg-2:#111114;
+  --surface:#16161a;
+  --surface-2:#1d1d22;
+  --line:rgba(225,38,45,.22);
+  --line-soft:rgba(255,255,255,.07);
+  --gold:#e1262d;            /* "gold" = the brand accent: the red of the logo */
+  --gold-2:#ff6b70;
+  --gold-3:#9e1016;
+  --gold-grad:linear-gradient(135deg,#ff5459 0%,#e1262d 45%,#a3121a 100%);
+  --on-accent:#fff;
+  --ivory:#f4f4f5;
+  --text:#e9e9ec;
+  --muted:#9b9ba3;
+  --touch:#a3121a;
+  --ok:#3fb27f;
+  --radius:22px;
+  --radius-sm:14px;
+  --shadow:0 30px 60px -20px rgba(0,0,0,.65);
+  --ff-display:"Bodoni Moda",Didot,"Times New Roman",serif;
+  --ff-body:"Manrope",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  --ff-num:"Montserrat","Manrope",system-ui,sans-serif;
+  --maxw:1220px;
+}
+html[lang="ar"]{
+  --ff-display:"Tajawal",system-ui,sans-serif;
+  --ff-body:"Tajawal",system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+section[id]{scroll-margin-top:70px}
+body{
+  background:var(--bg);color:var(--text);font-family:var(--ff-body);
+  font-size:16px;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased;
+}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+button,input,select{font:inherit;color:inherit}
+.container{width:100%;max-width:var(--maxw);margin:0 auto;padding:0 20px}
+::selection{background:var(--gold);color:#fff}
+
+/* ---------- utilities ---------- */
+.eyebrow{
+  display:inline-flex;align-items:center;gap:10px;
+  font-size:.74rem;letter-spacing:.32em;text-transform:uppercase;color:var(--gold);font-weight:600;
+}
+html[lang="ar"] .eyebrow{letter-spacing:.05em;font-size:.9rem}
+.eyebrow::before{content:"";width:28px;height:1px;background:var(--gold)}
+.h-display{
+  font-family:var(--ff-display);font-weight:700;line-height:1.05;letter-spacing:-.01em;color:var(--ivory);
+}
+html[lang="ar"] .h-display{font-weight:800;line-height:1.25;letter-spacing:0}
+.gold-text{background:var(--gold-grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.section{padding:110px 0;position:relative}
+.section-head{max-width:640px;margin-bottom:54px}
+.section-head h2{font-size:clamp(2.3rem,5vw,3.6rem);margin:14px 0 14px}
+.section-head p{color:var(--muted);font-size:1.05rem}
+
+.btn{
+  --h:54px;display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  height:var(--h);padding:0 28px;border-radius:999px;border:1px solid transparent;cursor:pointer;
+  font-weight:600;font-size:.95rem;letter-spacing:.04em;transition:transform .25s,box-shadow .25s,background .25s,color .25s,border-color .25s;
+  white-space:nowrap;
+}
+.btn svg{width:18px;height:18px;flex:none}
+.btn-gold{background:var(--gold-grad);color:var(--on-accent);box-shadow:0 10px 30px -10px rgba(225,38,45,.6)}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 18px 40px -12px rgba(225,38,45,.75)}
+.btn-ghost{border-color:rgba(225,38,45,.55);color:var(--gold-2);background:rgba(225,38,45,.04);backdrop-filter:blur(6px)}
+.btn-ghost:hover{background:rgba(225,38,45,.12);transform:translateY(-2px)}
+.btn:active{transform:translateY(0) scale(.98)}
+html[dir="rtl"] .btn .arrow{transform:scaleX(-1)}
+
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1)}
+.reveal.in{opacity:1;transform:none}
+
+/* ============================================================
+   NAV
+   ============================================================ */
+.nav{
+  position:fixed;inset:0 0 auto 0;z-index:50;transition:background .35s,border-color .35s,backdrop-filter .35s;
+  border-bottom:1px solid transparent;
+}
+.nav.scrolled{background:rgba(11,11,13,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-color:var(--line-soft)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:78px;gap:18px}
+.brand{display:flex;align-items:center;gap:12px}
+/* logo embedded once so it always shows, even when the page is opened on its own */
+.logo{display:block;aspect-ratio:300/96;color:var(--ivory)}
+.logo svg{display:block;width:100%;height:100%;overflow:visible}
+.brand-logo{height:46px}
+.foot-logo{height:52px}
+.nav-links{display:flex;gap:34px;font-size:.74rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase}
+html[lang="ar"] .nav-links{letter-spacing:0;font-size:.95rem}
+.nav-links a{color:#cfcfd4;position:relative;padding:6px 0;transition:color .2s}
+.nav-links a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--gold);transform:scaleX(0);transition:transform .3s}
+.nav-links a:hover{color:var(--gold-2)}
+.nav-links a:hover::after{transform:scaleX(1)}
+.nav-right{display:flex;align-items:center;gap:12px}
+.lang{display:flex;border:1px solid var(--line);border-radius:999px;padding:3px;background:rgba(255,255,255,.02)}
+.lang button{
+  border:0;background:transparent;cursor:pointer;height:32px;min-width:38px;padding:0 10px;border-radius:999px;
+  font-size:.78rem;font-weight:700;color:var(--muted);letter-spacing:.06em;transition:.25s;font-family:"Manrope",sans-serif;
+}
+.lang button[data-l="ar"]{font-family:"Tajawal",sans-serif;font-size:.9rem}
+.lang button.active{background:var(--gold-grad);color:var(--on-accent)}
+.nav .btn{--h:42px;padding:0 20px;font-size:.85rem}
+.burger{display:none;width:44px;height:44px;border-radius:12px;border:1px solid var(--line);background:transparent;cursor:pointer;place-items:center}
+.burger span{display:block;width:18px;height:1.5px;background:var(--gold-2);position:relative;transition:.3s}
+.burger span::before,.burger span::after{content:"";position:absolute;left:0;width:18px;height:1.5px;background:var(--gold-2);transition:.3s}
+.burger span::before{top:-6px}.burger span::after{top:6px}
+.nav.open .burger span{background:transparent}
+.nav.open .burger span::before{top:0;transform:rotate(45deg)}
+.nav.open .burger span::after{top:0;transform:rotate(-45deg)}
+.mobile-menu{display:none}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero{min-height:100svh;display:flex;align-items:center;position:relative;overflow:hidden;padding:120px 0 80px}
+/* ---------- animated ribbon background ---------- */
+#ribbon{position:fixed;inset:0;width:100%;height:100%;display:block;z-index:-2;pointer-events:none}
+#ribbonScrim{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:0;
+  background:linear-gradient(180deg,rgba(11,11,13,.62),rgba(11,11,13,.5))}
+.has-ribbon .hero-bg{background:linear-gradient(90deg,rgba(11,11,13,.0) 0%,rgba(11,11,13,.55) 55%,rgba(11,11,13,.35) 100%)}
+.has-ribbon .trust{background:rgba(17,17,20,.55)}
+.has-ribbon .reserve{background:radial-gradient(500px 360px at 0% 100%,rgba(122,31,43,.14),transparent 60%),rgba(17,17,20,.45)}
+.has-ribbon .nav.scrolled{background:rgba(11,11,13,.7)}
+.has-ribbon .hero-copy{position:relative}
+.has-ribbon .hero-copy::before{content:"";position:absolute;inset:-12% -18% -12% -30%;z-index:-1;pointer-events:none;
+  background:radial-gradient(closest-side,rgba(11,10,16,.82),rgba(11,10,16,.55) 55%,transparent)}
+.has-ribbon .hero h1,.has-ribbon .hero p.lead{text-shadow:0 2px 18px rgba(0,0,0,.55)}
+@media (max-width:920px){ .has-ribbon .hero-copy::before{inset:-6% -10%} }
+.hero-bg{position:absolute;inset:0;z-index:-1;
+  background:
+    radial-gradient(900px 520px at 78% 58%,rgba(225,38,45,.10),transparent 60%),
+    linear-gradient(180deg,#0b0b0d 0%,#0d0b0c 60%,#0b0b0d 100%);
+}
+.hero-bg::after{ /* subtle zellige-inspired pattern */
+  content:"";position:absolute;inset:0;opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cpath d='M40 4l10 26 26 10-26 10-10 26-10-26L4 40l26-10z' fill='none' stroke='%23e1262d' stroke-width='1'/%3E%3C/svg%3E");
+  mask-image:radial-gradient(ellipse at 70% 50%,#000 10%,transparent 70%);
+  -webkit-mask-image:radial-gradient(ellipse at 70% 50%,#000 10%,transparent 70%);
+}
+.hero{padding:120px 0 90px}
+.hero-car{position:absolute;inset:0 auto 0 0;width:min(58vw,880px);z-index:0;pointer-events:none;
+  background:url("images/hero-car.webp") 85% 50%/cover no-repeat;
+  -webkit-mask-image:linear-gradient(90deg,#000 58%,transparent 98%),linear-gradient(0deg,transparent 0,#000 22%);
+  -webkit-mask-composite:source-in;mask-image:linear-gradient(90deg,#000 58%,transparent 98%),linear-gradient(0deg,transparent 0,#000 22%);mask-composite:intersect}
+html[dir="rtl"] .hero-car{inset:0 0 0 auto;transform:scaleX(-1)}
+.hero-grid{display:grid;grid-template-columns:1fr 1.05fr;align-items:center;gap:30px;position:relative;z-index:1}
+.hero-copy{grid-column:2}
+.hero-kicker{display:block;font-size:.72rem;letter-spacing:.34em;text-transform:uppercase;color:#cfcfd4;font-weight:600;line-height:1.9}
+html[lang="ar"] .hero-kicker{letter-spacing:.04em;font-size:.95rem}
+.hero h1{margin:20px 0 26px;text-transform:uppercase;font-weight:800;line-height:.88;letter-spacing:-.015em}
+.hero h1 .l1{display:block;white-space:nowrap;color:var(--gold);font-size:clamp(3.3rem,7vw,7.2rem);text-shadow:0 0 40px rgba(225,38,45,.25)}
+.hero h1 .l2{display:block;white-space:nowrap;color:var(--ivory);font-size:clamp(2.25rem,4.75vw,4.9rem);margin-top:.08em}
+.hero p.lead{font-size:1.02rem;color:#c3c3c9;max-width:400px;margin-bottom:34px;line-height:1.7}
+.hero-ctas{display:flex;gap:14px;flex-wrap:wrap}
+.btn-outline{border-color:rgba(255,255,255,.55);color:var(--ivory);background:transparent;letter-spacing:.24em;text-transform:uppercase;font-size:.78rem;padding:0 30px}
+html[lang="ar"] .btn-outline{letter-spacing:0;font-size:.95rem}
+.btn-outline:hover{border-color:var(--gold);color:#fff;background:rgba(225,38,45,.12);transform:translateY(-2px)}
+.hero-stats{display:flex;gap:36px;margin-top:46px;padding-top:24px;border-top:1px solid var(--line-soft);max-width:440px}
+.hero-stats b{display:block;font-family:var(--ff-num);font-size:1.6rem;color:var(--ivory);font-weight:600;line-height:1;letter-spacing:-.01em}
+.hero-stats span{font-size:.72rem;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+html[lang="ar"] .hero-stats span{letter-spacing:0;font-size:.9rem}
+.hero-thumb{position:absolute;inset-inline-end:max(20px,calc((100vw - var(--maxw))/2 + 20px));bottom:70px;z-index:2;width:118px;height:118px;border-radius:16px;overflow:hidden;
+  border:1px solid rgba(255,255,255,.18);box-shadow:0 20px 40px -12px rgba(0,0,0,.7);
+  background:url("images/hero-car.webp") 47% 54%/360% no-repeat;transition:transform .3s,border-color .3s}
+.hero-thumb:hover{transform:translateY(-4px);border-color:var(--gold)}
+@media (max-width:1380px){.hero-thumb{display:none}}
+html[lang="ar"] .hero h1{font-family:"Bodoni Moda",Didot,serif;font-weight:800;line-height:.88;direction:ltr;text-align:right}
+.scroll-cue{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);z-index:2;width:24px;height:38px;border:1.5px solid rgba(225,38,45,.5);border-radius:14px}
+.scroll-cue::after{content:"";position:absolute;left:50%;top:8px;width:3px;height:7px;margin-left:-1.5px;border-radius:2px;background:var(--gold);animation:cue 1.8s infinite}
+@keyframes cue{0%{opacity:0;transform:translateY(0)}40%{opacity:1}100%{opacity:0;transform:translateY(12px)}}
+
+/* ---------- trust strip ---------- */
+.trust{border-block:1px solid var(--line-soft);background:var(--bg-2)}
+.trust-grid{display:grid;grid-template-columns:repeat(4,1fr)}
+.trust-item{display:flex;align-items:center;gap:16px;padding:30px 22px;border-inline-start:1px solid var(--line-soft)}
+.trust-item:first-child{border-inline-start:0}
+.trust-ic{width:48px;height:48px;border-radius:14px;flex:none;display:grid;place-items:center;border:1px solid var(--line);background:rgba(225,38,45,.06)}
+.trust-ic svg{width:22px;height:22px;stroke:var(--gold);fill:none;stroke-width:1.6}
+.trust-item b{display:block;color:var(--ivory);font-size:.96rem;font-weight:600}
+.trust-item span{font-size:.82rem;color:var(--muted)}
+
+/* ============================================================
+   FLEET
+   ============================================================ */
+.fleet-top{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-bottom:40px}
+.fleet-top .section-head{margin-bottom:0}
+.filters{display:flex;gap:8px;flex-wrap:wrap}
+.chip{
+  border:1px solid var(--line-soft);background:var(--surface);height:42px;padding:0 18px;border-radius:999px;cursor:pointer;
+  font-size:.85rem;font-weight:600;color:#bdb7ad;transition:.25s
+}
+.chip:hover{border-color:var(--line);color:var(--gold-2)}
+.chip.active{background:var(--gold-grad);color:var(--on-accent);border-color:transparent}
+
+.fleet-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.car{
+  position:relative;border-radius:var(--radius);overflow:hidden;
+  background:linear-gradient(180deg,var(--surface-2),var(--surface) 55%);
+  border:1px solid var(--line-soft);transition:transform .45s cubic-bezier(.2,.7,.2,1),border-color .35s,box-shadow .45s;
+  display:flex;flex-direction:column
+}
+.car:hover{transform:translateY(-6px);border-color:var(--line);box-shadow:var(--shadow)}
+.car.hide{display:none}
+.fleet-grid.all .car:last-child:nth-child(3n+1){grid-column:2}
+.car-stage{position:relative;aspect-ratio:16/9;max-width:100%;overflow:hidden;background:#0d0d10;border-bottom:1px solid var(--line)}
+.car-stage::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,transparent 70%,rgba(13,13,16,.55))}
+.car-stage img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.2,.7,.2,1),opacity .35s}
+.car:hover .car-stage img{transform:scale(1.05)}
+.car-tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.car-type{
+  font-size:.7rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
+  padding:7px 12px;border-radius:999px;background:rgba(11,11,13,.7);border:1px solid var(--line);color:var(--gold-2)
+}
+html[lang="ar"] .car-type{letter-spacing:0;font-size:.82rem}
+.car-badge{font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:7px 11px;border-radius:999px;background:var(--touch);color:#f6dfe2}
+html[lang="ar"] .car-badge{letter-spacing:0;font-size:.8rem}
+.car-body{padding:22px 24px 24px;display:flex;flex-direction:column;flex:1}
+.car-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.car-name{font-family:var(--ff-display);font-size:1.75rem;font-weight:700;color:var(--ivory);line-height:1.1}
+html[lang="ar"] .car-name{font-size:1.45rem}
+.car-brand{font-size:.72rem;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.car-price{text-align:end;flex:none}
+.car-price b{font-family:var(--ff-num);font-size:1.75rem;line-height:1;font-weight:700;display:block;letter-spacing:-.02em}
+.car-price span{font-size:.72rem;color:var(--muted);letter-spacing:.06em}
+.car-desc{color:#aaa49a;font-size:.9rem;margin:12px 0 16px;min-height:3.2em}
+.specs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px}
+.spec{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 4px;border-radius:12px;background:rgba(255,255,255,.025);border:1px solid var(--line-soft);font-size:.72rem;color:#c9c3b9;text-align:center}
+.spec svg{width:18px;height:18px;stroke:var(--gold);fill:none;stroke-width:1.6}
+.opts{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px}
+.opt{font-size:.74rem;padding:5px 10px;border-radius:999px;border:1px solid var(--line-soft);color:#bfb9ae;display:inline-flex;align-items:center;gap:6px}
+.opt::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--gold)}
+.swatches{display:flex;align-items:center;gap:8px;margin-bottom:20px}
+.swatches small{font-size:.74rem;color:var(--muted);margin-inline-end:4px}
+.sw{width:22px;height:22px;border-radius:50%;border:2px solid transparent;cursor:pointer;box-shadow:inset 0 0 0 1px rgba(255,255,255,.25);transition:.2s;outline-offset:2px}
+.sw.active{border-color:var(--gold);transform:scale(1.12)}
+.car-actions{margin-top:auto;display:flex;gap:10px}
+.car-actions .btn{--h:48px;flex:1;padding:0 16px;font-size:.88rem}
+.car-actions .btn-icon{flex:none;width:48px;padding:0}
+
+/* ============================================================
+   RESERVATION
+   ============================================================ */
+.reserve{background:
+  radial-gradient(700px 400px at 90% 10%,rgba(225,38,45,.10),transparent 60%),
+  radial-gradient(500px 360px at 0% 100%,rgba(122,31,43,.18),transparent 60%),var(--bg-2);border-top:1px solid var(--line-soft)}
+.reserve-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:48px;align-items:start}
+.perks{display:grid;gap:14px;margin-top:34px}
+.perk{display:flex;gap:14px;align-items:flex-start}
+.perk i{width:28px;height:28px;border-radius:50%;flex:none;display:grid;place-items:center;background:rgba(225,38,45,.12);border:1px solid var(--line)}
+.perk i svg{width:14px;height:14px;stroke:var(--gold);fill:none;stroke-width:2.4}
+.perk span{color:#c9c3b9;font-size:.96rem}
+.contact-card{margin-top:34px;padding:22px;border-radius:var(--radius-sm);border:1px solid var(--line);background:rgba(11,11,13,.5);display:flex;gap:16px;align-items:center}
+.contact-card .ic{width:48px;height:48px;border-radius:50%;background:#1faf5a;display:grid;place-items:center;flex:none}
+.contact-card .ic svg{width:24px;height:24px;fill:#fff}
+.contact-card small{color:var(--muted);font-size:.8rem;display:block}
+.contact-card a{font-family:var(--ff-num);font-size:1.2rem;font-weight:600;letter-spacing:.02em;color:var(--ivory);direction:ltr;unicode-bidi:embed}
+
+.form-card{
+  border-radius:28px;padding:36px;position:relative;
+  background:linear-gradient(180deg,rgba(29,29,34,.9),rgba(18,18,22,.95));
+  border:1px solid var(--line);box-shadow:var(--shadow)
+}
+.form-card::before{content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1px;background:linear-gradient(140deg,rgba(255,107,112,.55),transparent 35%,transparent 65%,rgba(225,38,45,.35));
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
+.form-title{font-family:var(--ff-display);font-size:1.9rem;color:var(--ivory);font-weight:600;margin-bottom:4px}
+.form-sub{color:var(--muted);font-size:.9rem;margin-bottom:26px}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.field{display:flex;flex-direction:column;gap:8px}
+.field.full{grid-column:1/-1}
+.field label{font-size:.76rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#b9b3a8}
+html[lang="ar"] .field label{letter-spacing:0;font-size:.9rem}
+.input{
+  height:54px;border-radius:14px;border:1px solid var(--line-soft);background:rgba(11,11,13,.65);
+  padding:0 16px;font-size:.98rem;color:var(--ivory);transition:border-color .2s,box-shadow .2s;width:100%;
+  appearance:none;-webkit-appearance:none
+}
+.input::placeholder{color:#6e6a63}
+.input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 4px rgba(225,38,45,.15)}
+select.input{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23e1262d' stroke-width='1.8' fill='none'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 16px center;padding-inline-end:40px;cursor:pointer
+}
+html[dir="rtl"] select.input{background-position:left 16px center}
+input[type="tel"].input,input[type="date"].input,.spec,.visit-list .ltr{font-family:var(--ff-num);font-variant-numeric:lining-nums}
+select.input option{background:#16161a;color:var(--ivory)}
+input[type="date"].input{color-scheme:dark}
+.input.err{border-color:#d9534f;box-shadow:0 0 0 4px rgba(217,83,79,.14)}
+.phone-wrap{display:flex;direction:ltr}
+.phone-wrap .cc{height:54px;display:flex;align-items:center;padding:0 12px;border:1px solid var(--line-soft);border-right:0;border-radius:14px 0 0 14px;background:rgba(225,38,45,.06);color:var(--gold-2);font-weight:600;font-size:.9rem}
+.phone-wrap .input{border-radius:0 14px 14px 0;text-align:left}
+.summary{
+  grid-column:1/-1;margin-top:6px;padding:18px 20px;border-radius:16px;border:1px dashed var(--line);
+  display:flex;align-items:center;justify-content:space-between;gap:16px;background:rgba(225,38,45,.04)
+}
+.summary .car-sum{display:flex;align-items:center;gap:14px;min-width:0}
+.summary img{width:92px;height:52px;object-fit:cover;flex:none;border-radius:10px;border:1px solid var(--line)}
+.summary .n{color:var(--ivory);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.summary .d{color:var(--muted);font-size:.82rem}
+.summary .t{text-align:end;flex:none}
+.summary .t b{font-family:var(--ff-num);font-size:1.6rem;font-weight:700;line-height:1;display:block;letter-spacing:-.02em}
+.summary .t span{font-size:.72rem;color:var(--muted)}
+.form-foot{grid-column:1/-1;display:flex;flex-direction:column;gap:12px;margin-top:6px}
+.form-foot .btn{width:100%;--h:58px;font-size:1rem}
+.form-note{font-size:.8rem;color:var(--muted);text-align:center;display:flex;align-items:center;justify-content:center;gap:8px}
+.form-note svg{width:14px;height:14px;stroke:var(--gold);fill:none;stroke-width:2}
+.err-msg{font-size:.78rem;color:#ef8a86;display:none}
+.field.has-err .err-msg{display:block}
+
+/* ---------- toast ---------- */
+.toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,220%);opacity:0;visibility:hidden;z-index:80;padding:16px 22px;border-radius:16px;background:#141416;border:1px solid var(--line);box-shadow:var(--shadow);display:flex;align-items:center;gap:12px;transition:transform .5s cubic-bezier(.2,.7,.2,1);max-width:calc(100% - 32px)}
+.toast.show{transform:translate(-50%,0);opacity:1;visibility:visible}
+.toast i{width:30px;height:30px;border-radius:50%;background:var(--ok);display:grid;place-items:center;flex:none}
+.toast i svg{width:16px;height:16px;stroke:#fff;fill:none;stroke-width:3}
+
+/* ============================================================
+   LOCATION / FOOTER
+   ============================================================ */
+.visit{padding:90px 0}
+.visit-card{
+  border-radius:28px;border:1px solid var(--line);overflow:hidden;display:grid;grid-template-columns:1fr;
+  background:linear-gradient(135deg,#1a0f11,#0f0f12)
+}
+.visit-info{padding:48px}
+.visit-info h3{font-size:clamp(2rem,4vw,2.8rem);margin:14px 0 14px}
+.visit-info p{color:var(--muted);margin-bottom:28px}
+.visit-list{display:grid;gap:14px;margin-bottom:32px}
+.visit-list div{display:flex;gap:14px;align-items:center;color:#d5cfc5}
+.visit-list svg{width:20px;height:20px;stroke:var(--gold);fill:none;stroke-width:1.6;flex:none}
+.visit-list .ltr{direction:ltr;unicode-bidi:embed}
+.visit-map{position:relative;min-height:320px;background:#0d0d10}
+.visit-map iframe{position:absolute;inset:0;width:100%;height:100%;border:0;filter:grayscale(1) invert(.92) contrast(.9) sepia(.25) hue-rotate(10deg)}
+footer{border-top:1px solid var(--line-soft);padding:36px 0 110px}
+.foot{display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.foot p{color:var(--muted);font-size:.85rem}
+.socials{display:flex;gap:10px}
+.socials a{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;transition:.25s}
+.socials a:hover{background:rgba(225,38,45,.12);transform:translateY(-2px)}
+.socials svg{width:18px;height:18px;fill:var(--gold-2)}
+
+/* ---------- floating action buttons ---------- */
+.fab{position:fixed;bottom:22px;inset-inline-end:20px;z-index:60;display:flex;flex-direction:column;gap:12px;align-items:center}
+.fab a{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;box-shadow:0 12px 30px -8px rgba(0,0,0,.6);transition:transform .25s;position:relative}
+.fab a:hover{transform:scale(1.08)}
+.fab svg{width:26px;height:26px;fill:#fff}
+.fab .wa{background:#25d366;width:62px;height:62px}
+.fab .wa::before{content:"";position:absolute;inset:0;border-radius:50%;background:#25d366;animation:pulse 2.2s infinite;z-index:-1}
+@keyframes pulse{0%{transform:scale(1);opacity:.6}100%{transform:scale(1.7);opacity:0}}
+.fab .ig{background:radial-gradient(circle at 30% 107%,#fdf497 0%,#fdf497 5%,#fd5949 45%,#d6249f 60%,#285AEB 90%)}
+.fab .loc{background:#141416;border:1px solid var(--line)}
+.fab .loc svg{fill:none;stroke:var(--gold);stroke-width:2}
+.fab .tip{position:absolute;inset-inline-end:calc(100% + 12px);white-space:nowrap;background:#141416;border:1px solid var(--line);padding:6px 12px;border-radius:10px;font-size:.78rem;opacity:0;pointer-events:none;transform:translateX(6px);transition:.25s;color:var(--ivory)}
+.fab a:hover .tip{opacity:1;transform:none}
+
+.conditions{padding:0 0 110px}
+.cond-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.cond{padding:26px;border-radius:var(--radius);border:1px solid var(--line-soft);background:linear-gradient(180deg,var(--surface-2),var(--surface));transition:border-color .3s,transform .3s}
+.cond:hover{border-color:var(--line);transform:translateY(-3px)}
+.cond-top{display:flex;align-items:center;gap:14px;margin-bottom:12px}
+.cond-ic{width:46px;height:46px;border-radius:14px;flex:none;display:grid;place-items:center;border:1px solid var(--line);background:rgba(225,38,45,.06)}
+.cond-ic svg{width:22px;height:22px;stroke:var(--gold);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.cond-num{font-family:var(--ff-num);font-weight:700;font-size:1.5rem;line-height:1;color:var(--gold-2)}
+.cond b{display:block;color:var(--ivory);font-size:1.02rem;font-weight:600;margin-bottom:4px}
+.cond p{color:var(--muted);font-size:.9rem}
+.accept{grid-column:1/-1;display:flex;gap:12px;align-items:flex-start;font-size:.88rem;color:#c9c3b9;cursor:pointer}
+.accept input{appearance:none;-webkit-appearance:none;width:22px;height:22px;border-radius:7px;border:1px solid var(--line);background:rgba(11,11,13,.65);flex:none;cursor:pointer;display:grid;place-items:center;margin-top:1px}
+.accept input:checked{background:var(--gold-grad);border-color:transparent}
+.accept input:checked::after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 2px 2px 0;transform:translateY(-1px) rotate(45deg)}
+.accept a{color:var(--gold-2);text-decoration:underline;text-underline-offset:3px}
+.accept.has-err input{border-color:#d9534f;box-shadow:0 0 0 4px rgba(217,83,79,.14)}
+.accept.has-err span{color:#ef8a86}
+.mbar{display:none}
+.no-ig .mbar{grid-template-columns:1fr 1fr 1.6fr}
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width:1080px){
+  .fleet-grid{grid-template-columns:repeat(2,1fr)}
+  .fleet-grid.all .car:last-child:nth-child(3n+1){grid-column:auto}
+  .fleet-grid.all .car:last-child:nth-child(odd){grid-column:1/-1;max-width:calc(50% - 12px);justify-self:center;width:100%}
+  .trust-grid{grid-template-columns:repeat(2,1fr)}
+  .trust-item:nth-child(3){border-inline-start:0}
+  .trust-item:nth-child(n+3){border-top:1px solid var(--line-soft)}
+}
+@media (max-width:920px){
+  .nav-links,.nav .btn-reserve{display:none}
+  .burger{display:grid}
+  .mobile-menu{
+    display:flex;flex-direction:column;gap:6px;position:fixed;top:78px;left:0;right:0;padding:18px 20px 26px;
+    background:rgba(11,11,13,.97);border-bottom:1px solid var(--line-soft);
+    transform:translateY(-12px);opacity:0;pointer-events:none;transition:.3s
+  }
+  .nav.open .mobile-menu{transform:none;opacity:1;pointer-events:auto}
+  .mobile-menu a{padding:14px 4px;border-bottom:1px solid var(--line-soft);font-size:1.05rem;color:var(--ivory)}
+  .mobile-menu .btn{margin-top:12px;width:100%}
+  .nav.open{background:rgba(11,11,13,.97)}
+  .hero{padding-top:calc(78px + 44vw);text-align:center;align-items:flex-start}
+  .hero-car{width:100%;height:calc(78px + 62vw);bottom:auto;background-position:70% 40%;
+    -webkit-mask-image:linear-gradient(0deg,transparent 0,#000 40%);mask-image:linear-gradient(0deg,transparent 0,#000 40%)}
+  html[dir="rtl"] .hero-car{inset:0 0 auto 0}
+  .hero-grid{grid-template-columns:1fr;gap:10px}
+  .hero-copy{grid-column:1}
+  .hero-thumb{display:none}
+  .has-ribbon .hero-bg{background:linear-gradient(180deg,transparent 30%,rgba(11,11,13,.6) 60%)}
+  .hero p.lead{margin-inline:auto}
+  .hero-ctas{justify-content:center}
+  .hero-stats{margin-inline:auto;justify-content:center}
+  .eyebrow::before{display:none}
+  .hero .eyebrow::after{display:none}
+  .scroll-cue{display:none}
+  .reserve-grid{grid-template-columns:1fr}
+  .cond-grid{grid-template-columns:repeat(2,1fr)}
+  .visit-card{grid-template-columns:1fr}
+}
+@media (max-width:640px){
+  .section{padding:80px 0}
+  .fleet-grid{grid-template-columns:1fr}
+  .trust-grid{grid-template-columns:1fr}
+  .trust-item{border-inline-start:0 !important;border-top:1px solid var(--line-soft);padding:20px 4px}
+  .trust-item:first-child{border-top:0}
+  .fgrid{grid-template-columns:1fr}
+  .cond-grid{grid-template-columns:1fr}
+  .conditions{padding-bottom:80px}
+  .cond{padding:22px}
+  .form-card{padding:24px 18px;border-radius:22px}
+  .hero-ctas{flex-direction:column}
+  .hero-ctas .btn{width:100%}
+  .fleet-grid.all .car:last-child:nth-child(odd){max-width:none}
+  .hero-stats{gap:22px}
+  .hero-stats b{font-size:1.45rem}
+  .brand-logo{height:38px}
+  .foot-logo{height:44px}
+  .lang button{min-width:32px;padding:0 7px;height:30px}
+  .filters{flex-wrap:nowrap;overflow-x:auto;width:100%;padding-bottom:4px;scrollbar-width:none}
+  .filters::-webkit-scrollbar{display:none}
+  .chip{flex:none}
+  .visit-info{padding:30px 22px}
+  .summary{flex-wrap:wrap}
+  .summary img{width:70px}
+  .fab{display:none}
+  body{padding-bottom:calc(76px + env(safe-area-inset-bottom))}
+  footer{padding-bottom:40px}
+  .toast{bottom:calc(90px + env(safe-area-inset-bottom))}
+  .mbar{
+    display:grid;grid-template-columns:1fr 1fr 1fr 1.5fr;gap:8px;position:fixed;left:0;right:0;bottom:0;z-index:60;
+    padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:rgba(11,11,13,.94);
+    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid var(--line)
+  }
+  .mbar a{height:52px;border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:.66rem;font-weight:600;color:#cfc9bf;border:1px solid var(--line-soft);background:var(--surface)}
+  .mbar a svg{width:20px;height:20px}
+  .mbar .m-wa svg{fill:#25d366}
+  .mbar .m-ig svg{fill:#e1306c}
+  .mbar .m-loc svg{fill:none;stroke:var(--gold);stroke-width:2}
+  .mbar .m-book{background:var(--gold-grad);color:var(--on-accent);border:0;flex-direction:row;font-size:.9rem;gap:8px}
+  .mbar .m-book svg{stroke:var(--on-accent);fill:none;stroke-width:1.8;width:18px;height:18px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none !important;transition:none !important}
+  .reveal{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+<canvas id="ribbon" aria-hidden="true"></canvas>
+<div id="ribbonScrim" aria-hidden="true"></div>
+
+<!-- ============================ NAV ============================ -->
+<header class="nav" id="nav">
+  <div class="container nav-inner">
+    <a href="#home" class="brand" aria-label="Super Fast Car"><span class="logo brand-logo" role="img" aria-label="Super Fast Car"><svg viewBox="0 0 300 96"><use href="#logo"/></svg></span></a>
+    <nav class="nav-links">
+      <a href="#home" data-i18n="nav.home">Home</a>
+      <a href="#fleet" data-i18n="nav.fleet">Fleet</a>
+      <a href="#conditions" data-i18n="nav.cond">Conditions</a>
+      <a href="#reservation" data-i18n="nav.reserve">Reservation</a>
+      <a href="#visit" data-i18n="nav.contact">Contact</a>
+    </nav>
+    <div class="nav-right">
+      <div class="lang" role="group" aria-label="Language">
+        <button data-l="fr">FR</button><button data-l="en">EN</button><button data-l="ar">ع</button>
+      </div>
+      <a href="#reservation" class="btn btn-gold btn-reserve" data-i18n="cta.book">Book now</a>
+      <button class="burger" id="burger" aria-label="Menu"><span></span></button>
+    </div>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#home" data-i18n="nav.home">Home</a>
+    <a href="#fleet" data-i18n="nav.fleet">Fleet</a>
+    <a href="#conditions" data-i18n="nav.cond">Conditions</a>
+    <a href="#reservation" data-i18n="nav.reserve">Reservation</a>
+    <a href="#visit" data-i18n="nav.contact">Contact</a>
+    <a href="#reservation" class="btn btn-gold" data-i18n="cta.book">Book now</a>
+  </div>
+</header>
+
+<main>
+<!-- ============================ HERO ============================ -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-car" role="img" aria-label="Super Fast Car"></div>
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <span class="hero-kicker reveal" data-i18n-html="hero.eyebrow">Location de voitures<br>Casablanca · 24h/24</span>
+      <h1 class="h-display reveal" data-i18n-html="hero.title"><span class="l1">The best</span><span class="l2">of the best</span></h1>
+      <p class="lead reveal" data-i18n="hero.lead"></p>
+      <div class="hero-ctas reveal">
+        <a href="#fleet" class="btn btn-outline">
+          <span data-i18n="cta.fleet">Voir la flotte</span>
+          <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a href="#reservation" class="btn btn-gold">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
+          <span data-i18n="cta.reserve">Réservation</span>
+        </a>
+      </div>
+      <div class="hero-stats reveal">
+        <div><b>7</b><span data-i18n="hero.s1">Voitures</span></div>
+        <div><b>199<small style="font-size:.9rem"> DH</small></b><span data-i18n="hero.s2">Dès / jour</span></div>
+        <div><b>24/24</b><span data-i18n="hero.s3">Ouvert</span></div>
+      </div>
+    </div>
+  </div>
+  <a href="#fleet" class="hero-thumb" aria-label="Fleet"></a>
+  <a href="#trust" class="scroll-cue" aria-label="Scroll"></a>
+</section>
+
+<!-- ============================ TRUST ============================ -->
+<section class="trust" id="trust">
+  <div class="container trust-grid">
+    <div class="trust-item reveal">
+      <span class="trust-ic"><svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg></span>
+      <div><b data-i18n="t1.b">Fully insured</b><span data-i18n="t1.s">Comprehensive cover on every car</span></div>
+    </div>
+    <div class="trust-item reveal">
+      <span class="trust-ic"><svg viewBox="0 0 24 24"><path d="M12 2.5a1.5 1.5 0 0 1 1.5 1.5v5.5l8 5v2l-8-2.5V19l2 1.5V22L12 21l-3.5 1v-1.5l2-1.5v-5L2.5 16.5v-2l8-5V4A1.5 1.5 0 0 1 12 2.5z"/></svg></span>
+      <div><b data-i18n="t2.b">Airport delivery</b><span data-i18n="t2.s">Mohammed V & city hotels</span></div>
+    </div>
+    <div class="trust-item reveal">
+      <span class="trust-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+      <div><b data-i18n="t3.b">24/7 assistance</b><span data-i18n="t3.s">Roadside help, day and night</span></div>
+    </div>
+    <div class="trust-item reveal">
+      <span class="trust-ic"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h4"/></svg></span>
+      <div><b data-i18n="t4.b">No hidden fees</b><span data-i18n="t4.s">Transparent price per day</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ FLEET ============================ -->
+<section class="section" id="fleet">
+  <div class="container">
+    <div class="fleet-top">
+      <div class="section-head reveal">
+        <span class="eyebrow" data-i18n="fleet.eyebrow">Our Fleet</span>
+        <h2 class="h-display" data-i18n-html="fleet.title">Choose your <span class="gold-text">companion</span></h2>
+        <p data-i18n="fleet.lead">Seven carefully maintained cars, cleaned and checked before every rental. Pick a colour, pick your dates — we take care of the rest.</p>
+      </div>
+      <div class="filters reveal" id="filters"></div>
+    </div>
+    <div class="fleet-grid" id="fleetGrid"></div>
+  </div>
+</section>
+
+<!-- ============================ CONDITIONS ============================ -->
+<section class="conditions" id="conditions">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="eyebrow" data-i18n="cond.eyebrow">Rental conditions</span>
+      <h2 class="h-display" data-i18n-html="cond.title">Before you <span class="gold-text">hit the road</span></h2>
+      <p data-i18n="cond.lead">Simple, clear conditions — so your rental is safe and stress-free.</p>
+    </div>
+    <div class="cond-grid">
+      <div class="cond reveal">
+        <div class="cond-top"><span class="cond-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span><span class="cond-num">21+</span></div>
+        <b data-i18n="cond.c1.b"></b><p data-i18n="cond.c1.p"></p>
+      </div>
+      <div class="cond reveal">
+        <div class="cond-top"><span class="cond-ic"><svg viewBox="0 0 24 24"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><circle cx="8.5" cy="11" r="2.2"/><path d="M5.5 16a3 3 0 0 1 6 0M14 10h4.5M14 13.5h3"/></svg></span><span class="cond-num">2+</span></div>
+        <b data-i18n="cond.c2.b"></b><p data-i18n="cond.c2.p"></p>
+      </div>
+      <div class="cond reveal">
+        <div class="cond-top"><span class="cond-ic"><svg viewBox="0 0 24 24"><rect x="5" y="2.5" width="14" height="19" rx="2"/><circle cx="12" cy="10" r="3"/><path d="M8.5 17h7"/></svg></span></div>
+        <b data-i18n="cond.c3.b"></b><p data-i18n="cond.c3.p"></p>
+      </div>
+      <div class="cond reveal">
+        <div class="cond-top"><span class="cond-ic"><svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M12 7.5v9M14.5 10c0-1-1.1-1.6-2.5-1.6s-2.5.6-2.5 1.6 1.1 1.4 2.5 1.8 2.5.8 2.5 1.8-1.1 1.6-2.5 1.6-2.5-.6-2.5-1.6"/></svg></span></div>
+        <b data-i18n="cond.c4.b"></b><p data-i18n="cond.c4.p"></p>
+      </div>
+      <div class="cond reveal">
+        <div class="cond-top"><span class="cond-ic"><svg viewBox="0 0 24 24"><path d="M4 21V5a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v16M3 21h13M4 10h11"/><path d="M15 8l3 2v7a1.5 1.5 0 0 0 3 0V9l-3-3"/></svg></span></div>
+        <b data-i18n="cond.c5.b"></b><p data-i18n="cond.c5.p"></p>
+      </div>
+      <div class="cond reveal">
+        <div class="cond-top"><span class="cond-ic"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></span><span class="cond-num">24h</span></div>
+        <b data-i18n="cond.c6.b"></b><p data-i18n="cond.c6.p"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ RESERVATION ============================ -->
+<section class="section reserve" id="reservation">
+  <div class="container reserve-grid">
+    <div class="reveal">
+      <span class="eyebrow" data-i18n="res.eyebrow">Reservation</span>
+      <div class="section-head" style="margin-bottom:0">
+        <h2 class="h-display" data-i18n-html="res.title">Reserve in <span class="gold-text">60 seconds</span></h2>
+        <p data-i18n="res.lead">Fill in the form — your request is sent straight to our team on WhatsApp and we confirm availability within minutes.</p>
+      </div>
+      <div class="perks">
+        <div class="perk"><i><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></i><span data-i18n="res.p1">Free cancellation up to 48h before pick-up</span></div>
+        <div class="perk"><i><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></i><span data-i18n="res.p3">Delivery to the airport, train station or your hotel</span></div>
+        <div class="perk"><i><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></i><span data-i18n="res.p4">We speak Arabic, French & English</span></div>
+      </div>
+      <div class="contact-card">
+        <span class="ic"><svg viewBox="0 0 24 24"><use href="#i-wa"/></svg></span>
+        <div><small data-i18n="res.call">Prefer to talk? Call or WhatsApp us</small><a href="tel:+212661464222">06 61 46 42 22</a></div>
+      </div>
+    </div>
+
+    <form class="form-card reveal" id="resForm" novalidate>
+      <div class="form-title" data-i18n="form.title">Your reservation</div>
+      <div class="form-sub" data-i18n="form.sub">All fields are required.</div>
+      <div class="fgrid">
+        <div class="field">
+          <label for="fCar" data-i18n="form.car">Car</label>
+          <select id="fCar" class="input" required></select>
+          <span class="err-msg" data-i18n="err.car">Please choose a car.</span>
+        </div>
+        <div class="field">
+          <label for="fColor" data-i18n="form.color">Colour</label>
+          <select id="fColor" class="input" required></select>
+        </div>
+        <div class="field full">
+          <label for="fName" data-i18n="form.name">Full name</label>
+          <input id="fName" class="input" type="text" autocomplete="name" data-i18n-ph="form.namePh" placeholder="e.g. Yassine El Amrani" required>
+          <span class="err-msg" data-i18n="err.name">Please enter your name.</span>
+        </div>
+        <div class="field full">
+          <label for="fPhone" data-i18n="form.phone">Phone / WhatsApp number</label>
+          <div class="phone-wrap">
+            <span class="cc">+</span>
+            <input id="fPhone" class="input" type="tel" inputmode="tel" autocomplete="tel" placeholder="212 6XX XX XX XX" required>
+          </div>
+          <span class="err-msg" data-i18n="err.phone">Please enter a valid phone number.</span>
+        </div>
+        <div class="field">
+          <label for="fFrom" data-i18n="form.from">Pick-up date</label>
+          <input id="fFrom" class="input" type="date" required>
+          <span class="err-msg" data-i18n="err.from">Choose a pick-up date (today or later).</span>
+        </div>
+        <div class="field">
+          <label for="fTo" data-i18n="form.to">Return date</label>
+          <input id="fTo" class="input" type="date" required>
+          <span class="err-msg" data-i18n="err.to">Return must be after pick-up.</span>
+        </div>
+        <div class="summary" id="summary">
+          <div class="car-sum">
+            <img id="sumImg" alt="">
+            <div style="min-width:0"><div class="n" id="sumName">—</div><div class="d" id="sumDays">—</div></div>
+          </div>
+          <div class="t"><b class="gold-text" id="sumTotal">—</b><span data-i18n="form.total">Estimated total</span></div>
+        </div>
+        <label class="accept" id="acceptWrap"><input type="checkbox" id="fAccept"><span data-i18n-html="form.accept">I have read and accept the <a href="#conditions">rental conditions</a>.</span></label>
+        <div class="form-foot">
+          <button type="submit" class="btn btn-gold">
+            <svg viewBox="0 0 24 24" fill="currentColor"><use href="#i-wa"/></svg>
+            <span data-i18n="form.submit">Send reservation</span>
+          </button>
+          <div class="form-note"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span data-i18n="form.note">Your details are only used to confirm your booking.</span></div>
+        </div>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- ============================ VISIT ============================ -->
+<section class="visit" id="visit">
+  <div class="container">
+    <div class="visit-card reveal">
+      <div class="visit-info">
+        <span class="eyebrow" data-i18n="visit.eyebrow">Visit us</span>
+        <h3 class="h-display" data-i18n-html="visit.title">Our agency in <span class="gold-text">Casablanca</span></h3>
+        <p data-i18n="visit.lead">Drop by to pick up your car, or let us bring it to you. We're always one message away.</p>
+        <div class="visit-list">
+          <div><svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-12a7 7 0 0 1 14 0c0 5.8-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></svg><span>Super Fast Car — Casablanca, Maroc</span></div>
+          <div><svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg><a class="ltr" href="tel:+212661464222">+212 6 61 46 42 22</a></div>
+          <div><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span data-i18n="visit.hours">Ouvert 7j/7 · 24h/24</span></div>
+        </div>
+        <div class="hero-ctas">
+          <a class="btn btn-gold js-maps" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.2-7-12a7 7 0 0 1 14 0c0 5.8-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></svg>
+            <span data-i18n="visit.directions">Get directions</span>
+          </a>
+          <a class="btn btn-ghost js-wa" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor"><use href="#i-wa"/></svg>WhatsApp
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="container foot">
+    <a href="#home" class="brand" aria-label="Super Fast Car"><span class="logo brand-logo foot-logo" role="img" aria-label="Super Fast Car"><svg viewBox="0 0 300 96"><use href="#logo"/></svg></span></a>
+    <p>© <span id="year"></span> Super Fast Car · <span data-i18n="foot.rights">All rights reserved.</span></p>
+    <div class="socials">
+      <a class="js-wa" target="_blank" rel="noopener" aria-label="WhatsApp"><svg viewBox="0 0 24 24"><use href="#i-wa"/></svg></a>
+      <a class="js-ig" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24"><use href="#i-ig"/></svg></a>
+      <a class="js-maps" target="_blank" rel="noopener" aria-label="Location"><svg viewBox="0 0 24 24" style="fill:none;stroke:var(--gold-2);stroke-width:2"><path d="M12 21s-7-6.2-7-12a7 7 0 0 1 14 0c0 5.8-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></svg></a>
+    </div>
+  </div>
+</footer>
+
+<!-- floating buttons -->
+<div class="fab">
+  <a class="loc js-maps" target="_blank" rel="noopener" aria-label="Location">
+    <span class="tip" data-i18n="fab.loc">Our location</span>
+    <svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-12a7 7 0 0 1 14 0c0 5.8-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></svg>
+  </a>
+  <a class="ig js-ig" target="_blank" rel="noopener" aria-label="Instagram">
+    <span class="tip">Instagram</span>
+    <svg viewBox="0 0 24 24"><use href="#i-ig"/></svg>
+  </a>
+  <a class="wa js-wa" target="_blank" rel="noopener" aria-label="WhatsApp">
+    <span class="tip" data-i18n="fab.wa">Chat on WhatsApp</span>
+    <svg viewBox="0 0 24 24"><use href="#i-wa"/></svg>
+  </a>
+</div>
+
+<!-- mobile action bar -->
+<nav class="mbar" aria-label="Quick actions">
+  <a class="m-loc js-maps" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-12a7 7 0 0 1 14 0c0 5.8-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></svg><span data-i18n="m.loc">Location</span></a>
+  <a class="m-ig js-ig" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><use href="#i-ig"/></svg><span>Instagram</span></a>
+  <a class="m-wa js-wa" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><use href="#i-wa"/></svg><span>WhatsApp</span></a>
+  <a class="m-book" href="#reservation"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span data-i18n="cta.book">Book now</span></a>
+</nav>
+
+<div class="toast" id="toast"><i><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg></i><span data-i18n="toast">Opening WhatsApp to send your reservation…</span></div>
+
+<!-- icon sprite -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="logo" viewBox="0 0 300 96">
+    <path d="M14 58C40 44 74 38 104 35 122 21 148 12 180 12c26 0 52 10 74 22 14 2 26 6 34 11-9-3-21-5-34-6C232 27 206 18 180 18c-28 0-52 8-70 22-34 3-68 9-96 18z" fill="#e1262d"/>
+    <path d="M122 36c16-10 36-16 58-16 18 0 34 5 48 13-30-2-72-1-106 3z" fill="#e1262d"/>
+    <text x="150" y="90" text-anchor="middle" font-family="Oswald,'Arial Narrow',Impact,sans-serif" font-weight="700" font-size="44" textLength="262" lengthAdjust="spacingAndGlyphs" fill="currentColor" transform="skewX(-8) translate(12 0)">SUPER FAST CAR</text>
+  </symbol>
+  <symbol id="i-wa" viewBox="0 0 24 24"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.47-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.08c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.41-.07-.13-.27-.2-.57-.35zM12.05 21.5h-.01a9.4 9.4 0 0 1-4.8-1.32l-.34-.2-3.57.94.95-3.48-.22-.36a9.4 9.4 0 0 1-1.44-5.02c0-5.2 4.23-9.43 9.44-9.43 2.52 0 4.89.98 6.67 2.77a9.37 9.37 0 0 1 2.76 6.67c0 5.2-4.24 9.43-9.44 9.43zm8.03-17.47A11.3 11.3 0 0 0 12.05.7C5.8.7.7 5.8.7 12.06c0 2 .52 3.95 1.52 5.67L.6 23.3l5.7-1.5a11.3 11.3 0 0 0 5.74 1.47h.01c6.26 0 11.35-5.1 11.36-11.36 0-3.03-1.18-5.88-3.33-8.03z"/></symbol>
+  <symbol id="i-ig" viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41a3.7 3.7 0 0 1-1.38-.9 3.7 3.7 0 0 1-.9-1.38c-.16-.42-.36-1.06-.41-2.23C2.21 15.58 2.2 15.2 2.2 12s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41C8.42 2.21 8.8 2.2 12 2.2zm0 1.8c-3.15 0-3.5.01-4.74.07-.97.04-1.5.2-1.85.34-.46.18-.8.4-1.15.75-.35.35-.57.69-.75 1.15-.14.35-.3.88-.34 1.85C3.11 8.5 3.1 8.85 3.1 12s.01 3.5.07 4.74c.04.97.2 1.5.34 1.85.18.46.4.8.75 1.15.35.35.69.57 1.15.75.35.14.88.3 1.85.34 1.24.06 1.59.07 4.74.07s3.5-.01 4.74-.07c.97-.04 1.5-.2 1.85-.34.46-.18.8-.4 1.15-.75.35-.35.57-.69.75-1.15.14-.35.3-.88.34-1.85.06-1.24.07-1.59.07-4.74s-.01-3.5-.07-4.74c-.04-.97-.2-1.5-.34-1.85a3.1 3.1 0 0 0-.75-1.15 3.1 3.1 0 0 0-1.15-.75c-.35-.14-.88-.3-1.85-.34C15.5 4.01 15.15 4 12 4zm0 3.07a4.93 4.93 0 1 1 0 9.86 4.93 4.93 0 0 1 0-9.86zm0 8.13a3.2 3.2 0 1 0 0-6.4 3.2 3.2 0 0 0 0 6.4zm6.28-8.33a1.15 1.15 0 1 1-2.3 0 1.15 1.15 0 0 1 2.3 0z"/></symbol>
+</svg>
+
+<script>
+/* ============================================================
+   CONFIG — edit these values
+   ============================================================ */
+const CONFIG = {
+  whatsapp: "212661464222",                // 06 61 46 42 22
+  instagram: "",                            // add the Instagram link here when ready (the buttons appear automatically)
+  maps: "https://share.google/YRnU4etdlmtSaHehn",
+  // Car photos: transparent-background studio renders, all at the same angle.
+  imageApi: "https://cdn.imagin.studio/getImage",
+  imageCustomer: "hrjavascript-mastery",
+  imageAngle: "23"
+};
+
+/* Colours offered for every car (hex = swatch, api = colour sent to the photo service) */
+const COLORS = {
+  white:  {hex:"#f2f2f0", api:"white",  en:"White",  fr:"Blanc",  ar:"أبيض"},
+  black:  {hex:"#111111", api:"black",  en:"Black",  fr:"Noir",   ar:"أسود"},
+  grey:   {hex:"#8d9196", api:"grey",   en:"Grey",   fr:"Gris",   ar:"رمادي"},
+  silver: {hex:"#c7cacf", api:"silver", en:"Silver", fr:"Argent", ar:"فضي"},
+  blue:   {hex:"#1f3f73", api:"blue",   en:"Blue",   fr:"Bleu",   ar:"أزرق"},
+  red:    {hex:"#9c1c24", api:"red",    en:"Red",    fr:"Rouge",  ar:"أحمر"}
+};
+
+/* ============================================================
+   FLEET DATA
+   To use your own photos, put a transparent PNG in /images and
+   set  photo: "images/sandero.png"  (it will be used first).
+   ============================================================ */
+/* Fleet photos (same dark studio, same angle, 16:9). Embedded so the site is one file. */
+const PHOTOS = Object.fromEntries(["sandero","logan","clio","c3","accent","golf","tucson"].map(id => [id, `images/cars/${id}.webp`]));
+const CARS = [
+  { id:"sandero", brand:"Dacia", model:"Sandero", make:"dacia", family:"sandero", year:2023,
+    price:199, type:"city", seats:5, doors:5, gear:"manual", fuel:"diesel", bags:2,
+    colors:["white","grey","silver","blue"], badge:"best",
+    desc:{ en:"The smart everyday choice — economical, easy to park and surprisingly roomy for city life and weekend escapes.",
+           fr:"Le choix malin du quotidien — économique, facile à garer et étonnamment spacieux pour la ville et les week-ends.",
+           ar:"الاختيار الذكي لكل يوم — اقتصادية، سهلة الركن وواسعة بشكل مفاجئ للمدينة ورحلات نهاية الأسبوع." },
+    opts:{ en:["Air conditioning","Bluetooth","USB","Radio","Power steering"],
+           fr:["Climatisation","Bluetooth","USB","Radio","Direction assistée"],
+           ar:["مكيف هواء","بلوتوث","USB","راديو","مقود معزز"] } },
+  { id:"logan", brand:"Dacia", model:"Logan", make:"dacia", family:"logan", year:2023,
+    price:249, type:"sedan", seats:5, doors:4, gear:"manual", fuel:"diesel", bags:3,
+    colors:["white","grey","black","silver"],
+    desc:{ en:"A reliable sedan with one of the biggest boots in its class — perfect for families and long road trips.",
+           fr:"Une berline fiable avec l'un des plus grands coffres de sa catégorie — idéale pour les familles et les longs trajets.",
+           ar:"سيدان موثوقة بصندوق من الأكبر في فئتها — مثالية للعائلات والرحلات الطويلة." },
+    opts:{ en:["Air conditioning","Bluetooth","Cruise control","Large boot","USB"],
+           fr:["Climatisation","Bluetooth","Régulateur de vitesse","Grand coffre","USB"],
+           ar:["مكيف هواء","بلوتوث","مثبت السرعة","صندوق كبير","USB"] } },
+  { id:"clio", brand:"Renault", model:"Clio 5", make:"renault", family:"clio", year:2023,
+    price:249, type:"city", seats:5, doors:5, gear:"manual", fuel:"diesel", bags:2,
+    colors:["red","white","black","blue"],
+    desc:{ en:"Stylish, agile and packed with tech — the French icon that makes every drive feel a little more special.",
+           fr:"Stylée, agile et bien équipée — l'icône française qui rend chaque trajet un peu plus spécial.",
+           ar:"أنيقة ورشيقة ومليئة بالتقنيات — الأيقونة الفرنسية التي تجعل كل رحلة مميزة." },
+    opts:{ en:["Touchscreen","Apple CarPlay / Android Auto","Air conditioning","LED lights","Parking sensors"],
+           fr:["Écran tactile","Apple CarPlay / Android Auto","Climatisation","Feux LED","Radar de recul"],
+           ar:["شاشة لمس","Apple CarPlay / Android Auto","مكيف هواء","أضواء LED","حساسات الركن"] } },
+  { id:"c3", brand:"Citroën", model:"C3", make:"citroen", family:"c3", year:2022,
+    price:249, type:"city", seats:5, doors:5, gear:"manual", fuel:"diesel", bags:2,
+    colors:["white","red","grey","black"],
+    desc:{ en:"Signature Citroën comfort with soft suspension and a playful design — relaxed driving through busy streets.",
+           fr:"Le confort signé Citroën, suspension douce et design ludique — une conduite détendue en pleine ville.",
+           ar:"راحة سيتروين المميزة مع تعليق ناعم وتصميم مرح — قيادة مريحة في شوارع المدينة." },
+    opts:{ en:["Comfort suspension","Touchscreen","Apple CarPlay / Android Auto","Air conditioning","Bluetooth"],
+           fr:["Suspension confort","Écran tactile","Apple CarPlay / Android Auto","Climatisation","Bluetooth"],
+           ar:["تعليق مريح","شاشة لمس","Apple CarPlay / Android Auto","مكيف هواء","بلوتوث"] } },
+  { id:"accent", brand:"Hyundai", model:"Accent", make:"hyundai", family:"accent", year:2021,
+    price:299, type:"sedan", seats:5, doors:4, gear:"auto", fuel:"petrol", bags:3,
+    colors:["white","silver","black","grey"],
+    desc:{ en:"A refined, quiet sedan with automatic gearbox — smooth comfort for business trips and airport transfers.",
+           fr:"Une berline raffinée et silencieuse en boîte automatique — un confort fluide pour vos déplacements pro et transferts aéroport.",
+           ar:"سيدان راقية وهادئة بناقل حركة أوتوماتيكي — راحة سلسة لرحلات العمل والتنقل من وإلى المطار." },
+    opts:{ en:["Automatic","Touchscreen","Rear camera","Air conditioning","Bluetooth"],
+           fr:["Automatique","Écran tactile","Caméra de recul","Climatisation","Bluetooth"],
+           ar:["أوتوماتيك","شاشة لمس","كاميرا خلفية","مكيف هواء","بلوتوث"] } },
+  { id:"golf", brand:"Volkswagen", model:"Golf 8", make:"volkswagen", family:"golf", year:2021,
+    price:499, type:"premium", seats:5, doors:5, gear:"auto", fuel:"diesel", bags:2,
+    colors:["grey","white","black","blue"], badge:"premium",
+    desc:{ en:"The benchmark compact — digital cockpit, precise handling and German build quality for a premium experience.",
+           fr:"La référence des compactes — cockpit digital, tenue de route précise et qualité allemande pour une expérience premium.",
+           ar:"المرجع في فئتها — لوحة قيادة رقمية، ثبات دقيق وجودة ألمانية لتجربة فاخرة." },
+    opts:{ en:["Automatic DSG","Digital cockpit","Apple CarPlay / Android Auto","LED headlights","Climate control","Parking sensors"],
+           fr:["Boîte auto DSG","Cockpit digital","Apple CarPlay / Android Auto","Phares LED","Climatisation auto","Radars de stationnement"],
+           ar:["أوتوماتيك DSG","لوحة قيادة رقمية","Apple CarPlay / Android Auto","مصابيح LED","تكييف أوتوماتيكي","حساسات الركن"] } },
+  { id:"tucson", brand:"Hyundai", model:"Tucson", make:"hyundai", family:"tucson", year:2023,
+    price:499, type:"suv", seats:5, doors:5, gear:"auto", fuel:"diesel", bags:4,
+    colors:["black","white","grey","blue"], badge:"premium",
+    desc:{ en:"Bold, spacious and commanding — the ideal SUV to explore Morocco from the Atlantic coast to the Atlas mountains.",
+           fr:"Audacieux, spacieux et imposant — le SUV idéal pour explorer le Maroc, de la côte atlantique aux montagnes de l'Atlas.",
+           ar:"جريئة وواسعة ومهيبة — سيارة SUV المثالية لاكتشاف المغرب من الساحل الأطلسي إلى جبال الأطلس." },
+    opts:{ en:["Automatic","Large touchscreen","Rear camera","Parking sensors","Cruise control","Climate control"],
+           fr:["Automatique","Grand écran tactile","Caméra de recul","Radars de stationnement","Régulateur de vitesse","Climatisation auto"],
+           ar:["أوتوماتيك","شاشة لمس كبيرة","كاميرا خلفية","حساسات الركن","مثبت السرعة","تكييف أوتوماتيكي"] } }
+];
+
+/* ============================================================
+   TRANSLATIONS
+   ============================================================ */
+const I18N = {
+  en:{
+    "nav.home":"Home","nav.fleet":"Fleet","nav.reserve":"Reservation","nav.contact":"Contact",
+    "cta.book":"Book now","cta.fleet":"View Fleet","cta.reserve":"Reservation",
+    "hero.eyebrow":"Car rental<br>Casablanca · 24/7",
+    "hero.title":'<span class="l1">The best</span><span class="l2">of the best</span>',
+    "hero.lead":"Well-kept cars, honest prices and a team that answers day and night — your keys are ready whenever you are.",
+    "hero.s1":"Cars","hero.s2":"From / day","hero.s3":"Open",
+    "unit.dh":"DH","unit.perday":"/ day",
+    "t1.b":"Fully insured","t1.s":"Comprehensive cover on every car",
+    "t2.b":"Airport delivery","t2.s":"Mohammed V & city hotels",
+    "t3.b":"24/7 assistance","t3.s":"Roadside help, day and night",
+    "t4.b":"No hidden fees","t4.s":"Transparent price per day",
+    "fleet.eyebrow":"Our Fleet","fleet.title":'Choose your <span class="gold-text">companion</span>',
+    "fleet.lead":"Seven carefully maintained cars, cleaned and checked before every rental. Pick a colour, pick your dates — we take care of the rest.",
+    "f.all":"All","type.city":"City car","type.sedan":"Sedan","type.suv":"SUV","type.premium":"Compact premium",
+    "badge.best":"Best price","badge.premium":"Premium",
+    "spec.seats":"seats","spec.manual":"Manual","spec.auto":"Automatic","spec.diesel":"Diesel","spec.petrol":"Petrol","spec.bags":"bags",
+    "car.colour":"Colour","car.reserve":"Reserve",
+    "res.eyebrow":"Reservation","res.title":'Reserve in <span class="gold-text">60 seconds</span>',
+    "res.lead":"Fill in the form — your request is sent straight to our team on WhatsApp and we confirm availability within minutes.",
+    "res.p1":"Free cancellation up to 48h before pick-up",
+    "res.p3":"Delivery to the airport, train station or your hotel","res.p4":"We speak Arabic, French & English",
+    "res.call":"Prefer to talk? Call or WhatsApp us",
+    "form.title":"Your reservation","form.sub":"All fields are required.",
+    "form.car":"Car","form.color":"Colour","form.name":"Full name","form.namePh":"e.g. Yassine El Amrani",
+    "form.phone":"Phone / WhatsApp number","form.from":"Pick-up date","form.to":"Return date",
+    "form.total":"Estimated total","form.submit":"Send reservation","form.choose":"Choose a car…",
+    "form.note":"Your details are only used to confirm your booking.",
+    "form.days1":"day","form.daysN":"days","form.pick":"Select your dates",
+    "err.car":"Please choose a car.","err.name":"Please enter your name.","err.phone":"Please enter a valid phone number.",
+    "err.from":"Choose a pick-up date (today or later).","err.to":"Return must be after pick-up.",
+    "visit.eyebrow":"Visit us","visit.title":'Our agency in <span class="gold-text">Casablanca</span>',
+    "visit.lead":"Drop by to pick up your car, or let us bring it to you. We're always one message away.",
+    "visit.hours":"Open 7 days · 24/7","visit.directions":"Get directions",
+    "foot.rights":"All rights reserved.",
+    "nav.cond":"Conditions","cond.eyebrow":"Rental conditions","cond.title":"Before you <span class=\"gold-text\">hit the road</span>","cond.lead":"Simple, clear conditions — so your rental is safe and stress-free.","cond.c1.b":"Minimum age","cond.c1.p":"The driver must be at least 21 years old.","cond.c2.b":"Driving licence","cond.c2.p":"A valid licence held for at least 2 years. Foreign and international licences accepted.","cond.c3.b":"Identity document","cond.c3.p":"National ID card (CIN) for Moroccan residents, valid passport for international clients.","cond.c4.b":"Security deposit","cond.c4.p":"A deposit is required at pick-up and fully returned when the car comes back in the same condition.","cond.c5.b":"Fuel policy","cond.c5.p":"Return the car with the same fuel level as at pick-up.","cond.c6.b":"Rental period","cond.c6.p":"Minimum rental of 1 day (24 hours). Any additional driver must meet the same conditions.","form.accept":"I have read and accept the <a href=\"#conditions\">rental conditions</a>.","m.loc":"Location","fab.loc":"Our location","fab.wa":"Chat on WhatsApp",
+    "toast":"Opening WhatsApp to send your reservation…",
+    "wa.hello":"Hello Super Fast Car, I'd like to rent a car.",
+    "msg.head":"New reservation — Super Fast Car","msg.car":"Car","msg.color":"Colour","msg.name":"Name","msg.phone":"Phone",
+    "msg.from":"From","msg.to":"To","msg.days":"Duration","msg.total":"Estimated total"
+  },
+  fr:{
+    "nav.home":"Accueil","nav.fleet":"Flotte","nav.reserve":"Réservation","nav.contact":"Contact",
+    "cta.book":"Réserver","cta.fleet":"Voir la flotte","cta.reserve":"Réservation",
+    "hero.eyebrow":"Location de voitures<br>Casablanca · 24h/24",
+    "hero.title":'<span class="l1">The best</span><span class="l2">of the best</span>',
+    "hero.lead":"Des voitures impeccables, des prix honnêtes et une équipe qui répond jour et nuit — vos clés sont prêtes quand vous l'êtes.",
+    "hero.s1":"Voitures","hero.s2":"Dès / jour","hero.s3":"Ouvert",
+    "unit.dh":"DH","unit.perday":"/ jour",
+    "t1.b":"Entièrement assuré","t1.s":"Assurance tous risques sur chaque voiture",
+    "t2.b":"Livraison aéroport","t2.s":"Mohammed V & hôtels en ville",
+    "t3.b":"Assistance 24h/24","t3.s":"Dépannage jour et nuit",
+    "t4.b":"Aucun frais caché","t4.s":"Prix transparent par jour",
+    "fleet.eyebrow":"Notre flotte","fleet.title":'Choisissez votre <span class="gold-text">compagnon</span>',
+    "fleet.lead":"Sept voitures soigneusement entretenues, nettoyées et vérifiées avant chaque location. Choisissez une couleur, vos dates — on s'occupe du reste.",
+    "f.all":"Toutes","type.city":"Citadine","type.sedan":"Berline","type.suv":"SUV","type.premium":"Compacte premium",
+    "badge.best":"Meilleur prix","badge.premium":"Premium",
+    "spec.seats":"places","spec.manual":"Manuelle","spec.auto":"Automatique","spec.diesel":"Diesel","spec.petrol":"Essence","spec.bags":"valises",
+    "car.colour":"Couleur","car.reserve":"Réserver",
+    "res.eyebrow":"Réservation","res.title":'Réservez en <span class="gold-text">60 secondes</span>',
+    "res.lead":"Remplissez le formulaire — votre demande est envoyée directement à notre équipe sur WhatsApp et nous confirmons la disponibilité en quelques minutes.",
+    "res.p1":"Annulation gratuite jusqu'à 48h avant la prise en charge",
+    "res.p3":"Livraison à l'aéroport, à la gare ou à votre hôtel","res.p4":"Nous parlons arabe, français et anglais",
+    "res.call":"Vous préférez parler ? Appelez-nous ou écrivez sur WhatsApp",
+    "form.title":"Votre réservation","form.sub":"Tous les champs sont obligatoires.",
+    "form.car":"Voiture","form.color":"Couleur","form.name":"Nom complet","form.namePh":"ex. Yassine El Amrani",
+    "form.phone":"Téléphone / WhatsApp","form.from":"Date de départ","form.to":"Date de retour",
+    "form.total":"Total estimé","form.submit":"Envoyer la réservation","form.choose":"Choisir une voiture…",
+    "form.note":"Vos données servent uniquement à confirmer votre réservation.",
+    "form.days1":"jour","form.daysN":"jours","form.pick":"Sélectionnez vos dates",
+    "err.car":"Veuillez choisir une voiture.","err.name":"Veuillez saisir votre nom.","err.phone":"Veuillez saisir un numéro valide.",
+    "err.from":"Choisissez une date de départ (aujourd'hui ou plus tard).","err.to":"Le retour doit être après le départ.",
+    "visit.eyebrow":"Nous rendre visite","visit.title":'Notre agence à <span class="gold-text">Casablanca</span>',
+    "visit.lead":"Passez récupérer votre voiture, ou laissez-nous vous la livrer. Nous sommes toujours à un message de vous.",
+    "visit.hours":"Ouvert 7j/7 · 24h/24","visit.directions":"Itinéraire",
+    "foot.rights":"Tous droits réservés.",
+    "nav.cond":"Conditions","cond.eyebrow":"Conditions de location","cond.title":"Avant de <span class=\"gold-text\">prendre la route</span>","cond.lead":"Des conditions simples et claires — pour une location sûre et sans stress.","cond.c1.b":"Âge minimum","cond.c1.p":"Le conducteur doit être âgé d'au moins 21 ans.","cond.c2.b":"Permis de conduire","cond.c2.p":"Permis valide depuis au moins 2 ans. Permis étrangers et internationaux acceptés.","cond.c3.b":"Pièce d'identité","cond.c3.p":"CIN pour les résidents marocains, passeport valide pour les clients internationaux.","cond.c4.b":"Caution","cond.c4.p":"Une caution est demandée à la prise en charge et restituée intégralement au retour du véhicule en bon état.","cond.c5.b":"Carburant","cond.c5.p":"Rendre la voiture avec le même niveau de carburant qu'au départ.","cond.c6.b":"Durée de location","cond.c6.p":"Location minimum d'1 jour (24 heures). Tout conducteur supplémentaire doit remplir les mêmes conditions.","form.accept":"J'ai lu et j'accepte les <a href=\"#conditions\">conditions de location</a>.","m.loc":"Adresse","fab.loc":"Notre adresse","fab.wa":"Discuter sur WhatsApp",
+    "toast":"Ouverture de WhatsApp pour envoyer votre réservation…",
+    "wa.hello":"Bonjour Super Fast Car, je souhaite louer une voiture.",
+    "msg.head":"Nouvelle réservation — Super Fast Car","msg.car":"Voiture","msg.color":"Couleur","msg.name":"Nom","msg.phone":"Téléphone",
+    "msg.from":"Du","msg.to":"Au","msg.days":"Durée","msg.total":"Total estimé"
+  },
+  ar:{
+    "nav.home":"الرئيسية","nav.fleet":"السيارات","nav.reserve":"الحجز","nav.contact":"اتصل بنا",
+    "cta.book":"احجز الآن","cta.fleet":"اكتشف السيارات","cta.reserve":"الحجز",
+    "hero.eyebrow":"كراء السيارات<br>الدار البيضاء · 24/24",
+    "hero.title":'<span class="l1">The best</span><span class="l2">of the best</span>',
+    "hero.lead":"سيارات نظيفة ومعتنى بها، أسعار واضحة وفريق يجيبك ليلاً ونهاراً — مفاتيحك جاهزة متى كنت جاهزاً.",
+    "hero.s1":"سيارات","hero.s2":"ابتداءً من / يوم","hero.s3":"مفتوح",
+    "unit.dh":"درهم","unit.perday":"/ يوم",
+    "t1.b":"تأمين شامل","t1.s":"تغطية كاملة لكل سيارة",
+    "t2.b":"التوصيل للمطار","t2.s":"مطار محمد الخامس وفنادق المدينة",
+    "t3.b":"مساعدة 24/24","t3.s":"مساعدة على الطريق ليلاً ونهاراً",
+    "t4.b":"بدون رسوم خفية","t4.s":"سعر واضح لكل يوم",
+    "fleet.eyebrow":"أسطولنا","fleet.title":'اختر <span class="gold-text">رفيق رحلتك</span>',
+    "fleet.lead":"سبع سيارات مُعتنى بها جيداً، تُنظّف وتُفحص قبل كل كراء. اختر اللون والتواريخ — ونحن نتكفل بالباقي.",
+    "f.all":"الكل","type.city":"سيارة مدينة","type.sedan":"سيدان","type.suv":"SUV","type.premium":"مدمجة فاخرة",
+    "badge.best":"أفضل سعر","badge.premium":"فاخرة",
+    "spec.seats":"مقاعد","spec.manual":"يدوي","spec.auto":"أوتوماتيك","spec.diesel":"ديزل","spec.petrol":"بنزين","spec.bags":"حقائب",
+    "car.colour":"اللون","car.reserve":"احجز",
+    "res.eyebrow":"الحجز","res.title":'احجز في <span class="gold-text">60 ثانية</span>',
+    "res.lead":"املأ الاستمارة — يُرسل طلبك مباشرة إلى فريقنا عبر واتساب ونؤكد التوفر في دقائق.",
+    "res.p1":"إلغاء مجاني حتى 48 ساعة قبل الاستلام",
+    "res.p3":"التوصيل إلى المطار أو محطة القطار أو فندقك","res.p4":"نتحدث العربية والفرنسية والإنجليزية",
+    "res.call":"تفضل الحديث؟ اتصل بنا أو راسلنا على واتساب",
+    "form.title":"حجزك","form.sub":"جميع الحقول إلزامية.",
+    "form.car":"السيارة","form.color":"اللون","form.name":"الاسم الكامل","form.namePh":"مثال: ياسين العمراني",
+    "form.phone":"رقم الهاتف / واتساب","form.from":"تاريخ الاستلام","form.to":"تاريخ الإرجاع",
+    "form.total":"المجموع التقديري","form.submit":"إرسال الحجز","form.choose":"اختر سيارة…",
+    "form.note":"تُستخدم بياناتك فقط لتأكيد حجزك.",
+    "form.days1":"يوم","form.daysN":"أيام","form.pick":"اختر التواريخ",
+    "err.car":"المرجو اختيار سيارة.","err.name":"المرجو إدخال اسمك.","err.phone":"المرجو إدخال رقم هاتف صحيح.",
+    "err.from":"اختر تاريخ الاستلام (اليوم أو بعده).","err.to":"يجب أن يكون الإرجاع بعد الاستلام.",
+    "visit.eyebrow":"زورونا","visit.title":'وكالتنا في <span class="gold-text">الدار البيضاء</span>',
+    "visit.lead":"مرّ لاستلام سيارتك، أو دعنا نوصلها إليك. نحن دائماً على بُعد رسالة.",
+    "visit.hours":"مفتوح 7 أيام · 24/24","visit.directions":"الاتجاهات",
+    "foot.rights":"جميع الحقوق محفوظة.",
+    "nav.cond":"الشروط","cond.eyebrow":"شروط الكراء","cond.title":"قبل أن <span class=\"gold-text\">تنطلق</span>","cond.lead":"شروط بسيطة وواضحة — لكراء آمن ومريح.","cond.c1.b":"السن الأدنى","cond.c1.p":"يجب ألا يقل عمر السائق عن 21 سنة.","cond.c2.b":"رخصة السياقة","cond.c2.p":"رخصة سارية منذ سنتين على الأقل. تُقبل الرخص الأجنبية والدولية.","cond.c3.b":"وثيقة الهوية","cond.c3.p":"البطاقة الوطنية للمقيمين بالمغرب، وجواز سفر ساري المفعول للزبناء الأجانب.","cond.c4.b":"الضمانة","cond.c4.p":"تُطلب ضمانة عند الاستلام وتُسترجع كاملة عند إرجاع السيارة بنفس الحالة.","cond.c5.b":"الوقود","cond.c5.p":"إرجاع السيارة بنفس مستوى الوقود عند الاستلام.","cond.c6.b":"مدة الكراء","cond.c6.p":"الحد الأدنى للكراء يوم واحد (24 ساعة). يجب أن يستوفي أي سائق إضافي نفس الشروط.","form.accept":"قرأت وأوافق على <a href=\"#conditions\">شروط الكراء</a>.","m.loc":"الموقع","fab.loc":"موقعنا","fab.wa":"تواصل عبر واتساب",
+    "toast":"جارٍ فتح واتساب لإرسال حجزك…",
+    "wa.hello":"مرحباً Super Fast Car، أود كراء سيارة.",
+    "msg.head":"حجز جديد — Super Fast Car","msg.car":"السيارة","msg.color":"اللون","msg.name":"الاسم","msg.phone":"الهاتف",
+    "msg.from":"من","msg.to":"إلى","msg.days":"المدة","msg.total":"المجموع التقديري"
+  }
+};
+
+/* ============================================================
+   APP
+   ============================================================ */
+let lang = "fr";
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => [...r.querySelectorAll(s)];
+const t = k => (I18N[lang] && I18N[lang][k]) || I18N.fr[k] || k;
+const carById = id => CARS.find(c => c.id === id);
+const state = { filter:"all", color:{} };
+CARS.forEach(c => { state.color[c.id] = c.colors[0]; if (PHOTOS[c.id]) c.photo = PHOTOS[c.id]; });
+
+/* --- car imagery: studio render → your own photo → elegant silhouette --- */
+const SILHOUETTE = "data:image/svg+xml," + encodeURIComponent(
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 160"><defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#ff8a8e"/><stop offset="1" stop-color="#a3121a"/></linearGradient></defs><path d="M30 112c0-14 6-22 22-26l52-10 46-30c10-6 22-9 34-9h70c14 0 26 5 36 14l32 26 34 8c14 4 20 12 20 24v10c0 5-4 8-9 8h-22a34 34 0 0 0-66 0H147a34 34 0 0 0-66 0H40c-6 0-10-4-10-9z" fill="none" stroke="url(#g)" stroke-width="3"/><path d="M160 58l24-15c6-3 12-5 19-5h32v35h-86zm90-20h22c10 0 19 4 26 10l18 16-66 9z" fill="rgba(225,38,45,.12)" stroke="url(#g)" stroke-width="2"/><circle cx="114" cy="128" r="24" fill="none" stroke="url(#g)" stroke-width="3"/><circle cx="296" cy="128" r="24" fill="none" stroke="url(#g)" stroke-width="3"/></svg>`);
+
+function imageSources(car, colorKey, width=800){
+  const col = COLORS[colorKey] || COLORS.white;
+  const q = new URLSearchParams({
+    customer:CONFIG.imageCustomer, make:car.make, modelFamily:car.family, modelYear:car.year,
+    angle:CONFIG.imageAngle, zoomType:"fullscreen", paintDescription:col.api, width
+  });
+  const list = [];
+  if (car.photo) list.push(car.photo);
+  list.push(`${CONFIG.imageApi}?${q}`);
+  // same model without year/colour constraint as a second chance
+  list.push(`${CONFIG.imageApi}?${new URLSearchParams({customer:CONFIG.imageCustomer, make:car.make, modelFamily:car.family, angle:CONFIG.imageAngle, zoomType:"fullscreen", width})}`);
+  list.push(SILHOUETTE);
+  return list;
+}
+function setCarImage(img, car, colorKey, width){
+  const srcs = imageSources(car, colorKey, width);
+  let i = 0;
+  img.onerror = () => { i++; if (i < srcs.length) img.src = srcs[i]; };
+  img.onload = () => { img.style.opacity = 1; };
+  img.src = srcs[0];
+  img.alt = `${car.brand} ${car.model}`;
+}
+
+/* --- icons for specs --- */
+const IC = {
+  seats:'<svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="3.5"/><path d="M5 21v-2a7 7 0 0 1 14 0v2"/></svg>',
+  gear:'<svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2"/><circle cx="12" cy="6" r="2"/><circle cx="18" cy="6" r="2"/><circle cx="6" cy="18" r="2"/><circle cx="12" cy="18" r="2"/><path d="M6 8v8M12 8v8M18 8v4H6"/></svg>',
+  fuel:'<svg viewBox="0 0 24 24"><path d="M4 21V5a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v16M3 21h13M4 10h11"/><path d="M15 8l3 2v7a1.5 1.5 0 0 0 3 0V9l-3-3"/></svg>',
+  bags:'<svg viewBox="0 0 24 24"><rect x="5" y="7" width="14" height="13" rx="2"/><path d="M9 7V4h6v3M9 11v5M15 11v5"/></svg>'
+};
+
+/* --- render fleet --- */
+function renderFilters(){
+  const types = ["all","city","sedan","suv","premium"];
+  $("#filters").innerHTML = types.map(tp =>
+    `<button class="chip ${state.filter===tp?"active":""}" data-f="${tp}">${t(tp==="all"?"f.all":"type."+tp)}</button>`).join("");
+  $$("#filters .chip").forEach(b => b.onclick = () => { state.filter = b.dataset.f; renderFilters(); applyFilter(); });
+}
+function applyFilter(){
+  $("#fleetGrid").classList.toggle("all", state.filter==="all");
+  $$(".car").forEach(el => el.classList.toggle("hide", state.filter!=="all" && el.dataset.type!==state.filter));
+}
+function renderFleet(){
+  const grid = $("#fleetGrid");
+  grid.innerHTML = CARS.map(c => `
+    <article class="car reveal in" data-id="${c.id}" data-type="${c.type}">
+      <div class="car-stage">
+        <img loading="lazy" style="opacity:0">
+      </div>
+      <div class="car-body">
+        <div class="car-tags"><span class="car-type">${t("type."+c.type)}</span>${c.badge ? `<span class="car-badge">${t("badge."+c.badge)}</span>` : ""}</div>
+        <div class="car-head">
+          <div><div class="car-brand">${c.brand}</div><h3 class="car-name">${c.model}</h3></div>
+          <div class="car-price"><b class="gold-text">${c.price}</b><span>${t("unit.dh")} ${t("unit.perday")}</span></div>
+        </div>
+        <p class="car-desc">${c.desc[lang]}</p>
+        <div class="specs">
+          <div class="spec">${IC.seats}${c.seats} ${t("spec.seats")}</div>
+          <div class="spec">${IC.gear}${t("spec."+c.gear)}</div>
+          <div class="spec">${IC.fuel}${t("spec."+c.fuel)}</div>
+          <div class="spec">${IC.bags}${c.bags} ${t("spec.bags")}</div>
+        </div>
+        <div class="opts">${c.opts[lang].map(o=>`<span class="opt">${o}</span>`).join("")}</div>
+        <div class="swatches"><small>${t("car.colour")}</small>
+          ${c.colors.map(k=>`<button class="sw ${state.color[c.id]===k?"active":""}" data-c="${k}" title="${COLORS[k][lang]}" aria-label="${COLORS[k][lang]}" style="background:${COLORS[k].hex}"></button>`).join("")}
+        </div>
+        <div class="car-actions">
+          <a href="#reservation" class="btn btn-gold js-reserve">${t("car.reserve")}
+            <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a class="btn btn-ghost btn-icon" target="_blank" rel="noopener" aria-label="WhatsApp"
+             href="https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(t("wa.hello")+" — "+c.brand+" "+c.model)}">
+             <svg viewBox="0 0 24 24" fill="currentColor"><use href="#i-wa"/></svg></a>
+        </div>
+      </div>
+    </article>`).join("");
+
+  $$(".car").forEach(el => {
+    const car = carById(el.dataset.id);
+    const img = $(".car-stage img", el);
+    setCarImage(img, car, state.color[car.id], 800);
+    $$(".sw", el).forEach(sw => sw.onclick = () => {
+      state.color[car.id] = sw.dataset.c;
+      $$(".sw", el).forEach(s => s.classList.toggle("active", s===sw));
+      img.style.opacity = .25;
+      setCarImage(img, car, sw.dataset.c, 800);
+    });
+    $(".js-reserve", el).onclick = () => { selectCar(car.id, state.color[car.id]); };
+  });
+  applyFilter();
+}
+
+/* --- reservation form --- */
+const fCar=$("#fCar"), fColor=$("#fColor"), fName=$("#fName"), fPhone=$("#fPhone"), fFrom=$("#fFrom"), fTo=$("#fTo");
+const iso = d => new Date(d.getTime() - d.getTimezoneOffset()*60000).toISOString().slice(0,10);
+const today = () => { const d=new Date(); d.setHours(0,0,0,0); return d; };
+
+function fillCarSelect(){
+  const cur = fCar.value;
+  fCar.innerHTML = `<option value="">${t("form.choose")}</option>` +
+    CARS.map(c=>`<option value="${c.id}">${c.brand} ${c.model} — ${c.price} ${t("unit.dh")}${t("unit.perday")}</option>`).join("");
+  fCar.value = cur;
+  fillColorSelect();
+}
+function fillColorSelect(){
+  const car = carById(fCar.value);
+  const cur = fColor.value;
+  const keys = car ? car.colors : Object.keys(COLORS);
+  fColor.innerHTML = keys.map(k=>`<option value="${k}">${COLORS[k][lang]}</option>`).join("");
+  if (keys.includes(cur)) fColor.value = cur;
+}
+function selectCar(id, color){
+  fCar.value = id; fillColorSelect();
+  if (color) fColor.value = color;
+  clearErr(fCar); updateSummary();
+}
+function nights(){
+  if (!fFrom.value || !fTo.value) return 0;
+  const d = (new Date(fTo.value) - new Date(fFrom.value)) / 86400000;
+  return d > 0 ? Math.round(d) : 0;
+}
+let sumKey = "";
+function updateSummary(){
+  const car = carById(fCar.value);
+  const n = nights();
+  const key = (car?car.id:"") + "|" + fColor.value;
+  if (car && key !== sumKey){ setCarImage($("#sumImg"), car, fColor.value, 400); sumKey = key; }
+  $("#sumImg").style.visibility = car ? "visible" : "hidden";
+  $("#sumName").textContent = car ? `${car.brand} ${car.model} · ${COLORS[fColor.value]?.[lang]||""}` : t("form.choose");
+  $("#sumDays").textContent = n ? `${n} ${n>1?t("form.daysN"):t("form.days1")} × ${car?car.price:"—"} ${t("unit.dh")}` : t("form.pick");
+  $("#sumTotal").textContent = car && n ? `${(car.price*n).toLocaleString("fr-FR")} ${t("unit.dh")}` : "—";
+}
+function setErr(el){ el.classList.add("err"); el.closest(".field").classList.add("has-err"); }
+function clearErr(el){ el.classList.remove("err"); el.closest(".field").classList.remove("has-err"); }
+
+fCar.onchange = () => { fillColorSelect(); clearErr(fCar); updateSummary(); };
+fColor.onchange = updateSummary;
+fFrom.onchange = () => {
+  clearErr(fFrom);
+  if (fFrom.value){
+    const min = new Date(fFrom.value); min.setDate(min.getDate()+1);
+    fTo.min = iso(min);
+    if (!fTo.value || fTo.value <= fFrom.value) fTo.value = iso(min);
+  }
+  clearErr(fTo); updateSummary();
+};
+fTo.onchange = () => { clearErr(fTo); updateSummary(); };
+[fName,fPhone].forEach(el => el.oninput = () => clearErr(el));
+$("#fAccept").onchange = () => $("#acceptWrap").classList.remove("has-err");
+
+$("#resForm").addEventListener("submit", e => {
+  e.preventDefault();
+  let ok = true;
+  const phoneDigits = fPhone.value.replace(/[^\d]/g,"");
+  if (!fCar.value){ setErr(fCar); ok=false; }
+  if (fName.value.trim().length < 2){ setErr(fName); ok=false; }
+  if (phoneDigits.length < 9){ setErr(fPhone); ok=false; }
+  if (!fFrom.value || new Date(fFrom.value) < new Date(iso(today()))){ setErr(fFrom); ok=false; }
+  if (!nights()){ setErr(fTo); ok=false; }
+  if (!$("#fAccept").checked){ $("#acceptWrap").classList.add("has-err"); ok=false; }
+  if (!ok){ const f = $(".has-err .input") || $(".accept.has-err input"); f && f.focus(); return; }
+
+  const car = carById(fCar.value), n = nights();
+  const fmt = v => new Date(v).toLocaleDateString(lang==="ar"?"ar-MA":lang==="fr"?"fr-FR":"en-GB",{day:"2-digit",month:"short",year:"numeric"});
+  const msg = [
+    `*${t("msg.head")}*`, "",
+    `🚗 ${t("msg.car")}: ${car.brand} ${car.model} (${car.price} ${t("unit.dh")} ${t("unit.perday")})`,
+    `🎨 ${t("msg.color")}: ${COLORS[fColor.value][lang]}`,
+    `👤 ${t("msg.name")}: ${fName.value.trim()}`,
+    `📞 ${t("msg.phone")}: +${phoneDigits}`,
+    `📅 ${t("msg.from")}: ${fmt(fFrom.value)}`,
+    `📅 ${t("msg.to")}: ${fmt(fTo.value)}`,
+    `⏱ ${t("msg.days")}: ${n} ${n>1?t("form.daysN"):t("form.days1")}`,
+    `💰 ${t("msg.total")}: ${(car.price*n).toLocaleString("fr-FR")} ${t("unit.dh")}`
+  ].join("\n");
+  const toast = $("#toast"); toast.classList.add("show");
+  setTimeout(()=>toast.classList.remove("show"), 3500);
+  const link = document.createElement("a");
+  link.href = `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(msg)}`;
+  link.target = "_blank"; link.rel = "noopener";
+  document.body.appendChild(link); link.click(); link.remove();
+});
+
+/* --- language --- */
+function applyLang(l){
+  lang = I18N[l] ? l : "fr";
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang==="ar" ? "rtl" : "ltr";
+  $$("[data-i18n]").forEach(el => el.textContent = t(el.dataset.i18n));
+  $$("[data-i18n-html]").forEach(el => el.innerHTML = t(el.dataset.i18nHtml));
+  $$("[data-i18n-ph]").forEach(el => el.placeholder = t(el.dataset.i18nPh));
+  $$(".lang button").forEach(b => b.classList.toggle("active", b.dataset.l===lang));
+  $$(".js-wa").forEach(a => a.href = `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(t("wa.hello"))}`);
+  renderFilters(); renderFleet(); fillCarSelect(); updateSummary();
+  try { localStorage.setItem("sfc-lang", lang); } catch(e){}
+}
+$$(".lang button").forEach(b => b.onclick = () => applyLang(b.dataset.l));
+
+/* --- static links --- */
+$$(".js-ig").forEach(a => CONFIG.instagram ? a.href = CONFIG.instagram : a.remove());
+if (!CONFIG.instagram) document.documentElement.classList.add("no-ig");
+$$(".js-maps").forEach(a => a.href = CONFIG.maps);
+
+/* --- nav --- */
+const nav = $("#nav");
+const onScroll = () => nav.classList.toggle("scrolled", scrollY > 30);
+addEventListener("scroll", onScroll, {passive:true}); onScroll();
+$("#burger").onclick = () => nav.classList.toggle("open");
+$$("#mobileMenu a").forEach(a => a.onclick = () => nav.classList.remove("open"));
+
+/* --- reveal on scroll --- */
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target);} }), {threshold:.12});
+$$(".reveal").forEach(el => io.observe(el));
+
+/* --- init --- */
+$("#year").textContent = new Date().getFullYear();
+fFrom.min = iso(today());
+{ const tm = new Date(today()); tm.setDate(tm.getDate()+1); fTo.min = iso(tm); }
+let saved = null; try { saved = localStorage.getItem("sfc-lang"); } catch(e){}
+applyLang(saved || "fr");
+</script>
+<script>
+/* ============================================================
+   RIBBON GLOW BACKGROUND (WebGL2, adapted from Originkit "Ribbon Glow")
+   Preset: color1 #E1262D, color2 #7A0C12, speed 26, size 76, angle -50, hover 118, reach 231
+   ============================================================ */
+(function(){
+  const RIBBON = { background:"#0B0A0C", color1:"#E1262D", color2:"#7A0C12", speed:26, size:76, angle:-50, hover:118, reach:231 };
+  const canvas = document.getElementById("ribbon");
+  if (!canvas) return;
+  const gl = canvas.getContext("webgl2", { antialias:false, alpha:false, depth:false, stencil:false, powerPreference:"high-performance" });
+  if (!gl) { canvas.remove(); return; }
+
+  const LAYERS = 84, TWIST = 1.25, DRAG = 0.18;
+  const VERT = `#version 300 es
+const vec2 P[3] = vec2[3](vec2(-1.0,-1.0), vec2(3.0,-1.0), vec2(-1.0,3.0));
+void main(){ gl_Position = vec4(P[gl_VertexID], 0.0, 1.0); }`;
+  const FIELD = `#version 300 es
+precision highp float;
+uniform vec2 uRes; uniform float uTime; uniform vec3 uC1; uniform vec3 uC2;
+uniform float uSize; uniform float uAngle; uniform vec2 uMouse; uniform float uOn; uniform float uReach; uniform vec2 uVel;
+out vec4 o;
+const float LAYERS = ${LAYERS.toFixed(1)};
+const float TWIST = ${TWIST.toFixed(3)};
+const float DRAG = ${DRAG.toFixed(3)};
+const float GAIN = 0.62;
+const vec2 CENTRE = vec2(-0.62, 0.24);
+const float TILT = 0.6; const float ZOOM = 1.05; const float THETA = 2.13;
+const float SHEAR = 0.963; const float SHRINK = 0.953;
+const vec2 WARP_FREQ = vec2(0.42, 2.4); const vec2 WARP_AMP = vec2(0.13, 0.027);
+const vec2 ASPECT = vec2(2.1, 0.17); const float OFFSET = 0.36;
+const float GLOW = 0.0021; const float SOFT = 0.0019; const float FALLOFF = 0.37;
+const float PHASE = 12.0; const float CYCLE = 0.16; const float HUE_TRAVEL = 2.0;
+mat2 rot(float a){ float c = cos(a), s = sin(a); return mat2(c, s, -s, c); }
+void main(){
+  vec2 R = uRes;
+  vec2 pos = (gl_FragCoord.xy - 0.5 * R) / R.y;
+  vec2 d = pos - uMouse;
+  float w = uOn * exp(-dot(d, d) / (uReach * uReach));
+  if (w > 1e-4) pos = uMouse + rot(w * TWIST) * d * (1.0 - 0.3 * min(w, 1.0)) - uVel * min(w, 1.0) * DRAG;
+  pos = rot(uAngle) * pos / uSize;
+  float t = uTime * 0.49 + PHASE;
+  float breath = (-sin(uTime * 0.735) + sin(uTime * 0.49 + 1.0)) * 0.25 + 0.5;
+  vec2 u = rot(TILT) * ((pos - CENTRE) * (ZOOM - breath * 0.085));
+  mat2 fold = mat2(cos(THETA), sin(THETA), -SHEAR, cos(THETA));
+  vec3 col = vec3(0.0);
+  for (float i = 1.0; i <= LAYERS; i += 1.0) {
+    u.x -= sin(u.y * WARP_FREQ.x + t + i * 0.007) * WARP_AMP.x;
+    u.y -= sin(u.x * WARP_FREQ.y - t + i * 0.02) * WARP_AMP.y;
+    u = fold * u * SHRINK;
+    vec2 q = (u - vec2(OFFSET + breath * 0.1, 0.0)) * ASPECT;
+    float g = GLOW / (dot(q, q) + SOFT) * (0.25 + breath * 0.4);
+    float r = length(u);
+    float k = sin(i * CYCLE + t * 1.2 + r * HUE_TRAVEL) * 0.5 + 0.5;
+    col += g * mix(uC1, uC2, k) * (0.62 + 0.5 * k) * exp2(-r * FALLOFF);
+  }
+  vec3 x = max(col * GAIN, 0.0);
+  col = (x * (2.51 * x + 0.03)) / (x * (2.43 * x + 0.59) + 0.14);
+  col = pow(clamp(col, 0.0, 1.0), vec3(0.85, 0.92, 0.98));
+  col *= 1.0 - smoothstep(0.5, 1.6, length(pos)) * 0.07;
+  o = vec4(col, 1.0);
+}`;
+  const FINISH = `#version 300 es
+precision highp float;
+uniform sampler2D uField; uniform vec2 uRes; uniform float uTime; uniform vec3 uBg; uniform float uPaper;
+out vec4 o;
+float ign(vec2 p, float f){ p += 5.588238 * mod(f, 64.0); return fract(52.9829189 * fract(0.06711056 * p.x + 0.00583715 * p.y)); }
+void main(){
+  vec2 frag = gl_FragCoord.xy;
+  vec3 L = max(texture(uField, frag / uRes).rgb, 0.0);
+  vec3 dark = uBg + L * (1.0 - uBg);
+  float strength = clamp(max(L.r, max(L.g, L.b)), 0.0, 1.0);
+  vec3 paper = uBg * (1.0 - strength) + L * 0.96;
+  vec3 col = mix(dark, paper, uPaper);
+  col += (ign(frag, floor(uTime * 24.0)) - 0.5) / 255.0;
+  o = vec4(clamp(col, 0.0, 1.0), 1.0);
+}`;
+
+  const hex = h => { h = h.replace("#",""); return [0,2,4].map(i => parseInt(h.slice(i,i+2),16)/255); };
+  const clamp = (v,lo,hi) => v<lo?lo:v>hi?hi:v;
+
+  function link(frag){
+    const mk = (type, src) => {
+      const sh = gl.createShader(type); gl.shaderSource(sh, src); gl.compileShader(sh);
+      if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) { console.error("RibbonGlow shader:", gl.getShaderInfoLog(sh)); return null; }
+      return sh;
+    };
+    const vs = mk(gl.VERTEX_SHADER, VERT), fs = mk(gl.FRAGMENT_SHADER, frag);
+    if (!vs || !fs) return null;
+    const p = gl.createProgram(); gl.attachShader(p, vs); gl.attachShader(p, fs); gl.linkProgram(p);
+    gl.deleteShader(vs); gl.deleteShader(fs);
+    if (!gl.getProgramParameter(p, gl.LINK_STATUS)) { console.error("RibbonGlow link:", gl.getProgramInfoLog(p)); return null; }
+    return p;
+  }
+  const field = link(FIELD), finish = link(FINISH);
+  if (!field || !finish) { canvas.remove(); return; }
+  const loc = (p, names) => Object.fromEntries(names.map(n => [n, gl.getUniformLocation(p, n)]));
+  const uf = loc(field, ["uRes","uTime","uC1","uC2","uSize","uAngle","uMouse","uOn","uReach","uVel"]);
+  const un = loc(finish, ["uField","uRes","uTime","uBg","uPaper"]);
+  gl.bindVertexArray(gl.createVertexArray());
+
+  // offscreen field target (half-float when available)
+  const fbo = gl.createFramebuffer();
+  let tex = null, tw = 0, th = 0, half = !!gl.getExtension("EXT_color_buffer_float");
+  function resizeTarget(w, h){
+    if (w === tw && h === th && tex) return;
+    for (let a = 0; a < 2; a++){
+      if (tex) gl.deleteTexture(tex);
+      tex = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, tex);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+      gl.texImage2D(gl.TEXTURE_2D, 0, half ? gl.RGBA16F : gl.RGBA8, w, h, 0, gl.RGBA, half ? gl.HALF_FLOAT : gl.UNSIGNED_BYTE, null);
+      gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
+      gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, tex, 0);
+      const ok = gl.checkFramebufferStatus(gl.FRAMEBUFFER) === gl.FRAMEBUFFER_COMPLETE;
+      gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+      if (ok || !half) break;
+      half = false;
+    }
+    tw = w; th = h;
+  }
+
+  // pointer (the canvas covers the viewport, so viewport coords are canvas coords)
+  const ptr = { tx:0, ty:0, inside:false };
+  const read = e => { ptr.tx = e.clientX; ptr.ty = e.clientY; ptr.inside = true; };
+  addEventListener("pointermove", read, { passive:true });
+  addEventListener("pointerdown", read, { passive:true });
+  document.addEventListener("pointerout", e => { if (!e.relatedTarget) ptr.inside = false; });
+  addEventListener("touchend", () => { ptr.inside = false; }, { passive:true });
+
+  const mobile = matchMedia("(max-width:760px)").matches || matchMedia("(pointer:coarse)").matches;
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const MAX_DPR = mobile ? 1.25 : 2;
+  const FIELD_SCALE = mobile ? 0.4 : 0.5;   // the field is rendered at reduced resolution, then upscaled
+
+  const v = {
+    speed: clamp(RIBBON.speed,0,100)/50, size: clamp(RIBBON.size,50,200)/100,
+    angle: clamp(RIBBON.angle,-180,180)*Math.PI/180, hover: clamp(RIBBON.hover,0,200)/100, reach: clamp(RIBBON.reach,10,800)
+  };
+  const c1 = hex(RIBBON.color1), c2 = hex(RIBBON.color2), bg = hex(RIBBON.background);
+  const bgLum = 0.2126*bg[0] + 0.7152*bg[1] + 0.0722*bg[2];
+
+  let mx=0, my=0, vx=0, vy=0, on=0, raf=0, last=-1, clock=0, running=false;
+
+  function frame(now){
+    raf = requestAnimationFrame(frame);
+    const dt = last < 0 ? 0 : clamp((now-last)/1000, 0, 0.05);
+    last = now;
+    clock = (clock + dt*v.speed) % 3600;
+    draw(dt);
+  }
+  function draw(dt){
+    const dpr = Math.min(devicePixelRatio || 1, MAX_DPR);
+    const cw = canvas.clientWidth || innerWidth, ch = canvas.clientHeight || innerHeight;
+    const bw = Math.max(1, Math.round(cw*dpr)), bh = Math.max(1, Math.round(ch*dpr));
+    if (canvas.width !== bw || canvas.height !== bh){ canvas.width = bw; canvas.height = bh; }
+    resizeTarget(Math.max(1, Math.round(bw*FIELD_SCALE)), Math.max(1, Math.round(bh*FIELD_SCALE)));
+
+    const present = ptr.inside ? 1 : 0;
+    if (present && on < 0.02){ mx = ptr.tx; my = ptr.ty; }
+    on += (present - on) * (1 - Math.exp(-dt*5));
+    const k = 1 - Math.exp(-dt*16);
+    const nx = mx + (ptr.tx-mx)*k, ny = my + (ptr.ty-my)*k;
+    if (dt > 0){ const kv = 1 - Math.exp(-dt*8); vx += ((nx-mx)/dt - vx)*kv; vy += ((ny-my)/dt - vy)*kv; }
+    mx = nx; my = ny;
+    const vLen = Math.hypot(vx, vy)/ch, vCap = vLen > 3 ? 3/vLen : 1;
+
+    gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
+    gl.viewport(0, 0, tw, th);
+    gl.useProgram(field);
+    gl.uniform2f(uf.uRes, tw, th);
+    gl.uniform1f(uf.uTime, clock);
+    gl.uniform3f(uf.uC1, c1[0], c1[1], c1[2]);
+    gl.uniform3f(uf.uC2, c2[0], c2[1], c2[2]);
+    gl.uniform1f(uf.uSize, v.size);
+    gl.uniform1f(uf.uAngle, v.angle);
+    gl.uniform2f(uf.uMouse, (mx - cw/2)/ch, (ch/2 - my)/ch);
+    gl.uniform1f(uf.uOn, on*v.hover);
+    gl.uniform1f(uf.uReach, v.reach/ch);
+    gl.uniform2f(uf.uVel, (vx/ch)*vCap, (-vy/ch)*vCap);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    gl.viewport(0, 0, bw, bh);
+    gl.useProgram(finish);
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, tex);
+    gl.uniform1i(un.uField, 0);
+    gl.uniform2f(un.uRes, bw, bh);
+    gl.uniform1f(un.uTime, clock);
+    gl.uniform3f(un.uBg, bg[0], bg[1], bg[2]);
+    gl.uniform1f(un.uPaper, clamp((bgLum-0.35)/0.3, 0, 1));
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+  }
+  function start(){ if (running || reduced) return; running = true; last = -1; raf = requestAnimationFrame(frame); }
+  function stop(){ running = false; cancelAnimationFrame(raf); }
+
+  document.documentElement.classList.add("has-ribbon");
+  clock = 8;            // start on a nicely developed frame
+  draw(0);              // first frame immediately (also the only frame with reduced motion)
+  if (reduced) addEventListener("resize", () => draw(0));
+  start();
+  document.addEventListener("visibilitychange", () => document.hidden ? stop() : start());
+
+  // soften the ribbons behind content once the visitor scrolls past the hero
+  const scrim = document.getElementById("ribbonScrim");
+  const onScroll = () => { if (scrim) scrim.style.opacity = (0.35 + 0.65*clamp(scrollY / (innerHeight*0.8), 0, 1)).toFixed(3); };
+  addEventListener("scroll", onScroll, { passive:true }); onScroll();
+})();
+</script>
+</body>
+</html>
