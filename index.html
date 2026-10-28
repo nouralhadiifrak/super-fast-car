@@ -10,10 +10,8 @@
 <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@700&display=swap" rel="stylesheet">
-<link rel="preconnect" href="https://api.fontshare.com" crossorigin>
-<link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@500,700,800&display=swap" rel="stylesheet">
-<link href="https://api.fontshare.com/v2/css?f[]=erode@400,500,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Oswald:wght@700&family=Manrope:wght@300;400;500;600;700&family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
+
 
 <style>
 /* ============================================================
@@ -39,9 +37,9 @@
   --radius:22px;
   --radius-sm:14px;
   --shadow:0 30px 60px -20px rgba(0,0,0,.65);
-  --ff-display:"Cabinet Grotesk",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;  /* titles, buttons, labels, numbers */
-  --ff-body:"Erode",Georgia,"Times New Roman",serif;                                /* running text */
-  --ff-num:var(--ff-display);
+  --ff-display:"DM Serif Display",Georgia,"Times New Roman",serif;   /* one weight only: keep titles at 400 */
+  --ff-body:"Manrope",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  --ff-num:"Montserrat","Manrope",system-ui,sans-serif;
   --maxw:1220px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -58,14 +56,13 @@ button,input,select{font:inherit;color:inherit}
 ::selection{background:var(--gold);color:#fff}
 
 /* ---------- utilities ---------- */
-.btn,.nav-links,.mobile-menu a,.eyebrow,.hero-kicker,.chip,.car-type,.car-badge,.car-brand,.field label,.mbar a,.hero-stats span,.form-sub,.toast span{font-family:var(--ff-display)}
 .eyebrow{
   display:inline-flex;align-items:center;gap:10px;
   font-size:.74rem;letter-spacing:.32em;text-transform:uppercase;color:var(--gold);font-weight:600;
 }
 .eyebrow::before{content:"";width:28px;height:1px;background:var(--gold)}
 .h-display{
-  font-family:var(--ff-display);font-weight:800;line-height:1.02;letter-spacing:-.02em;color:var(--ivory);
+  font-family:var(--ff-display);font-weight:400;font-synthesis:none;line-height:1.05;letter-spacing:-.005em;color:var(--ivory);
 }
 .gold-text{background:var(--gold-grad);-webkit-background-clip:text;background-clip:text;color:transparent}
 .section{padding:110px 0;position:relative}
@@ -124,7 +121,7 @@ button,input,select{font:inherit;color:inherit}
 .lang{display:flex;border:1px solid var(--line);border-radius:999px;padding:3px;background:rgba(255,255,255,.02)}
 .lang button{
   border:0;background:transparent;cursor:pointer;height:32px;min-width:38px;padding:0 10px;border-radius:999px;
-  font-size:.78rem;font-weight:700;color:var(--muted);letter-spacing:.06em;transition:.25s;font-family:var(--ff-display);
+  font-size:.78rem;font-weight:700;color:var(--muted);letter-spacing:.06em;transition:.25s;font-family:var(--ff-body);
 }
 .lang button.active{background:var(--gold-grad);color:var(--on-accent)}
 .nav .btn{--h:42px;padding:0 20px;font-size:.85rem}
@@ -181,7 +178,7 @@ button,input,select{font:inherit;color:inherit}
 .hero-grid{display:block;max-width:none;padding:0;position:relative;z-index:1}
 .hero-copy{margin-inline-start:var(--copy-start);max-width:var(--avail)}
 .hero-kicker{display:block;font-size:.72rem;letter-spacing:.34em;text-transform:uppercase;color:#d6d6db;font-weight:600;line-height:1.9}
-.hero h1{margin:18px 0 22px;text-transform:uppercase;font-weight:800;line-height:.9;letter-spacing:-.025em}
+.hero h1{margin:18px 0 22px;text-transform:uppercase;font-weight:400;line-height:.92;letter-spacing:-.01em}
 .hero h1 .l1{display:block;white-space:nowrap;color:var(--gold);font-size:min(7vw,calc(var(--avail) / 4.8))}
 .hero h1 .l2{display:block;white-space:nowrap;color:var(--ivory);font-size:min(4.7vw,calc(var(--avail) / 6.4));margin-top:.08em}
 .hero p.lead{font-size:1rem;color:#d0d0d5;max-width:min(400px,var(--avail));margin-bottom:28px;line-height:1.7}
@@ -240,7 +237,7 @@ button,input,select{font:inherit;color:inherit}
 .car-badge{font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:7px 11px;border-radius:999px;background:var(--touch);color:#f6dfe2}
 .car-body{padding:22px 24px 24px;display:flex;flex-direction:column;flex:1}
 .car-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
-.car-name{font-family:var(--ff-display);font-size:1.75rem;font-weight:700;color:var(--ivory);line-height:1.1}
+.car-name{font-family:var(--ff-display);font-size:1.75rem;font-weight:400;color:var(--ivory);line-height:1.1}
 .car-brand{font-size:.72rem;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);font-weight:600}
 .car-price{text-align:end;flex:none}
 .car-price b{font-family:var(--ff-num);font-size:1.75rem;line-height:1;font-weight:700;display:block;letter-spacing:-.02em}
@@ -279,7 +276,7 @@ button,input,select{font:inherit;color:inherit}
 }
 .form-card::before{content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1px;background:linear-gradient(140deg,rgba(255,107,112,.55),transparent 35%,transparent 65%,rgba(225,38,45,.35));
   -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
-.form-title{font-family:var(--ff-display);font-size:1.9rem;color:var(--ivory);font-weight:600;margin-bottom:4px}
+.form-title{font-family:var(--ff-display);font-size:1.9rem;color:var(--ivory);font-weight:400;margin-bottom:4px}
 .form-sub{color:var(--muted);font-size:.9rem;margin-bottom:26px}
 .fgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .field{display:flex;flex-direction:column;gap:8px}
