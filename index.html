@@ -10,14 +10,14 @@
 <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,500..900;1,6..96,500..900&family=Oswald:wght@600;700&family=Manrope:wght@300;400;500;600;700&family=Montserrat:wght@500;600;700&family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,500..900;1,6..96,500..900&family=Oswald:wght@600;700&family=Manrope:wght@300;400;500;600;700&family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
 
 <style>
 /* ============================================================
    DIRECTION CAR — design tokens
    ============================================================ */
 :root{
-  --bg:#0b0b0d;
+  --bg:#100e0b;
   --bg-2:#111114;
   --surface:#16161a;
   --surface-2:#1d1d22;
@@ -41,10 +41,6 @@
   --ff-num:"Montserrat","Manrope",system-ui,sans-serif;
   --maxw:1220px;
 }
-html[lang="ar"]{
-  --ff-display:"Tajawal",system-ui,sans-serif;
-  --ff-body:"Tajawal",system-ui,sans-serif;
-}
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 section[id]{scroll-margin-top:70px}
@@ -63,12 +59,10 @@ button,input,select{font:inherit;color:inherit}
   display:inline-flex;align-items:center;gap:10px;
   font-size:.74rem;letter-spacing:.32em;text-transform:uppercase;color:var(--gold);font-weight:600;
 }
-html[lang="ar"] .eyebrow{letter-spacing:.05em;font-size:.9rem}
 .eyebrow::before{content:"";width:28px;height:1px;background:var(--gold)}
 .h-display{
   font-family:var(--ff-display);font-weight:700;line-height:1.05;letter-spacing:-.01em;color:var(--ivory);
 }
-html[lang="ar"] .h-display{font-weight:800;line-height:1.25;letter-spacing:0}
 .gold-text{background:var(--gold-grad);-webkit-background-clip:text;background-clip:text;color:transparent}
 .section{padding:110px 0;position:relative}
 .section-head{max-width:640px;margin-bottom:54px}
@@ -82,12 +76,22 @@ html[lang="ar"] .h-display{font-weight:800;line-height:1.25;letter-spacing:0}
   white-space:nowrap;
 }
 .btn svg{width:18px;height:18px;flex:none}
+/* two light trails circling the border (same idea as Chicken Amine) */
+@property --trail{syntax:"<angle>";initial-value:0deg;inherits:false}
+.btn{position:relative;isolation:isolate;--trail-a:var(--gold);--trail-b:#fff;--trail-band:rgba(255,255,255,.16)}
+.btn::before{content:"";position:absolute;inset:-2px;z-index:-1;border-radius:inherit;padding:2px;pointer-events:none;
+  background:conic-gradient(from var(--trail),transparent 0deg,var(--trail-a) 40deg,var(--trail-b) 70deg,transparent 110deg,transparent 180deg,var(--trail-a) 220deg,var(--trail-b) 250deg,transparent 290deg),var(--trail-band);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;
+  mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);
+  animation:trail 3.2s linear infinite;transition:filter .25s}
+.btn:hover::before,.btn:focus-visible::before{animation-duration:1.6s;filter:brightness(1.3) drop-shadow(0 0 6px var(--gold))}
+@keyframes trail{to{--trail:360deg}}
+.btn-gold{--trail-a:#ffd2d4;--trail-b:#fff;--trail-band:rgba(255,255,255,.22)}
 .btn-gold{background:var(--gold-grad);color:var(--on-accent);box-shadow:0 10px 30px -10px rgba(225,38,45,.6)}
 .btn-gold:hover{transform:translateY(-2px);box-shadow:0 18px 40px -12px rgba(225,38,45,.75)}
-.btn-ghost{border-color:rgba(225,38,45,.55);color:var(--gold-2);background:rgba(225,38,45,.04);backdrop-filter:blur(6px)}
+.btn-ghost{border-color:transparent;color:var(--gold-2);background:rgba(225,38,45,.04);backdrop-filter:blur(6px)}
 .btn-ghost:hover{background:rgba(225,38,45,.12);transform:translateY(-2px)}
 .btn:active{transform:translateY(0) scale(.98)}
-html[dir="rtl"] .btn .arrow{transform:scaleX(-1)}
 
 .reveal{opacity:0;transform:translateY(28px);transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1)}
 .reveal.in{opacity:1;transform:none}
@@ -108,7 +112,6 @@ html[dir="rtl"] .btn .arrow{transform:scaleX(-1)}
 .brand-logo{height:46px}
 .foot-logo{height:52px}
 .nav-links{display:flex;gap:34px;font-size:.74rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase}
-html[lang="ar"] .nav-links{letter-spacing:0;font-size:.95rem}
 .nav-links a{color:#cfcfd4;position:relative;padding:6px 0;transition:color .2s}
 .nav-links a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--gold);transform:scaleX(0);transition:transform .3s}
 .nav-links a:hover{color:var(--gold-2)}
@@ -119,7 +122,6 @@ html[lang="ar"] .nav-links{letter-spacing:0;font-size:.95rem}
   border:0;background:transparent;cursor:pointer;height:32px;min-width:38px;padding:0 10px;border-radius:999px;
   font-size:.78rem;font-weight:700;color:var(--muted);letter-spacing:.06em;transition:.25s;font-family:"Manrope",sans-serif;
 }
-.lang button[data-l="ar"]{font-family:"Tajawal",sans-serif;font-size:.9rem}
 .lang button.active{background:var(--gold-grad);color:var(--on-accent)}
 .nav .btn{--h:42px;padding:0 20px;font-size:.85rem}
 .burger{display:none;width:44px;height:44px;border-radius:12px;border:1px solid var(--line);background:transparent;cursor:pointer;place-items:center}
@@ -135,19 +137,18 @@ html[lang="ar"] .nav-links{letter-spacing:0;font-size:.95rem}
    HERO
    ============================================================ */
 .hero{min-height:100svh;display:flex;align-items:center;position:relative;overflow:hidden;padding:120px 0 80px}
-/* ---------- animated ribbon background ---------- */
-#ribbon{position:fixed;inset:0;width:100%;height:100%;display:block;z-index:-2;pointer-events:none}
-#ribbonScrim{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:0;
-  background:linear-gradient(180deg,rgba(11,11,13,.62),rgba(11,11,13,.5))}
-.has-ribbon .hero-bg{background:linear-gradient(90deg,rgba(11,11,13,.0) 0%,rgba(11,11,13,.55) 55%,rgba(11,11,13,.35) 100%)}
-.has-ribbon .trust{background:rgba(17,17,20,.55)}
-.has-ribbon .reserve{background:radial-gradient(500px 360px at 0% 100%,rgba(122,31,43,.14),transparent 60%),rgba(17,17,20,.45)}
-.has-ribbon .nav.scrolled{background:rgba(11,11,13,.7)}
-.has-ribbon .hero-copy{position:relative}
-.has-ribbon .hero-copy::before{content:"";position:absolute;inset:-12% -18% -12% -30%;z-index:-1;pointer-events:none;
-  background:radial-gradient(closest-side,rgba(11,10,16,.82),rgba(11,10,16,.55) 55%,transparent)}
-.has-ribbon .hero h1,.has-ribbon .hero p.lead{text-shadow:0 2px 18px rgba(0,0,0,.55)}
-@media (max-width:920px){ .has-ribbon .hero-copy::before{inset:-6% -10%} }
+/* ---------- "Blood Moon" aura: fixed behind the page, blends (screen) against the body colour ---------- */
+.aura{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.aura i{position:absolute;inset:0;mix-blend-mode:screen;transform:translateZ(0);will-change:transform;pointer-events:none}
+.aura-1{background:radial-gradient(ellipse 48% 52% at 40% 45%,rgba(220,38,38,.9) 0%,transparent 60%);filter:blur(216px)}
+.aura-2{background:radial-gradient(ellipse 35% 40% at 70% 35%,rgba(153,27,27,.7) 0%,transparent 65%);filter:blur(198px)}
+.aura-3{background:radial-gradient(ellipse 30% 35% at 25% 70%,rgba(239,68,68,.5) 0%,transparent 55%);filter:blur(162px)}
+.aura-4{background:radial-gradient(ellipse 22% 25% at 60% 80%,rgba(185,28,28,.4) 0%,transparent 60%);filter:blur(126px)}
+@media (max-width:640px){.aura-1{filter:blur(150px)}.aura-2{filter:blur(138px)}.aura-3{filter:blur(113px)}.aura-4{filter:blur(88px)}}
+.trust{background:rgba(16,14,11,.45)}
+.reserve{background:rgba(16,14,11,.3)}
+.nav.scrolled{background:rgba(16,14,11,.78)}
+.hero h1,.hero p.lead{text-shadow:0 2px 18px rgba(0,0,0,.55)}
 .hero-bg{position:absolute;inset:0;z-index:-1;
   background:
     radial-gradient(900px 520px at 78% 58%,rgba(225,38,45,.10),transparent 60%),
@@ -159,36 +160,31 @@ html[lang="ar"] .nav-links{letter-spacing:0;font-size:.95rem}
   mask-image:radial-gradient(ellipse at 70% 50%,#000 10%,transparent 70%);
   -webkit-mask-image:radial-gradient(ellipse at 70% 50%,#000 10%,transparent 70%);
 }
-/* the photo is the hero: shown whole, text in the empty space right of the car; the ribbon only starts below it */
+/* the photo is the hero: shown whole, text in the empty space right of the car; the aura only starts below it */
 .hero{--copy-start:max(56vw,723px);--avail:calc(100vw - var(--copy-start) - 60px);
-  min-height:max(46.5vw,600px);padding:96px 0 48px;background:#2b2b2d;align-items:center}
-.hero-bg,.has-ribbon .hero-copy::before{display:none}
+  min-height:max(46.5vw,600px);padding:96px 0 48px;background:#050505;align-items:center}
+.hero-bg{display:none}
 .hero-car{position:absolute;inset:0;z-index:0;pointer-events:none;background:url("images/hero-car.webp") 0% 50%/cover no-repeat}
-html[dir="rtl"] .hero-car{transform:scaleX(-1)}
 .hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:8%;z-index:0;pointer-events:none;background:linear-gradient(180deg,transparent,var(--bg))}
 .hero-grid{display:block;max-width:none;padding:0;position:relative;z-index:1}
 .hero-copy{margin-inline-start:var(--copy-start);max-width:var(--avail)}
 .hero-kicker{display:block;font-size:.72rem;letter-spacing:.34em;text-transform:uppercase;color:#d6d6db;font-weight:600;line-height:1.9}
-html[lang="ar"] .hero-kicker{letter-spacing:.04em;font-size:.95rem}
 .hero h1{margin:18px 0 22px;text-transform:uppercase;font-weight:800;line-height:.88;letter-spacing:-.015em}
 .hero h1 .l1{display:block;white-space:nowrap;color:var(--gold);font-size:min(7vw,calc(var(--avail) / 4.8))}
 .hero h1 .l2{display:block;white-space:nowrap;color:var(--ivory);font-size:min(4.7vw,calc(var(--avail) / 6.4));margin-top:.08em}
 .hero p.lead{font-size:1rem;color:#d0d0d5;max-width:min(400px,var(--avail));margin-bottom:28px;line-height:1.7}
 .hero-ctas{display:flex;gap:14px;flex-wrap:wrap}
-.btn-outline{border-color:rgba(255,255,255,.55);color:var(--ivory);background:transparent;letter-spacing:.24em;text-transform:uppercase;font-size:.78rem;padding:0 30px}
-html[lang="ar"] .btn-outline{letter-spacing:0;font-size:.95rem}
+.btn-outline{border-color:transparent;color:var(--ivory);background:transparent;letter-spacing:.24em;text-transform:uppercase;font-size:.78rem;padding:0 30px}
 .btn-outline:hover{border-color:var(--gold);color:#fff;background:rgba(225,38,45,.12);transform:translateY(-2px)}
 .hero-stats{display:flex;gap:36px;margin-top:32px;padding-top:20px;border-top:1px solid rgba(255,255,255,.14);max-width:440px}
 .hero-stats b{display:block;font-family:var(--ff-num);font-size:1.6rem;color:var(--ivory);font-weight:600;line-height:1;letter-spacing:-.01em}
 .hero-stats span{font-size:.72rem;color:#b4b4bb;letter-spacing:.08em;text-transform:uppercase}
-html[lang="ar"] .hero-stats span{letter-spacing:0;font-size:.9rem}
-html[lang="ar"] .hero h1{font-family:"Bodoni Moda",Didot,serif;font-weight:800;line-height:.88;direction:ltr;text-align:right}
 .scroll-cue{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);z-index:2;width:24px;height:38px;border:1.5px solid rgba(225,38,45,.5);border-radius:14px}
 .scroll-cue::after{content:"";position:absolute;left:50%;top:8px;width:3px;height:7px;margin-left:-1.5px;border-radius:2px;background:var(--gold);animation:cue 1.8s infinite}
 @keyframes cue{0%{opacity:0;transform:translateY(0)}40%{opacity:1}100%{opacity:0;transform:translateY(12px)}}
 
 /* ---------- trust strip ---------- */
-.trust{border-block:1px solid var(--line-soft);background:var(--bg-2)}
+.trust{border-block:1px solid var(--line-soft)}
 .trust-grid{display:grid;grid-template-columns:repeat(4,1fr)}
 .trust-item{display:flex;align-items:center;gap:16px;padding:30px 22px;border-inline-start:1px solid var(--line-soft)}
 .trust-item:first-child{border-inline-start:0}
@@ -219,6 +215,17 @@ html[lang="ar"] .hero h1{font-family:"Bodoni Moda",Didot,serif;font-weight:800;l
 }
 .car:hover{transform:translateY(-6px);border-color:var(--line);box-shadow:var(--shadow)}
 .car.hide{display:none}
+/* mobile "flip stack": cards wait under each other; scrolling lifts and tilts the top one away */
+.fleet-grid.stack{display:block;position:relative}
+.stack-stage{position:sticky;top:84px;perspective:1100px;transform-origin:50% 0}
+.stack .car-stage{aspect-ratio:2/1}
+.stack .car-body{padding:16px 18px 18px}
+.stack .car-tags{margin-bottom:10px}
+.stack .car-desc{min-height:0;margin:8px 0 12px;font-size:.86rem}
+.stack .specs{margin-bottom:12px}
+.stack .opts{margin-bottom:14px}
+.stack .car{position:absolute;left:0;right:0;top:0;transform-origin:50% 100%;transition:none;will-change:transform,opacity;backface-visibility:hidden}
+.stack .car:hover{transform:none}
 .fleet-grid.all .car:last-child:nth-child(3n+1){grid-column:2}
 .car-stage{position:relative;aspect-ratio:16/9;max-width:100%;overflow:hidden;background:#0d0d10;border-bottom:1px solid var(--line)}
 .car-stage::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,transparent 70%,rgba(13,13,16,.55))}
@@ -229,13 +236,10 @@ html[lang="ar"] .hero h1{font-family:"Bodoni Moda",Didot,serif;font-weight:800;l
   font-size:.7rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
   padding:7px 12px;border-radius:999px;background:rgba(11,11,13,.7);border:1px solid var(--line);color:var(--gold-2)
 }
-html[lang="ar"] .car-type{letter-spacing:0;font-size:.82rem}
 .car-badge{font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:7px 11px;border-radius:999px;background:var(--touch);color:#f6dfe2}
-html[lang="ar"] .car-badge{letter-spacing:0;font-size:.8rem}
 .car-body{padding:22px 24px 24px;display:flex;flex-direction:column;flex:1}
 .car-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
 .car-name{font-family:var(--ff-display);font-size:1.75rem;font-weight:700;color:var(--ivory);line-height:1.1}
-html[lang="ar"] .car-name{font-size:1.45rem}
 .car-brand{font-size:.72rem;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);font-weight:600}
 .car-price{text-align:end;flex:none}
 .car-price b{font-family:var(--ff-num);font-size:1.75rem;line-height:1;font-weight:700;display:block;letter-spacing:-.02em}
@@ -247,10 +251,6 @@ html[lang="ar"] .car-name{font-size:1.45rem}
 .opts{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px}
 .opt{font-size:.74rem;padding:5px 10px;border-radius:999px;border:1px solid var(--line-soft);color:#bfb9ae;display:inline-flex;align-items:center;gap:6px}
 .opt::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--gold)}
-.swatches{display:flex;align-items:center;gap:8px;margin-bottom:20px}
-.swatches small{font-size:.74rem;color:var(--muted);margin-inline-end:4px}
-.sw{width:22px;height:22px;border-radius:50%;border:2px solid transparent;cursor:pointer;box-shadow:inset 0 0 0 1px rgba(255,255,255,.25);transition:.2s;outline-offset:2px}
-.sw.active{border-color:var(--gold);transform:scale(1.12)}
 .car-actions{margin-top:auto;display:flex;gap:10px}
 .car-actions .btn{--h:48px;flex:1;padding:0 16px;font-size:.88rem}
 .car-actions .btn-icon{flex:none;width:48px;padding:0}
@@ -258,9 +258,7 @@ html[lang="ar"] .car-name{font-size:1.45rem}
 /* ============================================================
    RESERVATION
    ============================================================ */
-.reserve{background:
-  radial-gradient(700px 400px at 90% 10%,rgba(225,38,45,.10),transparent 60%),
-  radial-gradient(500px 360px at 0% 100%,rgba(122,31,43,.18),transparent 60%),var(--bg-2);border-top:1px solid var(--line-soft)}
+.reserve{border-top:1px solid var(--line-soft)}
 .reserve-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:48px;align-items:start}
 .perks{display:grid;gap:14px;margin-top:34px}
 .perk{display:flex;gap:14px;align-items:flex-start}
@@ -286,7 +284,6 @@ html[lang="ar"] .car-name{font-size:1.45rem}
 .field{display:flex;flex-direction:column;gap:8px}
 .field.full{grid-column:1/-1}
 .field label{font-size:.76rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#b9b3a8}
-html[lang="ar"] .field label{letter-spacing:0;font-size:.9rem}
 .input{
   height:54px;border-radius:14px;border:1px solid var(--line-soft);background:rgba(11,11,13,.65);
   padding:0 16px;font-size:.98rem;color:var(--ivory);transition:border-color .2s,box-shadow .2s;width:100%;
@@ -298,7 +295,6 @@ select.input{
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23e1262d' stroke-width='1.8' fill='none'/%3E%3C/svg%3E");
   background-repeat:no-repeat;background-position:right 16px center;padding-inline-end:40px;cursor:pointer
 }
-html[dir="rtl"] select.input{background-position:left 16px center}
 input[type="tel"].input,input[type="date"].input,.spec,.visit-list .ltr{font-family:var(--ff-num);font-variant-numeric:lining-nums}
 select.input option{background:#16161a;color:var(--ivory)}
 input[type="date"].input{color-scheme:dark}
@@ -480,8 +476,7 @@ footer{border-top:1px solid var(--line-soft);padding:36px 0 110px}
 </style>
 </head>
 <body>
-<canvas id="ribbon" aria-hidden="true"></canvas>
-<div id="ribbonScrim" aria-hidden="true"></div>
+<div class="aura" aria-hidden="true"><i class="aura-1"></i><i class="aura-2"></i><i class="aura-3"></i><i class="aura-4"></i></div>
 
 <!-- ============================ NAV ============================ -->
 <header class="nav" id="nav">
@@ -496,7 +491,7 @@ footer{border-top:1px solid var(--line-soft);padding:36px 0 110px}
     </nav>
     <div class="nav-right">
       <div class="lang" role="group" aria-label="Language">
-        <button data-l="fr">FR</button><button data-l="en">EN</button><button data-l="ar">ع</button>
+        <button data-l="fr">FR</button><button data-l="en">EN</button>
       </div>
       <a href="#reservation" class="btn btn-gold btn-reserve" data-i18n="cta.book">Book now</a>
       <button class="burger" id="burger" aria-label="Menu"><span></span></button>
@@ -570,7 +565,7 @@ footer{border-top:1px solid var(--line-soft);padding:36px 0 110px}
       <div class="section-head reveal">
         <span class="eyebrow" data-i18n="fleet.eyebrow">Our Fleet</span>
         <h2 class="h-display" data-i18n-html="fleet.title">Choose your <span class="gold-text">companion</span></h2>
-        <p data-i18n="fleet.lead">Seven carefully maintained cars, cleaned and checked before every rental. Pick a colour, pick your dates — we take care of the rest.</p>
+        <p data-i18n="fleet.lead">Seven carefully maintained cars, cleaned and checked before every rental. Pick your car and your dates — we take care of the rest.</p>
       </div>
       <div class="filters reveal" id="filters"></div>
     </div>
@@ -639,14 +634,10 @@ footer{border-top:1px solid var(--line-soft);padding:36px 0 110px}
       <div class="form-title" data-i18n="form.title">Your reservation</div>
       <div class="form-sub" data-i18n="form.sub">All fields are required.</div>
       <div class="fgrid">
-        <div class="field">
+        <div class="field full">
           <label for="fCar" data-i18n="form.car">Car</label>
           <select id="fCar" class="input" required></select>
           <span class="err-msg" data-i18n="err.car">Please choose a car.</span>
-        </div>
-        <div class="field">
-          <label for="fColor" data-i18n="form.color">Colour</label>
-          <select id="fColor" class="input" required></select>
         </div>
         <div class="field full">
           <label for="fName" data-i18n="form.name">Full name</label>
@@ -782,16 +773,6 @@ const CONFIG = {
   imageAngle: "23"
 };
 
-/* Colours offered for every car (hex = swatch, api = colour sent to the photo service) */
-const COLORS = {
-  white:  {hex:"#f2f2f0", api:"white",  en:"White",  fr:"Blanc",  ar:"أبيض"},
-  black:  {hex:"#111111", api:"black",  en:"Black",  fr:"Noir",   ar:"أسود"},
-  grey:   {hex:"#8d9196", api:"grey",   en:"Grey",   fr:"Gris",   ar:"رمادي"},
-  silver: {hex:"#c7cacf", api:"silver", en:"Silver", fr:"Argent", ar:"فضي"},
-  blue:   {hex:"#1f3f73", api:"blue",   en:"Blue",   fr:"Bleu",   ar:"أزرق"},
-  red:    {hex:"#9c1c24", api:"red",    en:"Red",    fr:"Rouge",  ar:"أحمر"}
-};
-
 /* ============================================================
    FLEET DATA
    To use your own photos, put a transparent PNG in /images and
@@ -801,68 +782,47 @@ const COLORS = {
 const PHOTOS = Object.fromEntries(["sandero","logan","clio","c3","accent","golf","tucson"].map(id => [id, `images/cars/${id}.webp`]));
 const CARS = [
   { id:"sandero", brand:"Dacia", model:"Sandero", make:"dacia", family:"sandero", year:2023,
-    price:199, type:"city", seats:5, doors:5, gear:"manual", fuel:"diesel", bags:2,
-    colors:["white","grey","silver","blue"], badge:"best",
+    price:199, type:"city", seats:5, doors:5, gear:"manual", fuel:"diesel", bags:2, badge:"best",
     desc:{ en:"The smart everyday choice — economical, easy to park and surprisingly roomy for city life and weekend escapes.",
-           fr:"Le choix malin du quotidien — économique, facile à garer et étonnamment spacieux pour la ville et les week-ends.",
-           ar:"الاختيار الذكي لكل يوم — اقتصادية، سهلة الركن وواسعة بشكل مفاجئ للمدينة ورحلات نهاية الأسبوع." },
+           fr:"Le choix malin du quotidien — économique, facile à garer et étonnamment spacieux pour la ville et les week-ends." },
     opts:{ en:["Air conditioning","Bluetooth","USB","Radio","Power steering"],
-           fr:["Climatisation","Bluetooth","USB","Radio","Direction assistée"],
-           ar:["مكيف هواء","بلوتوث","USB","راديو","مقود معزز"] } },
+           fr:["Climatisation","Bluetooth","USB","Radio","Direction assistée"] } },
   { id:"logan", brand:"Dacia", model:"Logan", make:"dacia", family:"logan", year:2023,
     price:249, type:"sedan", seats:5, doors:4, gear:"manual", fuel:"diesel", bags:3,
-    colors:["white","grey","black","silver"],
     desc:{ en:"A reliable sedan with one of the biggest boots in its class — perfect for families and long road trips.",
-           fr:"Une berline fiable avec l'un des plus grands coffres de sa catégorie — idéale pour les familles et les longs trajets.",
-           ar:"سيدان موثوقة بصندوق من الأكبر في فئتها — مثالية للعائلات والرحلات الطويلة." },
+           fr:"Une berline fiable avec l'un des plus grands coffres de sa catégorie — idéale pour les familles et les longs trajets." },
     opts:{ en:["Air conditioning","Bluetooth","Cruise control","Large boot","USB"],
-           fr:["Climatisation","Bluetooth","Régulateur de vitesse","Grand coffre","USB"],
-           ar:["مكيف هواء","بلوتوث","مثبت السرعة","صندوق كبير","USB"] } },
+           fr:["Climatisation","Bluetooth","Régulateur de vitesse","Grand coffre","USB"] } },
   { id:"clio", brand:"Renault", model:"Clio 5", make:"renault", family:"clio", year:2023,
     price:249, type:"city", seats:5, doors:5, gear:"manual", fuel:"diesel", bags:2,
-    colors:["red","white","black","blue"],
     desc:{ en:"Stylish, agile and packed with tech — the French icon that makes every drive feel a little more special.",
-           fr:"Stylée, agile et bien équipée — l'icône française qui rend chaque trajet un peu plus spécial.",
-           ar:"أنيقة ورشيقة ومليئة بالتقنيات — الأيقونة الفرنسية التي تجعل كل رحلة مميزة." },
+           fr:"Stylée, agile et bien équipée — l'icône française qui rend chaque trajet un peu plus spécial." },
     opts:{ en:["Touchscreen","Apple CarPlay / Android Auto","Air conditioning","LED lights","Parking sensors"],
-           fr:["Écran tactile","Apple CarPlay / Android Auto","Climatisation","Feux LED","Radar de recul"],
-           ar:["شاشة لمس","Apple CarPlay / Android Auto","مكيف هواء","أضواء LED","حساسات الركن"] } },
+           fr:["Écran tactile","Apple CarPlay / Android Auto","Climatisation","Feux LED","Radar de recul"] } },
   { id:"c3", brand:"Citroën", model:"C3", make:"citroen", family:"c3", year:2022,
     price:249, type:"city", seats:5, doors:5, gear:"manual", fuel:"diesel", bags:2,
-    colors:["white","red","grey","black"],
     desc:{ en:"Signature Citroën comfort with soft suspension and a playful design — relaxed driving through busy streets.",
-           fr:"Le confort signé Citroën, suspension douce et design ludique — une conduite détendue en pleine ville.",
-           ar:"راحة سيتروين المميزة مع تعليق ناعم وتصميم مرح — قيادة مريحة في شوارع المدينة." },
+           fr:"Le confort signé Citroën, suspension douce et design ludique — une conduite détendue en pleine ville." },
     opts:{ en:["Comfort suspension","Touchscreen","Apple CarPlay / Android Auto","Air conditioning","Bluetooth"],
-           fr:["Suspension confort","Écran tactile","Apple CarPlay / Android Auto","Climatisation","Bluetooth"],
-           ar:["تعليق مريح","شاشة لمس","Apple CarPlay / Android Auto","مكيف هواء","بلوتوث"] } },
+           fr:["Suspension confort","Écran tactile","Apple CarPlay / Android Auto","Climatisation","Bluetooth"] } },
   { id:"accent", brand:"Hyundai", model:"Accent", make:"hyundai", family:"accent", year:2021,
     price:299, type:"sedan", seats:5, doors:4, gear:"auto", fuel:"petrol", bags:3,
-    colors:["white","silver","black","grey"],
     desc:{ en:"A refined, quiet sedan with automatic gearbox — smooth comfort for business trips and airport transfers.",
-           fr:"Une berline raffinée et silencieuse en boîte automatique — un confort fluide pour vos déplacements pro et transferts aéroport.",
-           ar:"سيدان راقية وهادئة بناقل حركة أوتوماتيكي — راحة سلسة لرحلات العمل والتنقل من وإلى المطار." },
+           fr:"Une berline raffinée et silencieuse en boîte automatique — un confort fluide pour vos déplacements pro et transferts aéroport." },
     opts:{ en:["Automatic","Touchscreen","Rear camera","Air conditioning","Bluetooth"],
-           fr:["Automatique","Écran tactile","Caméra de recul","Climatisation","Bluetooth"],
-           ar:["أوتوماتيك","شاشة لمس","كاميرا خلفية","مكيف هواء","بلوتوث"] } },
+           fr:["Automatique","Écran tactile","Caméra de recul","Climatisation","Bluetooth"] } },
   { id:"golf", brand:"Volkswagen", model:"Golf 8", make:"volkswagen", family:"golf", year:2021,
-    price:499, type:"premium", seats:5, doors:5, gear:"auto", fuel:"diesel", bags:2,
-    colors:["grey","white","black","blue"], badge:"premium",
+    price:499, type:"premium", seats:5, doors:5, gear:"auto", fuel:"diesel", bags:2, badge:"premium",
     desc:{ en:"The benchmark compact — digital cockpit, precise handling and German build quality for a premium experience.",
-           fr:"La référence des compactes — cockpit digital, tenue de route précise et qualité allemande pour une expérience premium.",
-           ar:"المرجع في فئتها — لوحة قيادة رقمية، ثبات دقيق وجودة ألمانية لتجربة فاخرة." },
+           fr:"La référence des compactes — cockpit digital, tenue de route précise et qualité allemande pour une expérience premium." },
     opts:{ en:["Automatic DSG","Digital cockpit","Apple CarPlay / Android Auto","LED headlights","Climate control","Parking sensors"],
-           fr:["Boîte auto DSG","Cockpit digital","Apple CarPlay / Android Auto","Phares LED","Climatisation auto","Radars de stationnement"],
-           ar:["أوتوماتيك DSG","لوحة قيادة رقمية","Apple CarPlay / Android Auto","مصابيح LED","تكييف أوتوماتيكي","حساسات الركن"] } },
+           fr:["Boîte auto DSG","Cockpit digital","Apple CarPlay / Android Auto","Phares LED","Climatisation auto","Radars de stationnement"] } },
   { id:"tucson", brand:"Hyundai", model:"Tucson", make:"hyundai", family:"tucson", year:2023,
-    price:499, type:"suv", seats:5, doors:5, gear:"auto", fuel:"diesel", bags:4,
-    colors:["black","white","grey","blue"], badge:"premium",
+    price:499, type:"suv", seats:5, doors:5, gear:"auto", fuel:"diesel", bags:4, badge:"premium",
     desc:{ en:"Bold, spacious and commanding — the ideal SUV to explore Morocco from the Atlantic coast to the Atlas mountains.",
-           fr:"Audacieux, spacieux et imposant — le SUV idéal pour explorer le Maroc, de la côte atlantique aux montagnes de l'Atlas.",
-           ar:"جريئة وواسعة ومهيبة — سيارة SUV المثالية لاكتشاف المغرب من الساحل الأطلسي إلى جبال الأطلس." },
+           fr:"Audacieux, spacieux et imposant — le SUV idéal pour explorer le Maroc, de la côte atlantique aux montagnes de l'Atlas." },
     opts:{ en:["Automatic","Large touchscreen","Rear camera","Parking sensors","Cruise control","Climate control"],
-           fr:["Automatique","Grand écran tactile","Caméra de recul","Radars de stationnement","Régulateur de vitesse","Climatisation auto"],
-           ar:["أوتوماتيك","شاشة لمس كبيرة","كاميرا خلفية","حساسات الركن","مثبت السرعة","تكييف أوتوماتيكي"] } }
+           fr:["Automatique","Grand écran tactile","Caméra de recul","Radars de stationnement","Régulateur de vitesse","Climatisation auto"] } }
 ];
 
 /* ============================================================
@@ -882,7 +842,7 @@ const I18N = {
     "t3.b":"24/7 assistance","t3.s":"Roadside help, day and night",
     "t4.b":"No hidden fees","t4.s":"Transparent price per day",
     "fleet.eyebrow":"Our Fleet","fleet.title":'Choose your <span class="gold-text">companion</span>',
-    "fleet.lead":"Seven carefully maintained cars, cleaned and checked before every rental. Pick a colour, pick your dates — we take care of the rest.",
+    "fleet.lead":"Seven carefully maintained cars, cleaned and checked before every rental. Pick your car and your dates — we take care of the rest.",
     "f.all":"All","type.city":"City car","type.sedan":"Sedan","type.suv":"SUV","type.premium":"Compact premium",
     "badge.best":"Best price","badge.premium":"Premium",
     "spec.seats":"seats","spec.manual":"Manual","spec.auto":"Automatic","spec.diesel":"Diesel","spec.petrol":"Petrol","spec.bags":"bags",
@@ -923,7 +883,7 @@ const I18N = {
     "t3.b":"Assistance 24h/24","t3.s":"Dépannage jour et nuit",
     "t4.b":"Aucun frais caché","t4.s":"Prix transparent par jour",
     "fleet.eyebrow":"Notre flotte","fleet.title":'Choisissez votre <span class="gold-text">compagnon</span>',
-    "fleet.lead":"Sept voitures soigneusement entretenues, nettoyées et vérifiées avant chaque location. Choisissez une couleur, vos dates — on s'occupe du reste.",
+    "fleet.lead":"Sept voitures soigneusement entretenues, nettoyées et vérifiées avant chaque location. Choisissez votre voiture et vos dates — on s'occupe du reste.",
     "f.all":"Toutes","type.city":"Citadine","type.sedan":"Berline","type.suv":"SUV","type.premium":"Compacte premium",
     "badge.best":"Meilleur prix","badge.premium":"Premium",
     "spec.seats":"places","spec.manual":"Manuelle","spec.auto":"Automatique","spec.diesel":"Diesel","spec.petrol":"Essence","spec.bags":"valises",
@@ -950,47 +910,6 @@ const I18N = {
     "wa.hello":"Bonjour Super Fast Car, je souhaite louer une voiture.",
     "msg.head":"Nouvelle réservation — Super Fast Car","msg.car":"Voiture","msg.color":"Couleur","msg.name":"Nom","msg.phone":"Téléphone",
     "msg.from":"Du","msg.to":"Au","msg.days":"Durée","msg.total":"Total estimé"
-  },
-  ar:{
-    "nav.home":"الرئيسية","nav.fleet":"السيارات","nav.reserve":"الحجز","nav.contact":"اتصل بنا",
-    "cta.book":"احجز الآن","cta.fleet":"اكتشف السيارات","cta.reserve":"الحجز",
-    "hero.eyebrow":"كراء السيارات<br>الدار البيضاء · 24/24",
-    "hero.title":'<span class="l1">The best</span><span class="l2">of the best</span>',
-    "hero.lead":"سيارات نظيفة ومعتنى بها، أسعار واضحة وفريق يجيبك ليلاً ونهاراً — مفاتيحك جاهزة متى كنت جاهزاً.",
-    "hero.s1":"سيارات","hero.s2":"ابتداءً من / يوم","hero.s3":"مفتوح",
-    "unit.dh":"درهم","unit.perday":"/ يوم",
-    "t1.b":"تأمين شامل","t1.s":"تغطية كاملة لكل سيارة",
-    "t2.b":"التوصيل للمطار","t2.s":"مطار محمد الخامس وفنادق المدينة",
-    "t3.b":"مساعدة 24/24","t3.s":"مساعدة على الطريق ليلاً ونهاراً",
-    "t4.b":"بدون رسوم خفية","t4.s":"سعر واضح لكل يوم",
-    "fleet.eyebrow":"أسطولنا","fleet.title":'اختر <span class="gold-text">رفيق رحلتك</span>',
-    "fleet.lead":"سبع سيارات مُعتنى بها جيداً، تُنظّف وتُفحص قبل كل كراء. اختر اللون والتواريخ — ونحن نتكفل بالباقي.",
-    "f.all":"الكل","type.city":"سيارة مدينة","type.sedan":"سيدان","type.suv":"SUV","type.premium":"مدمجة فاخرة",
-    "badge.best":"أفضل سعر","badge.premium":"فاخرة",
-    "spec.seats":"مقاعد","spec.manual":"يدوي","spec.auto":"أوتوماتيك","spec.diesel":"ديزل","spec.petrol":"بنزين","spec.bags":"حقائب",
-    "car.colour":"اللون","car.reserve":"احجز",
-    "res.eyebrow":"الحجز","res.title":'احجز في <span class="gold-text">60 ثانية</span>',
-    "res.lead":"املأ الاستمارة — يُرسل طلبك مباشرة إلى فريقنا عبر واتساب ونؤكد التوفر في دقائق.",
-    "res.p1":"إلغاء مجاني حتى 48 ساعة قبل الاستلام",
-    "res.p3":"التوصيل إلى المطار أو محطة القطار أو فندقك","res.p4":"نتحدث العربية والفرنسية والإنجليزية",
-    "res.call":"تفضل الحديث؟ اتصل بنا أو راسلنا على واتساب",
-    "form.title":"حجزك","form.sub":"جميع الحقول إلزامية.",
-    "form.car":"السيارة","form.color":"اللون","form.name":"الاسم الكامل","form.namePh":"مثال: ياسين العمراني",
-    "form.phone":"رقم الهاتف / واتساب","form.from":"تاريخ الاستلام","form.to":"تاريخ الإرجاع",
-    "form.total":"المجموع التقديري","form.submit":"إرسال الحجز","form.choose":"اختر سيارة…",
-    "form.note":"تُستخدم بياناتك فقط لتأكيد حجزك.",
-    "form.days1":"يوم","form.daysN":"أيام","form.pick":"اختر التواريخ",
-    "err.car":"المرجو اختيار سيارة.","err.name":"المرجو إدخال اسمك.","err.phone":"المرجو إدخال رقم هاتف صحيح.",
-    "err.from":"اختر تاريخ الاستلام (اليوم أو بعده).","err.to":"يجب أن يكون الإرجاع بعد الاستلام.",
-    "visit.eyebrow":"زورونا","visit.title":'وكالتنا في <span class="gold-text">الدار البيضاء</span>',
-    "visit.lead":"مرّ لاستلام سيارتك، أو دعنا نوصلها إليك. نحن دائماً على بُعد رسالة.",
-    "visit.hours":"مفتوح 7 أيام · 24/24","visit.directions":"الاتجاهات",
-    "foot.rights":"جميع الحقوق محفوظة.",
-    "nav.cond":"الشروط","cond.eyebrow":"شروط الكراء","cond.title":"قبل أن <span class=\"gold-text\">تنطلق</span>","cond.lead":"شروط بسيطة وواضحة — لكراء آمن ومريح.","cond.c1.b":"السن الأدنى","cond.c1.p":"يجب ألا يقل عمر السائق عن 21 سنة.","cond.c2.b":"رخصة السياقة","cond.c2.p":"رخصة سارية منذ سنتين على الأقل. تُقبل الرخص الأجنبية والدولية.","cond.c3.b":"وثيقة الهوية","cond.c3.p":"البطاقة الوطنية للمقيمين بالمغرب، وجواز سفر ساري المفعول للزبناء الأجانب.","cond.c4.b":"الضمانة","cond.c4.p":"تُطلب ضمانة عند الاستلام وتُسترجع كاملة عند إرجاع السيارة بنفس الحالة.","cond.c5.b":"الوقود","cond.c5.p":"إرجاع السيارة بنفس مستوى الوقود عند الاستلام.","cond.c6.b":"مدة الكراء","cond.c6.p":"الحد الأدنى للكراء يوم واحد (24 ساعة). يجب أن يستوفي أي سائق إضافي نفس الشروط.","form.accept":"قرأت وأوافق على <a href=\"#conditions\">شروط الكراء</a>.","m.loc":"الموقع","fab.loc":"موقعنا","fab.wa":"تواصل عبر واتساب",
-    "toast":"جارٍ فتح واتساب لإرسال حجزك…",
-    "wa.hello":"مرحباً Super Fast Car، أود كراء سيارة.",
-    "msg.head":"حجز جديد — Super Fast Car","msg.car":"السيارة","msg.color":"اللون","msg.name":"الاسم","msg.phone":"الهاتف",
-    "msg.from":"من","msg.to":"إلى","msg.days":"المدة","msg.total":"المجموع التقديري"
   }
 };
 
@@ -1002,18 +921,17 @@ const $ = (s, r=document) => r.querySelector(s);
 const $$ = (s, r=document) => [...r.querySelectorAll(s)];
 const t = k => (I18N[lang] && I18N[lang][k]) || I18N.fr[k] || k;
 const carById = id => CARS.find(c => c.id === id);
-const state = { filter:"all", color:{} };
-CARS.forEach(c => { state.color[c.id] = c.colors[0]; if (PHOTOS[c.id]) c.photo = PHOTOS[c.id]; });
+const state = { filter:"all" };
+CARS.forEach(c => { if (PHOTOS[c.id]) c.photo = PHOTOS[c.id]; });
 
 /* --- car imagery: studio render → your own photo → elegant silhouette --- */
 const SILHOUETTE = "data:image/svg+xml," + encodeURIComponent(
   `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 160"><defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#ff8a8e"/><stop offset="1" stop-color="#a3121a"/></linearGradient></defs><path d="M30 112c0-14 6-22 22-26l52-10 46-30c10-6 22-9 34-9h70c14 0 26 5 36 14l32 26 34 8c14 4 20 12 20 24v10c0 5-4 8-9 8h-22a34 34 0 0 0-66 0H147a34 34 0 0 0-66 0H40c-6 0-10-4-10-9z" fill="none" stroke="url(#g)" stroke-width="3"/><path d="M160 58l24-15c6-3 12-5 19-5h32v35h-86zm90-20h22c10 0 19 4 26 10l18 16-66 9z" fill="rgba(225,38,45,.12)" stroke="url(#g)" stroke-width="2"/><circle cx="114" cy="128" r="24" fill="none" stroke="url(#g)" stroke-width="3"/><circle cx="296" cy="128" r="24" fill="none" stroke="url(#g)" stroke-width="3"/></svg>`);
 
-function imageSources(car, colorKey, width=800){
-  const col = COLORS[colorKey] || COLORS.white;
+function imageSources(car, width=800){
   const q = new URLSearchParams({
     customer:CONFIG.imageCustomer, make:car.make, modelFamily:car.family, modelYear:car.year,
-    angle:CONFIG.imageAngle, zoomType:"fullscreen", paintDescription:col.api, width
+    angle:CONFIG.imageAngle, zoomType:"fullscreen", width
   });
   const list = [];
   if (car.photo) list.push(car.photo);
@@ -1023,8 +941,8 @@ function imageSources(car, colorKey, width=800){
   list.push(SILHOUETTE);
   return list;
 }
-function setCarImage(img, car, colorKey, width){
-  const srcs = imageSources(car, colorKey, width);
+function setCarImage(img, car, width){
+  const srcs = imageSources(car, width);
   let i = 0;
   img.onerror = () => { i++; if (i < srcs.length) img.src = srcs[i]; };
   img.onload = () => { img.style.opacity = 1; };
@@ -1040,6 +958,10 @@ const IC = {
   bags:'<svg viewBox="0 0 24 24"><rect x="5" y="7" width="14" height="13" rx="2"/><path d="M9 7V4h6v3M9 11v5M15 11v5"/></svg>'
 };
 
+/* --- reveal on scroll --- */
+const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target);} }), {threshold:.12});
+$$(".reveal").forEach(el => io.observe(el));
+
 /* --- render fleet --- */
 function renderFilters(){
   const types = ["all","city","sedan","suv","premium"];
@@ -1050,11 +972,12 @@ function renderFilters(){
 function applyFilter(){
   $("#fleetGrid").classList.toggle("all", state.filter==="all");
   $$(".car").forEach(el => el.classList.toggle("hide", state.filter!=="all" && el.dataset.type!==state.filter));
+  if (typeof io !== "undefined") layoutFleet();
 }
 function renderFleet(){
   const grid = $("#fleetGrid");
   grid.innerHTML = CARS.map(c => `
-    <article class="car reveal in" data-id="${c.id}" data-type="${c.type}">
+    <article class="car reveal" data-id="${c.id}" data-type="${c.type}">
       <div class="car-stage">
         <img loading="lazy" style="opacity:0">
       </div>
@@ -1072,9 +995,6 @@ function renderFleet(){
           <div class="spec">${IC.bags}${c.bags} ${t("spec.bags")}</div>
         </div>
         <div class="opts">${c.opts[lang].map(o=>`<span class="opt">${o}</span>`).join("")}</div>
-        <div class="swatches"><small>${t("car.colour")}</small>
-          ${c.colors.map(k=>`<button class="sw ${state.color[c.id]===k?"active":""}" data-c="${k}" title="${COLORS[k][lang]}" aria-label="${COLORS[k][lang]}" style="background:${COLORS[k].hex}"></button>`).join("")}
-        </div>
         <div class="car-actions">
           <a href="#reservation" class="btn btn-gold js-reserve">${t("car.reserve")}
             <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
@@ -1088,20 +1008,60 @@ function renderFleet(){
   $$(".car").forEach(el => {
     const car = carById(el.dataset.id);
     const img = $(".car-stage img", el);
-    setCarImage(img, car, state.color[car.id], 800);
-    $$(".sw", el).forEach(sw => sw.onclick = () => {
-      state.color[car.id] = sw.dataset.c;
-      $$(".sw", el).forEach(s => s.classList.toggle("active", s===sw));
-      img.style.opacity = .25;
-      setCarImage(img, car, sw.dataset.c, 800);
-    });
-    $(".js-reserve", el).onclick = () => { selectCar(car.id, state.color[car.id]); };
+    setCarImage(img, car, 800);
+    $(".js-reserve", el).onclick = () => { selectCar(car.id); };
   });
   applyFilter();
 }
 
+/* desktop: cards rise in row by row; mobile: flip stack */
+const mqStack = matchMedia("(max-width:640px)");
+let stack = null;
+function layoutFleet(){
+  const grid = $("#fleetGrid");
+  const cards = $$(".car", grid);
+  const shown = cards.filter(c => !c.classList.contains("hide"));
+  grid.querySelector(".stack-stage")?.replaceWith(...cards);
+  cards.forEach(c => { c.style.cssText = ""; });
+  stack = null; grid.style.height = "";
+  grid.classList.toggle("stack", mqStack.matches);
+  if (!mqStack.matches){
+    shown.forEach((c,i) => { c.style.transitionDelay = (i%3)*110 + "ms"; c.classList.remove("in"); io.observe(c); });
+    return;
+  }
+  const stage = document.createElement("div");
+  stage.className = "stack-stage";
+  grid.prepend(stage); stage.append(...cards);
+  shown.forEach(c => c.classList.add("in"));
+  const h = Math.max(...shown.map(c => c.offsetHeight));
+  const step = Math.round(h * .85);
+  // shrink the whole stack a little on short phones so a card always fits between the bars
+  const room = innerHeight - 84 - 84;
+  const k = Math.min(1, room / h);
+  shown.forEach(c => { c.style.height = h + "px"; });
+  stage.style.height = h + "px";
+  stage.style.transform = k < 1 ? `scale(${k.toFixed(3)})` : "";
+  grid.style.height = h*k + (shown.length-1)*step + "px";
+  stack = { grid, shown, step };
+  paintStack();
+}
+function paintStack(){
+  if (!stack) return;
+  const { grid, shown, step } = stack;
+  const p = Math.min(Math.max((84 - grid.getBoundingClientRect().top) / step, 0), shown.length-1);
+  shown.forEach((c,i) => {
+    const t = Math.min(Math.max(p - i, 0), 1);
+    c.style.zIndex = shown.length - i;
+    c.style.visibility = t >= 1 ? "hidden" : "visible";
+    c.style.opacity = t > .55 ? Math.max(0, 1 - (t-.55)/.45) : 1;
+    c.style.transform = t ? `translateY(${-t*95}%) rotateX(${t*32}deg) scale(${1 + t*.06})` : "";
+  });
+}
+addEventListener("scroll", () => requestAnimationFrame(paintStack), {passive:true});
+let rz; addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(layoutFleet, 150); });
+
 /* --- reservation form --- */
-const fCar=$("#fCar"), fColor=$("#fColor"), fName=$("#fName"), fPhone=$("#fPhone"), fFrom=$("#fFrom"), fTo=$("#fTo");
+const fCar=$("#fCar"), fName=$("#fName"), fPhone=$("#fPhone"), fFrom=$("#fFrom"), fTo=$("#fTo");
 const iso = d => new Date(d.getTime() - d.getTimezoneOffset()*60000).toISOString().slice(0,10);
 const today = () => { const d=new Date(); d.setHours(0,0,0,0); return d; };
 
@@ -1110,18 +1070,9 @@ function fillCarSelect(){
   fCar.innerHTML = `<option value="">${t("form.choose")}</option>` +
     CARS.map(c=>`<option value="${c.id}">${c.brand} ${c.model} — ${c.price} ${t("unit.dh")}${t("unit.perday")}</option>`).join("");
   fCar.value = cur;
-  fillColorSelect();
 }
-function fillColorSelect(){
-  const car = carById(fCar.value);
-  const cur = fColor.value;
-  const keys = car ? car.colors : Object.keys(COLORS);
-  fColor.innerHTML = keys.map(k=>`<option value="${k}">${COLORS[k][lang]}</option>`).join("");
-  if (keys.includes(cur)) fColor.value = cur;
-}
-function selectCar(id, color){
-  fCar.value = id; fillColorSelect();
-  if (color) fColor.value = color;
+function selectCar(id){
+  fCar.value = id;
   clearErr(fCar); updateSummary();
 }
 function nights(){
@@ -1133,18 +1084,17 @@ let sumKey = "";
 function updateSummary(){
   const car = carById(fCar.value);
   const n = nights();
-  const key = (car?car.id:"") + "|" + fColor.value;
-  if (car && key !== sumKey){ setCarImage($("#sumImg"), car, fColor.value, 400); sumKey = key; }
+  const key = car ? car.id : "";
+  if (car && key !== sumKey){ setCarImage($("#sumImg"), car, 400); sumKey = key; }
   $("#sumImg").style.visibility = car ? "visible" : "hidden";
-  $("#sumName").textContent = car ? `${car.brand} ${car.model} · ${COLORS[fColor.value]?.[lang]||""}` : t("form.choose");
+  $("#sumName").textContent = car ? `${car.brand} ${car.model}` : t("form.choose");
   $("#sumDays").textContent = n ? `${n} ${n>1?t("form.daysN"):t("form.days1")} × ${car?car.price:"—"} ${t("unit.dh")}` : t("form.pick");
   $("#sumTotal").textContent = car && n ? `${(car.price*n).toLocaleString("fr-FR")} ${t("unit.dh")}` : "—";
 }
 function setErr(el){ el.classList.add("err"); el.closest(".field").classList.add("has-err"); }
 function clearErr(el){ el.classList.remove("err"); el.closest(".field").classList.remove("has-err"); }
 
-fCar.onchange = () => { fillColorSelect(); clearErr(fCar); updateSummary(); };
-fColor.onchange = updateSummary;
+fCar.onchange = () => { clearErr(fCar); updateSummary(); };
 fFrom.onchange = () => {
   clearErr(fFrom);
   if (fFrom.value){
@@ -1171,11 +1121,10 @@ $("#resForm").addEventListener("submit", e => {
   if (!ok){ const f = $(".has-err .input") || $(".accept.has-err input"); f && f.focus(); return; }
 
   const car = carById(fCar.value), n = nights();
-  const fmt = v => new Date(v).toLocaleDateString(lang==="ar"?"ar-MA":lang==="fr"?"fr-FR":"en-GB",{day:"2-digit",month:"short",year:"numeric"});
+  const fmt = v => new Date(v).toLocaleDateString(lang==="fr"?"fr-FR":"en-GB",{day:"2-digit",month:"short",year:"numeric"});
   const msg = [
     `*${t("msg.head")}*`, "",
     `🚗 ${t("msg.car")}: ${car.brand} ${car.model} (${car.price} ${t("unit.dh")} ${t("unit.perday")})`,
-    `🎨 ${t("msg.color")}: ${COLORS[fColor.value][lang]}`,
     `👤 ${t("msg.name")}: ${fName.value.trim()}`,
     `📞 ${t("msg.phone")}: +${phoneDigits}`,
     `📅 ${t("msg.from")}: ${fmt(fFrom.value)}`,
@@ -1195,7 +1144,6 @@ $("#resForm").addEventListener("submit", e => {
 function applyLang(l){
   lang = I18N[l] ? l : "fr";
   document.documentElement.lang = lang;
-  document.documentElement.dir = lang==="ar" ? "rtl" : "ltr";
   $$("[data-i18n]").forEach(el => el.textContent = t(el.dataset.i18n));
   $$("[data-i18n-html]").forEach(el => el.innerHTML = t(el.dataset.i18nHtml));
   $$("[data-i18n-ph]").forEach(el => el.placeholder = t(el.dataset.i18nPh));
@@ -1218,9 +1166,6 @@ addEventListener("scroll", onScroll, {passive:true}); onScroll();
 $("#burger").onclick = () => nav.classList.toggle("open");
 $$("#mobileMenu a").forEach(a => a.onclick = () => nav.classList.remove("open"));
 
-/* --- reveal on scroll --- */
-const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target);} }), {threshold:.12});
-$$(".reveal").forEach(el => io.observe(el));
 
 /* --- init --- */
 $("#year").textContent = new Date().getFullYear();
@@ -1228,217 +1173,6 @@ fFrom.min = iso(today());
 { const tm = new Date(today()); tm.setDate(tm.getDate()+1); fTo.min = iso(tm); }
 let saved = null; try { saved = localStorage.getItem("sfc-lang"); } catch(e){}
 applyLang(saved || "fr");
-</script>
-<script>
-/* ============================================================
-   RIBBON GLOW BACKGROUND (WebGL2, adapted from Originkit "Ribbon Glow")
-   Preset: color1 #E1262D, color2 #7A0C12, speed 26, size 76, angle -50, hover 118, reach 231
-   ============================================================ */
-(function(){
-  const RIBBON = { background:"#0B0A0C", color1:"#E1262D", color2:"#7A0C12", speed:26, size:76, angle:-50, hover:118, reach:231 };
-  const canvas = document.getElementById("ribbon");
-  if (!canvas) return;
-  const gl = canvas.getContext("webgl2", { antialias:false, alpha:false, depth:false, stencil:false, powerPreference:"high-performance" });
-  if (!gl) { canvas.remove(); return; }
-
-  const LAYERS = 84, TWIST = 1.25, DRAG = 0.18;
-  const VERT = `#version 300 es
-const vec2 P[3] = vec2[3](vec2(-1.0,-1.0), vec2(3.0,-1.0), vec2(-1.0,3.0));
-void main(){ gl_Position = vec4(P[gl_VertexID], 0.0, 1.0); }`;
-  const FIELD = `#version 300 es
-precision highp float;
-uniform vec2 uRes; uniform float uTime; uniform vec3 uC1; uniform vec3 uC2;
-uniform float uSize; uniform float uAngle; uniform vec2 uMouse; uniform float uOn; uniform float uReach; uniform vec2 uVel;
-out vec4 o;
-const float LAYERS = ${LAYERS.toFixed(1)};
-const float TWIST = ${TWIST.toFixed(3)};
-const float DRAG = ${DRAG.toFixed(3)};
-const float GAIN = 0.62;
-const vec2 CENTRE = vec2(-0.62, 0.24);
-const float TILT = 0.6; const float ZOOM = 1.05; const float THETA = 2.13;
-const float SHEAR = 0.963; const float SHRINK = 0.953;
-const vec2 WARP_FREQ = vec2(0.42, 2.4); const vec2 WARP_AMP = vec2(0.13, 0.027);
-const vec2 ASPECT = vec2(2.1, 0.17); const float OFFSET = 0.36;
-const float GLOW = 0.0021; const float SOFT = 0.0019; const float FALLOFF = 0.37;
-const float PHASE = 12.0; const float CYCLE = 0.16; const float HUE_TRAVEL = 2.0;
-mat2 rot(float a){ float c = cos(a), s = sin(a); return mat2(c, s, -s, c); }
-void main(){
-  vec2 R = uRes;
-  vec2 pos = (gl_FragCoord.xy - 0.5 * R) / R.y;
-  vec2 d = pos - uMouse;
-  float w = uOn * exp(-dot(d, d) / (uReach * uReach));
-  if (w > 1e-4) pos = uMouse + rot(w * TWIST) * d * (1.0 - 0.3 * min(w, 1.0)) - uVel * min(w, 1.0) * DRAG;
-  pos = rot(uAngle) * pos / uSize;
-  float t = uTime * 0.49 + PHASE;
-  float breath = (-sin(uTime * 0.735) + sin(uTime * 0.49 + 1.0)) * 0.25 + 0.5;
-  vec2 u = rot(TILT) * ((pos - CENTRE) * (ZOOM - breath * 0.085));
-  mat2 fold = mat2(cos(THETA), sin(THETA), -SHEAR, cos(THETA));
-  vec3 col = vec3(0.0);
-  for (float i = 1.0; i <= LAYERS; i += 1.0) {
-    u.x -= sin(u.y * WARP_FREQ.x + t + i * 0.007) * WARP_AMP.x;
-    u.y -= sin(u.x * WARP_FREQ.y - t + i * 0.02) * WARP_AMP.y;
-    u = fold * u * SHRINK;
-    vec2 q = (u - vec2(OFFSET + breath * 0.1, 0.0)) * ASPECT;
-    float g = GLOW / (dot(q, q) + SOFT) * (0.25 + breath * 0.4);
-    float r = length(u);
-    float k = sin(i * CYCLE + t * 1.2 + r * HUE_TRAVEL) * 0.5 + 0.5;
-    col += g * mix(uC1, uC2, k) * (0.62 + 0.5 * k) * exp2(-r * FALLOFF);
-  }
-  vec3 x = max(col * GAIN, 0.0);
-  col = (x * (2.51 * x + 0.03)) / (x * (2.43 * x + 0.59) + 0.14);
-  col = pow(clamp(col, 0.0, 1.0), vec3(0.85, 0.92, 0.98));
-  col *= 1.0 - smoothstep(0.5, 1.6, length(pos)) * 0.07;
-  o = vec4(col, 1.0);
-}`;
-  const FINISH = `#version 300 es
-precision highp float;
-uniform sampler2D uField; uniform vec2 uRes; uniform float uTime; uniform vec3 uBg; uniform float uPaper;
-out vec4 o;
-float ign(vec2 p, float f){ p += 5.588238 * mod(f, 64.0); return fract(52.9829189 * fract(0.06711056 * p.x + 0.00583715 * p.y)); }
-void main(){
-  vec2 frag = gl_FragCoord.xy;
-  vec3 L = max(texture(uField, frag / uRes).rgb, 0.0);
-  vec3 dark = uBg + L * (1.0 - uBg);
-  float strength = clamp(max(L.r, max(L.g, L.b)), 0.0, 1.0);
-  vec3 paper = uBg * (1.0 - strength) + L * 0.96;
-  vec3 col = mix(dark, paper, uPaper);
-  col += (ign(frag, floor(uTime * 24.0)) - 0.5) / 255.0;
-  o = vec4(clamp(col, 0.0, 1.0), 1.0);
-}`;
-
-  const hex = h => { h = h.replace("#",""); return [0,2,4].map(i => parseInt(h.slice(i,i+2),16)/255); };
-  const clamp = (v,lo,hi) => v<lo?lo:v>hi?hi:v;
-
-  function link(frag){
-    const mk = (type, src) => {
-      const sh = gl.createShader(type); gl.shaderSource(sh, src); gl.compileShader(sh);
-      if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) { console.error("RibbonGlow shader:", gl.getShaderInfoLog(sh)); return null; }
-      return sh;
-    };
-    const vs = mk(gl.VERTEX_SHADER, VERT), fs = mk(gl.FRAGMENT_SHADER, frag);
-    if (!vs || !fs) return null;
-    const p = gl.createProgram(); gl.attachShader(p, vs); gl.attachShader(p, fs); gl.linkProgram(p);
-    gl.deleteShader(vs); gl.deleteShader(fs);
-    if (!gl.getProgramParameter(p, gl.LINK_STATUS)) { console.error("RibbonGlow link:", gl.getProgramInfoLog(p)); return null; }
-    return p;
-  }
-  const field = link(FIELD), finish = link(FINISH);
-  if (!field || !finish) { canvas.remove(); return; }
-  const loc = (p, names) => Object.fromEntries(names.map(n => [n, gl.getUniformLocation(p, n)]));
-  const uf = loc(field, ["uRes","uTime","uC1","uC2","uSize","uAngle","uMouse","uOn","uReach","uVel"]);
-  const un = loc(finish, ["uField","uRes","uTime","uBg","uPaper"]);
-  gl.bindVertexArray(gl.createVertexArray());
-
-  // offscreen field target (half-float when available)
-  const fbo = gl.createFramebuffer();
-  let tex = null, tw = 0, th = 0, half = !!gl.getExtension("EXT_color_buffer_float");
-  function resizeTarget(w, h){
-    if (w === tw && h === th && tex) return;
-    for (let a = 0; a < 2; a++){
-      if (tex) gl.deleteTexture(tex);
-      tex = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, tex);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-      gl.texImage2D(gl.TEXTURE_2D, 0, half ? gl.RGBA16F : gl.RGBA8, w, h, 0, gl.RGBA, half ? gl.HALF_FLOAT : gl.UNSIGNED_BYTE, null);
-      gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
-      gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, tex, 0);
-      const ok = gl.checkFramebufferStatus(gl.FRAMEBUFFER) === gl.FRAMEBUFFER_COMPLETE;
-      gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-      if (ok || !half) break;
-      half = false;
-    }
-    tw = w; th = h;
-  }
-
-  // pointer (the canvas covers the viewport, so viewport coords are canvas coords)
-  const ptr = { tx:0, ty:0, inside:false };
-  const read = e => { ptr.tx = e.clientX; ptr.ty = e.clientY; ptr.inside = true; };
-  addEventListener("pointermove", read, { passive:true });
-  addEventListener("pointerdown", read, { passive:true });
-  document.addEventListener("pointerout", e => { if (!e.relatedTarget) ptr.inside = false; });
-  addEventListener("touchend", () => { ptr.inside = false; }, { passive:true });
-
-  const mobile = matchMedia("(max-width:760px)").matches || matchMedia("(pointer:coarse)").matches;
-  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const MAX_DPR = mobile ? 1.25 : 2;
-  const FIELD_SCALE = mobile ? 0.4 : 0.5;   // the field is rendered at reduced resolution, then upscaled
-
-  const v = {
-    speed: clamp(RIBBON.speed,0,100)/50, size: clamp(RIBBON.size,50,200)/100,
-    angle: clamp(RIBBON.angle,-180,180)*Math.PI/180, hover: clamp(RIBBON.hover,0,200)/100, reach: clamp(RIBBON.reach,10,800)
-  };
-  const c1 = hex(RIBBON.color1), c2 = hex(RIBBON.color2), bg = hex(RIBBON.background);
-  const bgLum = 0.2126*bg[0] + 0.7152*bg[1] + 0.0722*bg[2];
-
-  let mx=0, my=0, vx=0, vy=0, on=0, raf=0, last=-1, clock=0, running=false;
-
-  function frame(now){
-    raf = requestAnimationFrame(frame);
-    const dt = last < 0 ? 0 : clamp((now-last)/1000, 0, 0.05);
-    last = now;
-    clock = (clock + dt*v.speed) % 3600;
-    draw(dt);
-  }
-  function draw(dt){
-    const dpr = Math.min(devicePixelRatio || 1, MAX_DPR);
-    const cw = canvas.clientWidth || innerWidth, ch = canvas.clientHeight || innerHeight;
-    const bw = Math.max(1, Math.round(cw*dpr)), bh = Math.max(1, Math.round(ch*dpr));
-    if (canvas.width !== bw || canvas.height !== bh){ canvas.width = bw; canvas.height = bh; }
-    resizeTarget(Math.max(1, Math.round(bw*FIELD_SCALE)), Math.max(1, Math.round(bh*FIELD_SCALE)));
-
-    const present = ptr.inside ? 1 : 0;
-    if (present && on < 0.02){ mx = ptr.tx; my = ptr.ty; }
-    on += (present - on) * (1 - Math.exp(-dt*5));
-    const k = 1 - Math.exp(-dt*16);
-    const nx = mx + (ptr.tx-mx)*k, ny = my + (ptr.ty-my)*k;
-    if (dt > 0){ const kv = 1 - Math.exp(-dt*8); vx += ((nx-mx)/dt - vx)*kv; vy += ((ny-my)/dt - vy)*kv; }
-    mx = nx; my = ny;
-    const vLen = Math.hypot(vx, vy)/ch, vCap = vLen > 3 ? 3/vLen : 1;
-
-    gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
-    gl.viewport(0, 0, tw, th);
-    gl.useProgram(field);
-    gl.uniform2f(uf.uRes, tw, th);
-    gl.uniform1f(uf.uTime, clock);
-    gl.uniform3f(uf.uC1, c1[0], c1[1], c1[2]);
-    gl.uniform3f(uf.uC2, c2[0], c2[1], c2[2]);
-    gl.uniform1f(uf.uSize, v.size);
-    gl.uniform1f(uf.uAngle, v.angle);
-    gl.uniform2f(uf.uMouse, (mx - cw/2)/ch, (ch/2 - my)/ch);
-    gl.uniform1f(uf.uOn, on*v.hover);
-    gl.uniform1f(uf.uReach, v.reach/ch);
-    gl.uniform2f(uf.uVel, (vx/ch)*vCap, (-vy/ch)*vCap);
-    gl.drawArrays(gl.TRIANGLES, 0, 3);
-
-    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-    gl.viewport(0, 0, bw, bh);
-    gl.useProgram(finish);
-    gl.activeTexture(gl.TEXTURE0);
-    gl.bindTexture(gl.TEXTURE_2D, tex);
-    gl.uniform1i(un.uField, 0);
-    gl.uniform2f(un.uRes, bw, bh);
-    gl.uniform1f(un.uTime, clock);
-    gl.uniform3f(un.uBg, bg[0], bg[1], bg[2]);
-    gl.uniform1f(un.uPaper, clamp((bgLum-0.35)/0.3, 0, 1));
-    gl.drawArrays(gl.TRIANGLES, 0, 3);
-  }
-  function start(){ if (running || reduced) return; running = true; last = -1; raf = requestAnimationFrame(frame); }
-  function stop(){ running = false; cancelAnimationFrame(raf); }
-
-  document.documentElement.classList.add("has-ribbon");
-  clock = 8;            // start on a nicely developed frame
-  draw(0);              // first frame immediately (also the only frame with reduced motion)
-  if (reduced) addEventListener("resize", () => draw(0));
-  start();
-  document.addEventListener("visibilitychange", () => document.hidden ? stop() : start());
-
-  // soften the ribbons behind content once the visitor scrolls past the hero
-  const scrim = document.getElementById("ribbonScrim");
-  const onScroll = () => { if (scrim) scrim.style.opacity = (0.35 + 0.65*clamp(scrollY / (innerHeight*0.8), 0, 1)).toFixed(3); };
-  addEventListener("scroll", onScroll, { passive:true }); onScroll();
-})();
 </script>
 </body>
 </html>
