@@ -1091,6 +1091,12 @@ $("#resForm").addEventListener("submit", e => {
     `⏱ ${t("msg.days")}: ${n} ${n>1?t("form.daysN"):t("form.days1")}`,
     `💰 ${t("msg.total")}: ${(car.price*n).toLocaleString("fr-FR")} ${t("unit.dh")}`
   ].join("\n");
+  // demo: hand the request to the owner dashboard (/dashboard) open in this same browser
+  try {
+    const inbox = JSON.parse(localStorage.getItem("sfc-dash-inbox") || "[]");
+    inbox.push({ carId:car.id, name:fName.value.trim(), phone:phoneDigits, from:fFrom.value, to:fTo.value, at:Date.now() });
+    localStorage.setItem("sfc-dash-inbox", JSON.stringify(inbox));
+  } catch(e){}
   const toast = $("#toast"); toast.classList.add("show");
   setTimeout(()=>toast.classList.remove("show"), 3500);
   const link = document.createElement("a");

@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Super Fast Car — Espace gérant (démo)</title>
+<meta name="theme-color" content="#100e0b">
+<link rel="icon" type="image/svg+xml" href="../images/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Oswald:wght@700&family=Manrope:wght@400;500;600;700&family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   SUPER FAST CAR — owner dashboard (demo). Same tokens as the site.
+   ============================================================ */
+:root{
+  --bg:#100e0b;
+  --panel:#17151a;
+  --panel-2:#1e1c22;
+  --panel-3:#26232b;
+  --line:rgba(255,255,255,.08);
+  --line-2:rgba(255,255,255,.14);
+  --accent:#e1262d;
+  --accent-2:#ff6b70;
+  --accent-grad:linear-gradient(135deg,#ff5459 0%,#e1262d 45%,#a3121a 100%);
+  --ivory:#f4f4f5;
+  --text:#e9e9ec;
+  --muted:#9b9ba3;
+  --faint:#6d6d75;
+  /* status hues: validated as a set on the panel colour (dark), always shipped with a label */
+  --st-available:#199e70;
+  --st-rented:#3987e5;
+  --st-pending:#c98500;
+  --st-maint:#d55181;
+  --st-done:#6d6d75;
+  --radius:16px;
+  --ff-display:"DM Serif Display",Georgia,serif;
+  --ff-body:"Manrope",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  --ff-num:"Montserrat","Manrope",system-ui,sans-serif;
+  --side:248px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--text);font-family:var(--ff-body);font-size:14.5px;line-height:1.5;-webkit-font-smoothing:antialiased;min-height:100vh}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:inherit}
+.num{font-family:var(--ff-num);font-variant-numeric:tabular-nums lining-nums}
+.h-display{font-family:var(--ff-display);font-weight:400;color:var(--ivory);line-height:1.1}
+.muted{color:var(--muted)}
+.hidden{display:none !important}
+:focus-visible{outline:2px solid var(--accent-2);outline-offset:2px}
+
+/* ---------- layout ---------- */
+.app{display:grid;grid-template-columns:var(--side) 1fr;min-height:100vh}
+.side{position:sticky;top:0;height:100vh;background:#0c0b09;border-right:1px solid var(--line);display:flex;flex-direction:column;padding:22px 14px}
+.logo{display:block;width:150px;color:var(--ivory);margin:0 8px 6px}
+.logo svg{display:block;width:100%;height:auto;overflow:visible}
+.side-tag{margin:0 8px 22px;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.nav{display:flex;flex-direction:column;gap:2px}
+.nav a{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:12px;text-decoration:none;color:#c9c9cf;font-weight:600;font-size:.92rem;cursor:pointer;position:relative}
+.nav a svg{width:19px;height:19px;flex:none;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.nav a:hover{background:var(--panel)}
+.nav a.active{background:var(--panel-2);color:#fff}
+.nav a.active::before{content:"";position:absolute;left:-14px;top:9px;bottom:9px;width:3px;border-radius:0 3px 3px 0;background:var(--accent)}
+.nav .count{margin-left:auto;min-width:22px;height:22px;padding:0 7px;border-radius:999px;background:var(--st-pending);color:#1a1200;font-size:.72rem;font-weight:700;display:grid;place-items:center}
+.side-foot{margin-top:auto;padding:14px 10px 0;border-top:1px solid var(--line);font-size:.8rem;color:var(--muted);display:grid;gap:8px}
+.side-foot a{color:var(--accent-2);text-decoration:none;font-weight:600}
+
+.main{min-width:0;display:flex;flex-direction:column}
+.top{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:14px;padding:16px 28px;background:rgba(16,14,11,.88);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.top h1{font-size:1.65rem}
+.top .sub{font-size:.85rem;color:var(--muted)}
+.top-right{margin-left:auto;display:flex;gap:10px;align-items:center}
+.demo-pill{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:6px 10px;border-radius:999px;border:1px dashed var(--line-2);color:var(--muted);white-space:nowrap}
+.content{padding:24px 28px 60px;display:grid;gap:22px;align-content:start}
+
+/* ---------- controls ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;padding:0 16px;border-radius:999px;border:1px solid var(--line-2);background:var(--panel-2);cursor:pointer;font-weight:600;font-size:.86rem;white-space:nowrap;text-decoration:none;transition:background .2s,border-color .2s,transform .15s}
+.btn:hover{background:var(--panel-3);border-color:rgba(255,255,255,.24)}
+.btn:active{transform:scale(.98)}
+.btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.btn-primary{background:var(--accent-grad);border-color:transparent;color:#fff}
+.btn-primary:hover{background:var(--accent-grad);filter:brightness(1.08)}
+.btn-sm{height:32px;padding:0 12px;font-size:.8rem}
+.btn-ghost{background:transparent}
+.btn-danger{color:#ff8a8e;border-color:rgba(225,38,45,.45);background:rgba(225,38,45,.08)}
+.btn-wa{background:#1d8f4e;border-color:transparent;color:#fff}
+.btn-wa:hover{background:#21a35a}
+.icon-btn{width:40px;padding:0}
+.seg{display:inline-flex;border:1px solid var(--line-2);border-radius:999px;padding:3px;background:var(--panel)}
+.seg button{border:0;background:transparent;height:32px;padding:0 14px;border-radius:999px;cursor:pointer;font-weight:600;font-size:.82rem;color:var(--muted)}
+.seg button.on{background:var(--panel-3);color:#fff}
+.input,select.input,textarea.input{width:100%;height:42px;border-radius:12px;border:1px solid var(--line-2);background:#0f0e12;padding:0 12px;font-size:.92rem;color:var(--ivory)}
+textarea.input{height:auto;min-height:76px;padding:10px 12px;resize:vertical}
+.input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(225,38,45,.18)}
+input[type="date"].input,input[type="time"].input,input[type="datetime-local"].input{color-scheme:dark}
+select.input option{background:#17151a}
+.search{position:relative}
+.search svg{position:absolute;left:12px;top:50%;width:16px;height:16px;transform:translateY(-50%);stroke:var(--muted);fill:none;stroke-width:2}
+.search .input{padding-left:36px;height:40px;border-radius:999px;min-width:240px}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.toolbar .grow{flex:1}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{height:34px;padding:0 13px;border-radius:999px;border:1px solid var(--line-2);background:transparent;cursor:pointer;font-weight:600;font-size:.8rem;color:#c9c9cf;display:inline-flex;align-items:center;gap:7px}
+.chip.on{background:var(--ivory);color:#111;border-color:transparent}
+.chip b{font-family:var(--ff-num);font-weight:600;opacity:.7}
+
+/* ---------- cards ---------- */
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:20px}
+.card-head{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.card-head h2{font-size:1.25rem}
+.card-head .right{margin-left:auto;display:flex;gap:8px;align-items:center}
+.grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}
+.grid-3{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:22px}
+.card,.kpi{min-width:0}
+.kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}
+.kpis.k4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;display:grid;gap:6px}
+.kpi .lbl{font-size:.76rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:8px}
+.kpi .val{font-family:var(--ff-num);font-size:1.9rem;font-weight:600;color:var(--ivory);line-height:1.1;letter-spacing:-.02em}
+.kpi .val small{font-size:.9rem;color:var(--muted);font-weight:500;letter-spacing:0}
+.kpi .hint{font-size:.8rem;color:var(--muted)}
+.bar-meter{height:6px;border-radius:999px;background:var(--panel-3);overflow:hidden}
+.bar-meter i{display:block;height:100%;border-radius:999px;background:var(--accent)}
+
+/* ---------- status ---------- */
+.st{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 9px;border-radius:999px;font-size:.74rem;font-weight:700;white-space:nowrap;border:1px solid currentColor;background:color-mix(in srgb,currentColor 12%,transparent)}
+.st::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.st-available{color:#3cc796}
+.st-rented,.st-ongoing{color:#6ba9f0}
+.st-confirmed{color:#6ba9f0;background:transparent;border-style:dashed}
+.st-pending{color:#e0a92e}
+.st-maint{color:#e57aa1}
+.st-completed{color:#a5a5ad}
+.st-cancelled{color:#8a8a92;text-decoration:line-through}
+.st-late{color:#ff8a8e}
+.dot{width:8px;height:8px;border-radius:50%;flex:none;display:inline-block}
+
+/* ---------- lists & tables ---------- */
+.list{display:grid}
+.row{display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
+.row:first-child{border-top:0}
+.row .thumb{width:64px;height:40px;border-radius:8px;object-fit:cover;flex:none;background:#0d0d10}
+.row .main-t{min-width:0;flex:1}
+.row .main-t b{display:block;color:var(--ivory);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .main-t span{font-size:.82rem;color:var(--muted)}
+.row .actions{display:flex;gap:6px;flex:none}
+.empty{padding:22px 0;text-align:center;color:var(--muted);font-size:.9rem}
+.table-wrap{overflow-x:auto;border-radius:var(--radius);border:1px solid var(--line);background:var(--panel)}
+table{width:100%;border-collapse:collapse;font-size:.88rem}
+th{text-align:left;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700;padding:12px 14px;border-bottom:1px solid var(--line);white-space:nowrap;background:var(--panel)}
+td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:middle}
+tbody tr:last-child td{border-bottom:0}
+tbody tr.click{cursor:pointer}
+tbody tr.click:hover td{background:rgba(255,255,255,.025)}
+td.r,th.r{text-align:right}
+td .sub{display:block;font-size:.78rem;color:var(--muted)}
+.alert{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-top:1px solid var(--line)}
+.alert:first-child{border-top:0}
+.alert .ic{width:32px;height:32px;border-radius:10px;display:grid;place-items:center;flex:none;background:var(--panel-3)}
+.alert .ic svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.alert.crit .ic{color:#ff8a8e;background:rgba(225,38,45,.14)}
+.alert.warn .ic{color:#e0a92e;background:rgba(201,133,0,.14)}
+.alert.info .ic{color:#6ba9f0;background:rgba(57,135,229,.14)}
+.alert b{display:block;color:var(--ivory);font-weight:600;font-size:.9rem}
+.alert span{font-size:.82rem;color:var(--muted)}
+
+/* ---------- fleet ---------- */
+.fleet{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:18px}
+.fcar{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column}
+.fcar .ph{position:relative;aspect-ratio:16/8.4;background:#0d0d10}
+.fcar .ph img{width:100%;height:100%;object-fit:cover;display:block}
+.fcar .ph .st{position:absolute;left:12px;top:12px;background:rgba(10,10,12,.82)}
+.fcar .plate{position:absolute;right:12px;top:12px;font-family:var(--ff-num);font-size:.75rem;font-weight:600;padding:4px 8px;border-radius:6px;background:#f4f4f5;color:#111;letter-spacing:.04em}
+.fcar .bd{padding:16px 18px;display:grid;gap:12px;flex:1}
+.fcar .nm{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.fcar .nm h3{font-family:var(--ff-display);font-weight:400;font-size:1.35rem;color:var(--ivory);line-height:1.1}
+.fcar .nm small{display:block;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.fcar .price{font-family:var(--ff-num);font-weight:700;font-size:1.2rem;color:var(--ivory);text-align:right;white-space:nowrap}
+.fcar .price span{display:block;font-size:.7rem;color:var(--muted);font-weight:500}
+.facts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.fact{background:var(--panel-2);border-radius:10px;padding:8px 10px}
+.fact small{display:block;font-size:.7rem;color:var(--muted);font-weight:600}
+.fact b{font-family:var(--ff-num);font-weight:600;font-size:.86rem;color:var(--ivory)}
+.fact.warn b{color:#e0a92e}.fact.crit b{color:#ff8a8e}
+.fcar .next{font-size:.82rem;color:var(--muted)}
+.fcar .next b{color:var(--text);font-weight:600}
+.fcar .acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto}
+
+/* ---------- planning (timeline) ---------- */
+.plan-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);background:var(--panel)}
+.plan{--carw:190px;--dayw:64px;display:grid;min-width:max-content;position:relative}
+.plan-row{display:grid;grid-template-columns:var(--carw) repeat(var(--days),var(--dayw));position:relative;border-top:1px solid var(--line)}
+.plan-row:first-child{border-top:0}
+.plan-head{position:sticky;top:0;z-index:3;background:var(--panel)}
+.plan-car{position:sticky;left:0;z-index:2;background:var(--panel);display:flex;align-items:center;gap:10px;padding:10px 12px;border-right:1px solid var(--line);min-height:62px}
+.plan-car img{width:46px;height:30px;border-radius:6px;object-fit:cover;flex:none}
+.plan-car b{display:block;font-size:.86rem;color:var(--ivory);font-weight:600;white-space:nowrap}
+.plan-car span{font-size:.74rem;color:var(--muted)}
+.plan-day{border-left:1px solid var(--line);font-size:.72rem;text-align:center;padding:8px 2px;color:var(--muted);line-height:1.25}
+.plan-day b{display:block;font-family:var(--ff-num);font-size:.95rem;color:var(--text);font-weight:600}
+.plan-day.we{background:rgba(255,255,255,.02)}
+.plan-day.today{color:var(--accent-2)}
+.plan-day.today b{color:#fff}
+.plan-cell{border-left:1px solid var(--line);cursor:pointer}
+.plan-cell.we{background:rgba(255,255,255,.02)}
+.plan-cell:hover{background:rgba(225,38,45,.07)}
+.plan-today{position:absolute;top:0;bottom:0;width:2px;background:var(--accent);z-index:1;pointer-events:none}
+.bk{position:absolute;top:10px;height:42px;border-radius:9px;padding:4px 9px;font-size:.74rem;line-height:1.25;cursor:pointer;overflow:hidden;white-space:nowrap;z-index:1;border:1px solid transparent;color:#fff;display:flex;flex-direction:column;justify-content:center;box-shadow:0 0 0 2px var(--panel)}
+.bk b{font-weight:700;overflow:hidden;text-overflow:ellipsis}
+.bk span{opacity:.85;overflow:hidden;text-overflow:ellipsis}
+.bk.ongoing{background:var(--st-rented)}
+.bk.confirmed{background:rgba(57,135,229,.22);border-color:var(--st-rented);border-style:dashed}
+.bk.pending{background:rgba(201,133,0,.25);border-color:var(--st-pending);color:#ffe2a6}
+.bk.completed{background:#3a3940;color:#d5d5da}
+.bk.late{background:#a3121a;border-color:#ff6b70}
+.bk.maint{color:#ffd6e6;border-color:var(--st-maint);background:repeating-linear-gradient(45deg,rgba(213,81,129,.35) 0 6px,rgba(213,81,129,.12) 6px 12px)}
+.bk:hover{filter:brightness(1.12)}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:.8rem;color:var(--muted);align-items:center}
+.legend i{display:inline-block;width:20px;height:12px;border-radius:4px;vertical-align:-2px;margin-right:6px;border:1px solid transparent}
+
+/* ---------- charts ---------- */
+.chart{position:relative}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.chart .grid line{stroke:rgba(255,255,255,.07)}
+.chart .axis text{fill:var(--muted);font-size:11px;font-family:var(--ff-body)}
+.chart .vlabel{fill:var(--text);font-size:11px;font-family:var(--ff-num);font-weight:600}
+.chart .bar{fill:var(--accent)}
+.chart .bar.dim{fill:#6e2a2e}
+.chart .hit{fill:transparent;cursor:pointer}
+.chart .hit:hover+.bar,.chart .bar.hl{filter:brightness(1.2)}
+.tip{position:fixed;z-index:90;pointer-events:none;background:#0c0b0e;border:1px solid var(--line-2);border-radius:10px;padding:8px 11px;font-size:.8rem;box-shadow:0 12px 30px rgba(0,0,0,.5);opacity:0;transition:opacity .12s}
+.tip.on{opacity:1}
+.tip b{font-family:var(--ff-num);font-size:.95rem;color:#fff;display:block}
+.tip span{color:var(--muted)}
+details.tbl summary{cursor:pointer;color:var(--muted);font-size:.82rem;margin-top:10px}
+details.tbl table{margin-top:8px}
+
+/* ---------- drawer / modal ---------- */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:60;opacity:0;pointer-events:none;transition:opacity .2s}
+.overlay.on{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(520px,100%);background:#141217;border-left:1px solid var(--line-2);z-index:70;transform:translateX(100%);transition:transform .28s cubic-bezier(.2,.7,.2,1);display:flex;flex-direction:column}
+.drawer.on{transform:none}
+.dr-head{display:flex;align-items:center;gap:12px;padding:18px 22px;border-bottom:1px solid var(--line)}
+.dr-head h3{font-size:1.4rem}
+.dr-head .x{margin-left:auto}
+.dr-body{padding:20px 22px;overflow-y:auto;flex:1;display:grid;gap:16px;align-content:start}
+.dr-foot{padding:14px 22px;border-top:1px solid var(--line);display:flex;gap:8px;flex-wrap:wrap}
+.form{display:grid;grid-template-columns:1fr 1fr;gap:12px 14px}
+.f{display:grid;gap:6px}
+.f.full{grid-column:1/-1}
+.f label{font-size:.74rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#b9b9c0}
+.f .help{font-size:.76rem;color:var(--muted)}
+.err{color:#ff8a8e;font-size:.84rem;background:rgba(225,38,45,.1);border:1px solid rgba(225,38,45,.35);border-radius:10px;padding:10px 12px}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:8px 16px;font-size:.88rem}
+.kv dt{color:var(--muted)}
+.kv dd{color:var(--ivory);text-align:right;font-weight:600}
+.box{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px}
+.box h4{font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.money{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center}
+.money div{background:var(--panel-2);border-radius:10px;padding:10px 6px}
+.money small{display:block;font-size:.7rem;color:var(--muted);font-weight:600}
+.money b{font-family:var(--ff-num);font-weight:600;color:var(--ivory)}
+.money .due b{color:#e0a92e}
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,140%);opacity:0;visibility:hidden;background:#0c0b0e;border:1px solid var(--line-2);border-radius:12px;padding:12px 18px;z-index:95;font-weight:600;font-size:.88rem;transition:transform .3s cubic-bezier(.2,.7,.2,1);max-width:calc(100% - 32px)}
+.toast.on{transform:translate(-50%,0);opacity:1;visibility:visible}
+
+/* ---------- mobile ---------- */
+.mnav{display:none}
+@media (max-width:1180px){
+  .kpis{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .kpis.k4{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .grid-3{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:900px){
+  .app{grid-template-columns:minmax(0,1fr)}
+  .side{display:none}
+  .top{padding:12px 16px;flex-wrap:wrap}
+  .top h1{font-size:1.35rem}
+  .top .sub{display:none}
+  .content{padding:16px 16px 100px;gap:16px}
+  .grid-2{grid-template-columns:minmax(0,1fr)}
+  .table-wrap table{min-width:720px}
+  .row .thumb{width:52px;height:34px}
+  .kpis,.kpis.k4{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .kpi .val{font-size:1.5rem}
+  .search .input{min-width:0;width:100%}
+  .toolbar .search{flex:1 1 100%}
+  .plan{--carw:120px;--dayw:52px}
+  .plan-car img{display:none}
+  .form{grid-template-columns:1fr}
+  .mnav{display:grid;grid-template-columns:repeat(6,1fr);position:fixed;left:0;right:0;bottom:0;z-index:50;background:rgba(12,11,9,.96);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--line);padding:6px 4px calc(6px + env(safe-area-inset-bottom))}
+  .mnav a{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:.62rem;font-weight:600;color:#a9a9b0;text-decoration:none;padding:6px 0;border-radius:10px;cursor:pointer;position:relative}
+  .mnav a svg{width:21px;height:21px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+  .mnav a.active{color:#fff}
+  .mnav a.active svg{stroke:var(--accent-2)}
+  .mnav .count{position:absolute;top:0;right:calc(50% - 20px);min-width:17px;height:17px;border-radius:999px;background:var(--st-pending);color:#1a1200;font-size:.62rem;font-weight:700;display:grid;place-items:center;padding:0 4px}
+  table{font-size:.82rem}
+  td,th{padding:10px}
+  .toast{bottom:86px}
+}
+@media (max-width:520px){
+  .demo-pill{display:none}
+  .row{flex-wrap:wrap}
+  .row .main-t{flex:1 1 calc(100% - 66px)}
+  .row > .st{margin-left:64px}
+  .row .actions{margin-left:auto}
+  .money{grid-template-columns:1fr 1fr 1fr}
+}
+@media print{
+  body{background:#fff;color:#000}
+  .side,.top,.mnav,.overlay,.drawer,.toast,.content{display:none !important}
+  #printArea{display:block !important}
+}
+#printArea{display:none;color:#000;font-family:Arial,sans-serif;padding:24px;font-size:13px}
+#printArea h1{font-size:22px;margin-bottom:4px}
+#printArea table{border-collapse:collapse;width:100%;margin:12px 0}
+#printArea td{border:1px solid #999;padding:6px 8px;color:#000}
+#printArea .sig{display:flex;justify-content:space-between;margin-top:50px}
+@media (prefers-reduced-motion:reduce){*{transition:none !important}}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <aside class="side">
+    <a class="logo" href="../" title="Voir le site"><svg viewBox="0 0 300 96"><use href="#logo"/></svg></a>
+    <div class="side-tag">Espace gérant</div>
+    <nav class="nav" id="nav"></nav>
+    <div class="side-foot">
+      <span>Démo : les données sont des exemples, enregistrées uniquement dans ce navigateur.</span>
+      <a href="../" target="_blank" rel="noopener">Ouvrir le site ↗</a>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="top">
+      <div>
+        <h1 class="h-display" id="viewTitle">Tableau de bord</h1>
+        <div class="sub" id="viewSub"></div>
+      </div>
+      <div class="top-right">
+        <span class="demo-pill">Mode démo</span>
+        <button class="btn btn-primary" id="newBooking"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg><span>Réservation</span></button>
+      </div>
+    </header>
+    <main class="content" id="view"></main>
+  </div>
+</div>
+
+<nav class="mnav" id="mnav"></nav>
+<div class="overlay" id="overlay"></div>
+<aside class="drawer" id="drawer" aria-modal="true" role="dialog"></aside>
+<div class="tip" id="tip"></div>
+<div class="toast" id="toast"></div>
+<div id="printArea"></div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="logo" viewBox="0 0 300 96">
+    <path d="M14 58C40 44 74 38 104 35 122 21 148 12 180 12c26 0 52 10 74 22 14 2 26 6 34 11-9-3-21-5-34-6C232 27 206 18 180 18c-28 0-52 8-70 22-34 3-68 9-96 18z" fill="#e1262d"/>
+    <path d="M122 36c16-10 36-16 58-16 18 0 34 5 48 13-30-2-72-1-106 3z" fill="#e1262d"/>
+    <text x="150" y="90" text-anchor="middle" font-family="Oswald,'Arial Narrow',Impact,sans-serif" font-weight="700" font-size="44" textLength="262" lengthAdjust="spacingAndGlyphs" fill="currentColor" transform="skewX(-8) translate(12 0)">SUPER FAST CAR</text>
+  </symbol>
+</svg>
+
+<script>
+/* ============================================================
+   DATA — demo store in localStorage (one key). Reset from Paramètres.
+   ============================================================ */
+const STORE_KEY = "sfc-dash-v1";
+const INBOX_KEY = "sfc-dash-inbox";      // filled by the public site's booking form
+const DAY = 864e5;
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => [...r.querySelectorAll(s)];
+const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const uid = p => p + Math.random().toString(36).slice(2, 9);
+const startOfDay = d => { const x = new Date(d); x.setHours(0,0,0,0); return x; };
+const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; };
+const iso = d => { const x = new Date(d); return new Date(x.getTime() - x.getTimezoneOffset()*6e4).toISOString().slice(0,16); };
+const isoDate = d => iso(d).slice(0,10);
+const fmtD = d => new Date(d).toLocaleDateString("fr-FR", {day:"numeric", month:"short"});
+const fmtDY = d => new Date(d).toLocaleDateString("fr-FR", {day:"numeric", month:"short", year:"numeric"});
+const fmtT = d => new Date(d).toLocaleTimeString("fr-FR", {hour:"2-digit", minute:"2-digit"});
+const fmtDT = d => `${fmtD(d)} · ${fmtT(d)}`;
+const dh = n => `${Math.round(n).toLocaleString("fr-FR")} DH`;
+const sameDay = (a, b) => startOfDay(a).getTime() === startOfDay(b).getTime();
+const daysBetween = (a, b) => Math.max(1, Math.ceil((new Date(b) - new Date(a)) / DAY));
+const overlap = (a1, a2, b1, b2) => new Date(a1) < new Date(b2) && new Date(b1) < new Date(a2);
+
+const CAR_BASE = [
+  { id:"sandero", brand:"Dacia",      model:"Sandero", year:2023, price:199, gear:"Manuelle",    fuel:"Diesel",  plate:"12345-A-6",  km:38400 },
+  { id:"logan",   brand:"Dacia",      model:"Logan",   year:2023, price:249, gear:"Manuelle",    fuel:"Diesel",  plate:"23456-B-6",  km:41250 },
+  { id:"clio",    brand:"Renault",    model:"Clio 5",  year:2023, price:249, gear:"Manuelle",    fuel:"Diesel",  plate:"34567-A-6",  km:29800 },
+  { id:"c3",      brand:"Citroën",    model:"C3",      year:2022, price:249, gear:"Manuelle",    fuel:"Diesel",  plate:"45678-D-6",  km:52300 },
+  { id:"accent",  brand:"Hyundai",    model:"Accent",  year:2021, price:299, gear:"Automatique", fuel:"Essence", plate:"56789-H-6",  km:67100 },
+  { id:"golf",    brand:"Volkswagen", model:"Golf 8",  year:2021, price:499, gear:"Automatique", fuel:"Diesel",  plate:"67890-W-6",  km:58900 },
+  { id:"tucson",  brand:"Hyundai",    model:"Tucson",  year:2023, price:499, gear:"Automatique", fuel:"Diesel",  plate:"78901-B-6",  km:24600 },
+];
+const CLIENT_BASE = [
+  ["Yassine El Amrani","+212 6 61 23 45 67","Casablanca"],["Salma Bennani","+212 6 62 34 56 78","Rabat"],
+  ["Omar Tazi","+212 6 63 45 67 89","Casablanca"],["Khadija Alaoui","+212 6 64 56 78 90","Mohammedia"],
+  ["Mehdi Chraibi","+212 6 65 67 89 01","Casablanca"],["Imane Berrada","+212 6 66 78 90 12","Marrakech"],
+  ["Hamza Idrissi","+212 6 67 89 01 23","Casablanca"],["Nadia Fassi","+212 6 68 90 12 34","Fès"],
+  ["Anas Lahlou","+212 6 69 01 23 45","Casablanca"],["Sara Benjelloun","+212 6 70 12 34 56","Tanger"],
+  ["Karim Ziani","+212 6 71 23 45 67","Casablanca"],["Youssef Naciri","+212 6 72 34 56 78","El Jadida"],
+  ["Leila Mansouri","+212 6 73 45 67 89","Casablanca"],["Rachid Ouazzani","+212 6 74 56 78 90","Agadir"],
+  ["Ghita Sefrioui","+212 6 75 67 89 01","Casablanca"],["Adam Kettani","+212 6 76 78 90 12","Rabat"],
+  ["Julien Martin","+33 6 12 34 56 78","Lyon (France)"],["Emma Dubois","+33 6 23 45 67 89","Paris (France)"],
+  ["Lucas Moreau","+32 4 70 12 34 56","Bruxelles (Belgique)"],["Ines Haddad","+212 6 77 89 01 23","Casablanca"],
+];
+
+/* deterministic demo data, laid out around today's date */
+function seed(){
+  let s = 20261106;
+  const rnd = () => { s |= 0; s = s + 0x6D2B79F5 | 0; let t = Math.imul(s ^ s >>> 15, 1 | s); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+  const pick = a => a[Math.floor(rnd()*a.length)];
+  const t0 = startOfDay(new Date());
+  const at = (dayOffset, hour) => { const d = addDays(t0, dayOffset); d.setHours(hour, 0, 0, 0); return d; };
+  const today = new Date().getFullYear();
+
+  const cars = CAR_BASE.map((c, i) => ({
+    ...c, photo:`../images/cars/${c.id}.webp`,
+    insuranceUntil: isoDate(addDays(t0, [190, 18, 240, 95, 9, 300, 150][i])),
+    inspectionUntil: isoDate(addDays(t0, [260, 140, 330, 25, 120, 60, 400][i])),
+    vignetteYear: i === 3 ? today - 1 : today,
+    nextServiceKm: c.km + [4600, 750, 9200, 2100, -300, 5100, 7400][i],
+    maintenance: [], notes:""
+  }));
+  const clients = CLIENT_BASE.map(([name, phone, city], i) => ({
+    id:"cl"+i, name, phone, city,
+    cin: phone.startsWith("+212") ? `${pick(["BE","BK","BH","A","BJ"])}${100000 + Math.floor(rnd()*899999)}` : "",
+    passport: phone.startsWith("+212") ? "" : `${pick(["18","20","21"])}AB${10000 + Math.floor(rnd()*89999)}`,
+    licence: `${10 + Math.floor(rnd()*89)}/${100000 + Math.floor(rnd()*899999)}`,
+    blacklisted: i === 13, notes: i === 13 ? "Retour avec 2 jours de retard et rayure non déclarée (juin)." : ""
+  }));
+  const C = id => cars.find(c => c.id === id);
+
+  // fixed situations so "today" always has something to manage
+  cars.find(c => c.id === "golf").maintenance.push({ id:"mt1", from: isoDate(addDays(t0,-1)), to: isoDate(addDays(t0,2)), reason:"Vidange + plaquettes de frein" });
+  const fixtures = [
+    { carId:"sandero", clientId:"cl0",  start:at(-3,10), end:at(0,18), status:"ongoing",   source:"Agence" },     // return today
+    { carId:"clio",    clientId:"cl1",  start:at(0,11),  end:at(4,11), status:"confirmed", source:"WhatsApp" },   // departure today
+    { carId:"accent",  clientId:"cl16", start:at(-6,9),  end:at(-1,9), status:"ongoing",   source:"Site web" },   // late return
+    { carId:"logan",   clientId:"cl2",  start:at(-1,14), end:at(5,14), status:"ongoing",   source:"Téléphone" },
+    { carId:"tucson",  clientId:"cl17", start:at(3,10),  end:at(10,10), status:"pending",  source:"Site web" },
+    { carId:"c3",      clientId:"cl5",  start:at(2,9),   end:at(5,9),  status:"pending",   source:"WhatsApp" },
+    { carId:"c3",      clientId:"cl8",  start:at(0,17),  end:at(1,17), status:"confirmed", source:"Agence" },     // second departure today
+  ];
+  const bookings = [];
+  const busy = id => [...bookings.filter(b => b.carId === id), ...C(id).maintenance.map(m => ({start:m.from, end:addDays(m.to,1)}))];
+  const add = (o) => {
+    const car = C(o.carId), days = daysBetween(o.start, o.end);
+    const total = days * car.price + (o.extras || 0);
+    const paid = o.status === "completed" ? total : o.status === "ongoing" ? Math.round(total * pick([.5, 1, 1])) : o.status === "confirmed" ? Math.round(total * pick([0, .3, .3])) : 0;
+    bookings.push({ id: uid("bk"), carId:o.carId, clientId:o.clientId, start: iso(o.start), end: iso(o.end), pricePerDay: car.price,
+      extras: o.extras || 0, total, paid, deposit: car.price >= 400 ? 5000 : 3000, status:o.status, source:o.source || "Agence",
+      pickup: pick(["Agence","Agence","Agence","Aéroport Mohammed V","Gare Casa-Port","Livraison à domicile"]),
+      notes:"", createdAt: iso(addDays(o.start, -Math.ceil(rnd()*5))), kmOut:null, kmIn:null });
+  };
+  fixtures.forEach(add);
+
+  cars.forEach(car => {
+    let cur = addDays(t0, -150);
+    while (cur < addDays(t0, 26)){
+      cur = addDays(cur, Math.floor(rnd()*4));
+      const len = 1 + Math.floor(rnd() * (rnd() < .2 ? 10 : 5));
+      const start = new Date(cur); start.setHours(pick([9,10,11,14,16,18]));
+      const end = addDays(start, len);
+      if (busy(car.id).some(b => overlap(start, end, addDays(b.start,-1), addDays(b.end,1)))) { cur = addDays(cur, 2); continue; }
+      const now = new Date();
+      let status = end < now ? "completed" : start <= now ? "ongoing" : "confirmed";
+      if (status === "ongoing") { cur = addDays(cur, 1); continue; }           // ongoing rentals come only from fixtures
+      if (status === "completed" && rnd() < .08) status = "cancelled";
+      if (status === "confirmed" && rnd() < .12) status = "pending";
+      add({ carId:car.id, clientId:"cl" + Math.floor(rnd()*clients.length), start, end, status,
+            source: pick(["Agence","WhatsApp","WhatsApp","Site web","Téléphone"]), extras: rnd() < .15 ? pick([150, 200, 300]) : 0 });
+      cur = addDays(end, 1);
+    }
+  });
+  bookings.filter(b => b.status === "completed").forEach(b => { const car = C(b.carId); b.kmOut = car.km - 3000; b.kmIn = b.kmOut + 120 * daysBetween(b.start, b.end); });
+  bookings.filter(b => b.status === "ongoing").forEach(b => { b.kmOut = C(b.carId).km; });
+
+  const expenses = [];
+  for (let m = 5; m >= 0; m--){
+    const base = new Date(t0.getFullYear(), t0.getMonth() - m, 1);
+    cars.forEach(car => {
+      const d = (k) => isoDate(new Date(base.getFullYear(), base.getMonth(), m === 0 ? 1 + (k % Math.max(1, t0.getDate())) : Math.min(k, 28)));   // this month: only up to today
+      expenses.push({ id:uid("ex"), carId:car.id, date:d(3 + Math.floor(rnd()*20)), category:"Lavage", amount: 60 + Math.floor(rnd()*4)*20, note:"" });
+      if (rnd() < .35) expenses.push({ id:uid("ex"), carId:car.id, date:d(5 + Math.floor(rnd()*20)), category:"Entretien", amount: 450 + Math.floor(rnd()*10)*80, note: pick(["Vidange","Filtres","Pneus avant","Plaquettes"]) });
+      if (rnd() < .12) expenses.push({ id:uid("ex"), carId:car.id, date:d(5 + Math.floor(rnd()*20)), category:"Réparation", amount: 800 + Math.floor(rnd()*12)*150, note: pick(["Rétroviseur","Carrosserie","Batterie","Climatisation"]) });
+    });
+    expenses.push({ id:uid("ex"), carId:null, date:isoDate(new Date(base.getFullYear(), base.getMonth(), 1)), category:"Loyer agence", amount:6000, note:"" });
+  }
+  expenses.push({ id:uid("ex"), carId:"golf", date:isoDate(addDays(t0,-1)), category:"Entretien", amount:1350, note:"Vidange + plaquettes (en cours)" });
+
+  return { v:1, agency:{ name:"Super Fast Car", phone:"+212 6 61 46 42 22", deposit:3000 }, cars, clients, bookings, expenses, createdAt: iso(new Date()) };
+}
+
+let db;
+function load(){
+  try { db = JSON.parse(localStorage.getItem(STORE_KEY)); } catch(e){ db = null; }
+  if (!db || db.v !== 1) { db = seed(); save(); }
+  pullInbox();
+}
+function save(){ try { localStorage.setItem(STORE_KEY, JSON.stringify(db)); } catch(e){} }
+
+/* bookings sent from the public website (same browser) arrive as "pending" */
+function pullInbox(){
+  let inbox = [];
+  try { inbox = JSON.parse(localStorage.getItem(INBOX_KEY) || "[]"); } catch(e){}
+  if (!inbox.length) return;
+  inbox.forEach(r => {
+    const car = carById(r.carId); if (!car) return;
+    let cl = db.clients.find(c => c.phone.replace(/\D/g,"") === String(r.phone).replace(/\D/g,""));
+    if (!cl){ cl = { id:uid("cl"), name:r.name, phone:"+" + String(r.phone).replace(/\D/g,""), city:"", cin:"", passport:"", licence:"", blacklisted:false, notes:"" }; db.clients.push(cl); }
+    const start = new Date(r.from + "T10:00"), end = new Date(r.to + "T10:00");
+    const days = daysBetween(start, end);
+    db.bookings.push({ id:uid("bk"), carId:car.id, clientId:cl.id, start:iso(start), end:iso(end), pricePerDay:car.price, extras:0,
+      total:days*car.price, paid:0, deposit:db.agency.deposit, status:"pending", source:"Site web", pickup:"Agence", notes:"Demande reçue depuis le site.", createdAt:iso(new Date(r.at || Date.now())), kmOut:null, kmIn:null });
+  });
+  try { localStorage.removeItem(INBOX_KEY); } catch(e){}
+  save();
+  setTimeout(() => toast(`${inbox.length} nouvelle(s) demande(s) reçue(s) depuis le site`), 400);
+}
+
+/* ============================================================
+   HELPERS — derived state
+   ============================================================ */
+const carById = id => db.cars.find(c => c.id === id);
+const clientById = id => db.clients.find(c => c.id === id);
+const carName = c => c ? `${c.brand} ${c.model}` : "—";
+const live = b => b.status !== "cancelled";
+const isLate = b => b.status === "ongoing" && new Date(b.end) < new Date();
+function carMaintNow(car, at = new Date()){
+  return car.maintenance.find(m => new Date(m.from) <= at && at < addDays(m.to, 1));
+}
+function carStatus(car){
+  const now = new Date();
+  if (carMaintNow(car, now)) return "maint";
+  if (db.bookings.some(b => b.carId === car.id && b.status === "ongoing")) return "rented";
+  return "available";
+}
+const CAR_ST = { available:["Disponible","st-available"], rented:["Louée","st-rented"], maint:["Maintenance","st-maint"] };
+const BK_ST = { pending:["En attente","st-pending"], confirmed:["Confirmée","st-confirmed"], ongoing:["En cours","st-ongoing"], completed:["Terminée","st-completed"], cancelled:["Annulée","st-cancelled"] };
+const stCar = s => `<span class="st ${CAR_ST[s][1]}">${CAR_ST[s][0]}</span>`;
+const stBk = b => isLate(b) ? `<span class="st st-late">En retard</span>` : `<span class="st ${BK_ST[b.status][1]}">${BK_ST[b.status][0]}</span>`;
+function nextBooking(car){
+  const now = new Date();
+  return db.bookings.filter(b => b.carId === car.id && ["confirmed","pending"].includes(b.status) && new Date(b.start) >= startOfDay(now))
+    .sort((a,b) => new Date(a.start) - new Date(b.start))[0];
+}
+function conflicts(carId, start, end, ignoreId){
+  const car = carById(carId);
+  const bk = db.bookings.filter(b => b.carId === carId && b.id !== ignoreId && ["pending","confirmed","ongoing"].includes(b.status) && overlap(start, end, b.start, b.end));
+  const mt = car.maintenance.filter(m => overlap(start, end, m.from, addDays(m.to,1)));
+  return { bk, mt };
+}
+const due = b => Math.max(0, b.total - b.paid);
+const waLink = (phone, text) => `https://wa.me/${String(phone).replace(/\D/g,"")}?text=${encodeURIComponent(text)}`;
+const daysTo = d => Math.ceil((startOfDay(d) - startOfDay(new Date())) / DAY);
+
+function alerts(){
+  const out = [];
+  const now = new Date();
+  db.bookings.filter(isLate).forEach(b => out.push({ lvl:"crit", ic:"clock", t:`Retour en retard — ${carName(carById(b.carId))}`, s:`${clientById(b.clientId)?.name} devait rendre la voiture le ${fmtDT(b.end)}`, bk:b.id }));
+  db.cars.forEach(c => {
+    const ins = daysTo(c.insuranceUntil), insp = daysTo(c.inspectionUntil);
+    if (ins <= 30) out.push({ lvl: ins <= 10 ? "crit" : "warn", ic:"shield", t:`Assurance — ${carName(c)}`, s: ins < 0 ? `Expirée depuis le ${fmtDY(c.insuranceUntil)}` : `Expire le ${fmtDY(c.insuranceUntil)} (dans ${ins} j)`, car:c.id });
+    if (insp <= 30) out.push({ lvl: insp <= 10 ? "crit" : "warn", ic:"check", t:`Visite technique — ${carName(c)}`, s: insp < 0 ? `Expirée depuis le ${fmtDY(c.inspectionUntil)}` : `À faire avant le ${fmtDY(c.inspectionUntil)} (dans ${insp} j)`, car:c.id });
+    const kmLeft = c.nextServiceKm - c.km;
+    if (kmLeft <= 1000) out.push({ lvl: kmLeft <= 0 ? "crit" : "warn", ic:"wrench", t:`Entretien — ${carName(c)}`, s: kmLeft <= 0 ? `Vidange dépassée de ${Math.abs(kmLeft).toLocaleString("fr-FR")} km` : `Vidange dans ${kmLeft.toLocaleString("fr-FR")} km`, car:c.id });
+    if (c.vignetteYear < now.getFullYear()) out.push({ lvl:"warn", ic:"doc", t:`Vignette ${now.getFullYear()} — ${carName(c)}`, s:`Dernière vignette payée : ${c.vignetteYear}`, car:c.id });
+  });
+  const unpaid = db.bookings.filter(b => b.status === "completed" && due(b) > 0);
+  unpaid.forEach(b => out.push({ lvl:"warn", ic:"cash", t:`Reste à encaisser — ${dh(due(b))}`, s:`${clientById(b.clientId)?.name} · ${carName(carById(b.carId))}`, bk:b.id }));
+  const order = { crit:0, warn:1, info:2 };
+  return out.sort((a,b) => order[a.lvl] - order[b.lvl]);
+}
+
+/* ============================================================
+   ICONS
+   ============================================================ */
+const IC = {
+  home:'<svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>',
+  plan:'<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M7 14h4M13 17h4"/></svg>',
+  list:'<svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></svg>',
+  car:'<svg viewBox="0 0 24 24"><path d="M5 17H3v-5l2-5h14l2 5v5h-2"/><circle cx="7.5" cy="17" r="2"/><circle cx="16.5" cy="17" r="2"/><path d="M9.5 17h5M3 12h18"/></svg>',
+  users:'<svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M21.5 20a6.5 6.5 0 0 0-4-6"/></svg>',
+  cash:'<svg viewBox="0 0 24 24"><rect x="2.5" y="6" width="19" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 9.5v5M18 9.5v5"/></svg>',
+  gear:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>',
+  clock:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+  shield:'<svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/></svg>',
+  check:'<svg viewBox="0 0 24 24"><path d="M9 11l3 3 8-8"/><path d="M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9"/></svg>',
+  wrench:'<svg viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z"/></svg>',
+  doc:'<svg viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6M8 13h8M8 17h5"/></svg>',
+  x:'<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+  plus:'<svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>',
+  left:'<svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>',
+  right:'<svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>',
+  search:'<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>',
+  wa:'<svg viewBox="0 0 24 24" style="fill:currentColor;stroke:none"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.47-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.08c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.41-.07-.13-.27-.2-.57-.35zM12.05 21.5a9.4 9.4 0 0 1-4.8-1.32l-.34-.2-3.57.94.95-3.48-.22-.36a9.4 9.4 0 0 1-1.44-5.02c0-5.2 4.23-9.43 9.44-9.43a9.43 9.43 0 0 1 9.43 9.44c0 5.2-4.24 9.43-9.45 9.43z"/></svg>',
+  print:'<svg viewBox="0 0 24 24"><path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="7"/></svg>',
+};
+
+/* ============================================================
+   ROUTER & SHELL
+   ============================================================ */
+const VIEWS = [
+  { id:"home",     t:"Tableau de bord", ic:"home",  m:"Accueil" },
+  { id:"planning", t:"Planning",        ic:"plan",  m:"Planning" },
+  { id:"bookings", t:"Réservations",    ic:"list",  m:"Résa." },
+  { id:"fleet",    t:"Flotte",          ic:"car",   m:"Flotte" },
+  { id:"clients",  t:"Clients",         ic:"users", m:"Clients" },
+  { id:"finance",  t:"Finances",        ic:"cash",  m:"Finances" },
+  { id:"settings", t:"Paramètres",      ic:"gear",  m:"" },
+];
+let view = "home";
+const ui = { planStart: addDays(startOfDay(new Date()), -2), planDays: 14, bkFilter:"active", bkSearch:"", clSearch:"", finMonth: (()=>{ const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`; })() };
+
+function shell(){
+  const pend = db.bookings.filter(b => b.status === "pending").length;
+  $("#nav").innerHTML = VIEWS.map(v => `<a data-v="${v.id}" class="${view===v.id?"active":""}">${IC[v.ic]}<span>${v.t}</span>${v.id==="bookings" && pend ? `<em class="count">${pend}</em>` : ""}</a>`).join("");
+  $("#mnav").innerHTML = VIEWS.filter(v => v.m).map(v => `<a data-v="${v.id}" class="${view===v.id?"active":""}">${IC[v.ic]}<span>${v.m}</span>${v.id==="bookings" && pend ? `<em class="count">${pend}</em>` : ""}</a>`).join("");
+  $$("#nav a, #mnav a").forEach(a => a.onclick = () => go(a.dataset.v));
+}
+function go(v){
+  view = v; location.hash = v;
+  shell(); render(); scrollTo(0,0);
+}
+function render(){
+  const V = VIEWS.find(x => x.id === view);
+  $("#viewTitle").textContent = V.t;
+  const sub = { home: new Date().toLocaleDateString("fr-FR",{weekday:"long", day:"numeric", month:"long", year:"numeric"}),
+    planning:"Disponibilité de chaque voiture, jour par jour", bookings:"Toutes les demandes et locations", fleet:"Voitures, documents et entretien",
+    clients:"Historique et informations des clients", finance:"Chiffre d'affaires, dépenses et bénéfice", settings:"Agence et données de démo" }[view];
+  $("#viewSub").textContent = sub;
+  ({ home:vHome, planning:vPlanning, bookings:vBookings, fleet:vFleet, clients:vClients, finance:vFinance, settings:vSettings })[view]();
+}
+function refresh(){ save(); shell(); render(); }
+
+/* ============================================================
+   VIEW — HOME
+   ============================================================ */
+function vHome(){
+  const now = new Date(), t0 = startOfDay(now);
+  const st = db.cars.map(carStatus);
+  const nAvail = st.filter(s => s==="available").length, nRent = st.filter(s => s==="rented").length, nMaint = st.filter(s => s==="maint").length;
+  const ym = isoDate(now).slice(0,7);
+  const monthRev = db.bookings.filter(b => live(b) && b.status !== "pending" && b.start.slice(0,7) === ym).reduce((s,b) => s + b.total, 0);
+  const monthCash = db.bookings.filter(b => b.start.slice(0,7) === ym).reduce((s,b) => s + b.paid, 0);
+  const occ = occupancy(addDays(t0,-30), t0);
+  const deps = db.bookings.filter(b => ["confirmed","pending"].includes(b.status) && sameDay(b.start, now)).sort((a,b)=>new Date(a.start)-new Date(b.start));
+  const rets = db.bookings.filter(b => b.status === "ongoing" && (sameDay(b.end, now) || isLate(b))).sort((a,b)=>new Date(a.end)-new Date(b.end));
+  const pend = db.bookings.filter(b => b.status === "pending").sort((a,b)=>new Date(a.start)-new Date(b.start));
+  const al = alerts();
+
+  $("#view").innerHTML = `
+  <section class="kpis">
+    ${kpi("Disponibles", `${nAvail}<small> / ${db.cars.length}</small>`, `${nRent} louée(s) · ${nMaint} en maintenance`, "available")}
+    ${kpi("Départs aujourd'hui", deps.length, deps.length ? deps.map(b => fmtT(b.start)).join(" · ") : "Aucun départ prévu")}
+    ${kpi("Retours aujourd'hui", rets.length, rets.filter(isLate).length ? `${rets.filter(isLate).length} en retard` : "À l'heure")}
+    ${kpi("CA du mois", `${Math.round(monthRev/1000*10)/10}<small> k DH</small>`, `Encaissé : ${dh(monthCash)}`)}
+    <div class="kpi"><div class="lbl">Occupation (30 j)</div><div class="val">${occ}<small> %</small></div><div class="bar-meter"><i style="width:${occ}%"></i></div></div>
+  </section>
+
+  <section class="grid-2">
+    <div class="card">
+      <div class="card-head"><h2 class="h-display">Départs du jour</h2><div class="right"><span class="muted num">${deps.length}</span></div></div>
+      <div class="list">${deps.length ? deps.map(b => bkRow(b, "dep")).join("") : `<div class="empty">Aucune voiture ne part aujourd'hui.</div>`}</div>
+    </div>
+    <div class="card">
+      <div class="card-head"><h2 class="h-display">Retours du jour</h2><div class="right"><span class="muted num">${rets.length}</span></div></div>
+      <div class="list">${rets.length ? rets.map(b => bkRow(b, "ret")).join("") : `<div class="empty">Aucun retour prévu aujourd'hui.</div>`}</div>
+    </div>
+  </section>
+
+  <section class="grid-3">
+    <div class="card">
+      <div class="card-head"><h2 class="h-display">Demandes en attente</h2><div class="right"><button class="btn btn-sm" data-go="bookings">Tout voir</button></div></div>
+      <div class="list">${pend.length ? pend.map(b => bkRow(b, "pend")).join("") : `<div class="empty">Aucune demande à traiter.</div>`}</div>
+    </div>
+    <div class="card">
+      <div class="card-head"><h2 class="h-display">Alertes</h2><div class="right"><span class="muted num">${al.length}</span></div></div>
+      <div>${al.length ? al.slice(0,7).map(a => `<div class="alert ${a.lvl}" ${a.bk?`data-bk="${a.bk}"`:""} ${a.car?`data-car="${a.car}"`:""} style="cursor:pointer"><span class="ic">${IC[a.ic]}</span><div><b>${esc(a.t)}</b><span>${esc(a.s)}</span></div></div>`).join("") : `<div class="empty">Tout est en ordre.</div>`}</div>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="card-head"><h2 class="h-display">État de la flotte</h2><div class="right"><button class="btn btn-sm" data-go="fleet">Gérer la flotte</button></div></div>
+    <div class="list">${db.cars.map(c => {
+      const s = carStatus(c), on = db.bookings.find(b => b.carId === c.id && b.status === "ongoing"), nx = nextBooking(c), mt = carMaintNow(c);
+      const info = s === "rented" ? `Chez ${esc(clientById(on.clientId)?.name)} · retour ${fmtDT(on.end)}` : s === "maint" ? `${esc(mt.reason)} · jusqu'au ${fmtD(mt.to)}` : nx ? `Prochaine sortie : ${fmtDT(nx.start)}` : "Libre, aucune réservation à venir";
+      return `<div class="row" data-car="${c.id}" style="cursor:pointer"><img class="thumb" src="${esc(c.photo)}" alt="" loading="lazy"><div class="main-t"><b>${esc(carName(c))} <span class="muted num" style="font-weight:500;font-size:.8rem">· ${esc(c.plate)}</span></b><span>${info}</span></div>${stCar(s)}</div>`;
+    }).join("")}</div>
+  </section>`;
+  bindCommon();
+}
+function kpi(lbl, val, hint, dot){
+  return `<div class="kpi"><div class="lbl">${dot ? `<i class="dot" style="background:var(--st-${dot})"></i>` : ""}${lbl}</div><div class="val num">${val}</div><div class="hint">${hint}</div></div>`;
+}
+function bkRow(b, mode){
+  const c = carById(b.carId), cl = clientById(b.clientId);
+  const when = mode === "dep" ? `Départ ${fmtT(b.start)} · ${esc(b.pickup)}` : mode === "ret" ? (isLate(b) ? `Retour prévu ${fmtDT(b.end)}` : `Retour ${fmtT(b.end)}`) : `${fmtD(b.start)} → ${fmtD(b.end)} · ${daysBetween(b.start,b.end)} j · ${dh(b.total)}`;
+  const act = mode === "dep" ? (b.status === "pending" ? `<button class="btn btn-sm" data-act="confirm" data-id="${b.id}">Confirmer</button>` : `<button class="btn btn-sm btn-primary" data-act="pickup" data-id="${b.id}">Départ</button>`)
+    : mode === "ret" ? `<button class="btn btn-sm btn-primary" data-act="return" data-id="${b.id}">Retour</button>`
+    : `<button class="btn btn-sm btn-primary" data-act="confirm" data-id="${b.id}">Confirmer</button><button class="btn btn-sm btn-ghost" data-act="cancel" data-id="${b.id}" title="Refuser">${IC.x}</button>`;
+  return `<div class="row"><img class="thumb" src="${esc(c?.photo)}" alt="" loading="lazy"><div class="main-t" data-bk="${b.id}" style="cursor:pointer"><b>${esc(cl?.name)} · ${esc(carName(c))}</b><span>${when}${b.source==="Site web" && mode==="pend" ? " · via le site" : ""}</span></div>${mode==="ret" ? stBk(b) : ""}<div class="actions">${act}</div></div>`;
+}
+function occupancy(from, to){
+  const total = db.cars.length * Math.round((to - from) / DAY);
+  let used = 0;
+  db.bookings.filter(b => ["ongoing","completed","confirmed"].includes(b.status)).forEach(b => {
+    const s = Math.max(new Date(b.start), from), e = Math.min(new Date(b.end), to);
+    if (e > s) used += (e - s) / DAY;
+  });
+  return Math.round(used / total * 100);
+}
+
+/* ============================================================
+   VIEW — PLANNING (timeline per car)
+   ============================================================ */
+function vPlanning(){
+  const days = ui.planDays, start = ui.planStart, end = addDays(start, days);
+  const t0 = startOfDay(new Date());
+  const dayCells = Array.from({length:days}, (_, i) => addDays(start, i));
+  const isWe = d => [0,6].includes(d.getDay());
+  const pct = d => ((new Date(d) - start) / (end - start));
+  $("#view").innerHTML = `
+  <div class="toolbar">
+    <div class="seg"><button data-step="-1" aria-label="Période précédente">${IC.left.replace("<svg","<svg width='16' height='16' style='stroke:currentColor;fill:none;stroke-width:2'")}</button><button data-today>Aujourd'hui</button><button data-step="1" aria-label="Période suivante">${IC.right.replace("<svg","<svg width='16' height='16' style='stroke:currentColor;fill:none;stroke-width:2'")}</button></div>
+    <strong class="num" style="font-size:.95rem">${fmtD(start)} – ${fmtDY(addDays(end,-1))}</strong>
+    <span class="grow"></span>
+    <div class="seg">${[7,14,30].map(n => `<button data-days="${n}" class="${n===days?"on":""}">${n} j</button>`).join("")}</div>
+  </div>
+  <div class="legend">
+    <span><i style="background:var(--st-rented)"></i>En cours</span>
+    <span><i style="background:rgba(57,135,229,.22);border:1px dashed var(--st-rented)"></i>Confirmée</span>
+    <span><i style="background:rgba(201,133,0,.25);border:1px solid var(--st-pending)"></i>En attente</span>
+    <span><i style="background:#a3121a;border:1px solid #ff6b70"></i>En retard</span>
+    <span><i style="background:repeating-linear-gradient(45deg,rgba(213,81,129,.45) 0 4px,rgba(213,81,129,.12) 4px 8px);border:1px solid var(--st-maint)"></i>Maintenance</span>
+    <span><i style="background:#3a3940"></i>Terminée</span>
+    <span class="muted">Cliquez sur une case vide pour réserver ce jour-là.</span>
+  </div>
+  <div class="plan-wrap"><div class="plan" style="--days:${days}">
+    <div class="plan-row plan-head"><div class="plan-car" style="min-height:0"><span class="muted" style="font-size:.74rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase">Voiture</span></div>
+      ${dayCells.map(d => `<div class="plan-day ${isWe(d)?"we":""} ${sameDay(d,t0)?"today":""}">${d.toLocaleDateString("fr-FR",{weekday:"short"}).replace(".","")}<b>${d.getDate()}</b></div>`).join("")}
+    </div>
+    ${db.cars.map(c => {
+      const bks = db.bookings.filter(b => b.carId === c.id && live(b) && overlap(b.start, b.end, start, end));
+      const mts = c.maintenance.filter(m => overlap(m.from, addDays(m.to,1), start, end));
+      const bar = (s, e, cls, html, attrs) => {
+        const l = Math.max(0, pct(s)), r = Math.min(1, pct(e));
+        return `<div class="bk ${cls}" ${attrs} style="left:calc(var(--carw) + (100% - var(--carw)) * ${l.toFixed(4)} + 2px);width:calc((100% - var(--carw)) * ${(r-l).toFixed(4)} - 4px)">${html}</div>`;
+      };
+      return `<div class="plan-row"><div class="plan-car" data-car="${c.id}" style="cursor:pointer"><img src="${esc(c.photo)}" alt="" loading="lazy"><div><b>${esc(c.model)}</b><span class="num">${esc(c.plate)}</span></div></div>
+        ${dayCells.map(d => `<div class="plan-cell ${isWe(d)?"we":""}" data-new="${c.id}|${isoDate(d)}" title="Réserver ${esc(carName(c))} le ${fmtD(d)}"></div>`).join("")}
+        ${bks.map(b => { const cl = clientById(b.clientId); const cls = isLate(b) ? "late" : b.status;
+          return bar(b.start, isLate(b) ? new Date() : b.end, cls, `<b>${esc(cl?.name || "")}</b><span>${fmtT(b.start)} → ${fmtD(b.end)} ${fmtT(b.end)}</span>`, `data-bk="${b.id}" title="${esc(cl?.name)} · ${BK_ST[b.status][0]}"`); }).join("")}
+        ${mts.map(m => bar(m.from, addDays(m.to,1), "maint", `<b>Maintenance</b><span>${esc(m.reason)}</span>`, `data-car="${c.id}" title="Maintenance : ${esc(m.reason)}"`)).join("")}
+      </div>`;
+    }).join("")}
+    ${ (new Date() >= start && new Date() < end) ? `<div class="plan-today" style="left:calc(var(--carw) + (100% - var(--carw)) * ${pct(new Date()).toFixed(4)})"></div>` : ""}
+  </div></div>`;
+  $$("[data-step]").forEach(b => b.onclick = () => { ui.planStart = addDays(ui.planStart, +b.dataset.step * Math.max(7, Math.round(days/2))); render(); });
+  $("[data-today]").onclick = () => { ui.planStart = addDays(startOfDay(new Date()), -2); render(); };
+  $$("[data-days]").forEach(b => b.onclick = () => { ui.planDays = +b.dataset.days; render(); });
+  $$("[data-new]").forEach(c => c.onclick = () => { const [carId, d] = c.dataset.new.split("|"); bookingForm(null, { carId, date:d }); });
+  bindCommon();
+}
+
+/* ============================================================
+   VIEW — BOOKINGS
+   ============================================================ */
+function vBookings(){
+  const F = { active:"À venir & en cours", pending:"En attente", ongoing:"En cours", confirmed:"Confirmées", completed:"Terminées", cancelled:"Annulées", all:"Toutes" };
+  const match = (b, f) => f === "all" ? true : f === "active" ? ["pending","confirmed","ongoing"].includes(b.status) : b.status === f;
+  const q = ui.bkSearch.trim().toLowerCase();
+  const rows = db.bookings.filter(b => match(b, ui.bkFilter)).filter(b => {
+    if (!q) return true; const c = carById(b.carId), cl = clientById(b.clientId);
+    return [cl?.name, cl?.phone, carName(c), c?.plate].join(" ").toLowerCase().includes(q);
+  }).sort((a,b) => ui.bkFilter === "completed" || ui.bkFilter === "cancelled" || ui.bkFilter === "all" ? new Date(b.start) - new Date(a.start) : new Date(a.start) - new Date(b.start));
+  $("#view").innerHTML = `
+  <div class="toolbar">
+    <div class="chips">${Object.entries(F).map(([k,v]) => `<button class="chip ${ui.bkFilter===k?"on":""}" data-f="${k}">${v} <b>${db.bookings.filter(b => match(b,k)).length}</b></button>`).join("")}</div>
+    <span class="grow"></span>
+    <label class="search">${IC.search}<input class="input" id="bkQ" placeholder="Client, téléphone, voiture, plaque…" value="${esc(ui.bkSearch)}"></label>
+  </div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Client</th><th>Voiture</th><th>Période</th><th>Statut</th><th class="r">Total</th><th class="r">Reste</th><th>Source</th></tr></thead>
+    <tbody>${rows.length ? rows.slice(0,200).map(b => { const c = carById(b.carId), cl = clientById(b.clientId);
+      return `<tr class="click" data-bk="${b.id}"><td><b style="color:var(--ivory);font-weight:600">${esc(cl?.name)}</b><span class="sub num">${esc(cl?.phone)}</span></td>
+      <td>${esc(carName(c))}<span class="sub num">${esc(c?.plate)}</span></td>
+      <td class="num">${fmtD(b.start)} → ${fmtD(b.end)}<span class="sub">${daysBetween(b.start,b.end)} jour(s) · ${esc(b.pickup)}</span></td>
+      <td>${stBk(b)}</td><td class="r num">${dh(b.total)}</td><td class="r num" style="color:${due(b) && b.status!=="cancelled" ? "#e0a92e" : "var(--muted)"}">${b.status==="cancelled" ? "—" : dh(due(b))}</td><td class="muted">${esc(b.source)}</td></tr>`; }).join("")
+      : `<tr><td colspan="7" class="empty">Aucune réservation ne correspond.</td></tr>`}</tbody>
+  </table></div>`;
+  $$("[data-f]").forEach(b => b.onclick = () => { ui.bkFilter = b.dataset.f; render(); });
+  const qi = $("#bkQ"); qi.oninput = () => { ui.bkSearch = qi.value; const pos = qi.selectionStart; render(); const n = $("#bkQ"); n.focus(); n.setSelectionRange(pos,pos); };
+  bindCommon();
+}
+
+/* ============================================================
+   VIEW — FLEET
+   ============================================================ */
+function vFleet(){
+  $("#view").innerHTML = `
+  <div class="toolbar"><div class="legend">
+    <span>${stCar("available")}</span><span>${stCar("rented")}</span><span>${stCar("maint")}</span></div>
+    <span class="grow"></span><button class="btn" id="addCar">${IC.plus}Ajouter une voiture</button></div>
+  <div class="fleet">${db.cars.map(c => {
+    const s = carStatus(c), nx = nextBooking(c), on = db.bookings.find(b => b.carId === c.id && b.status === "ongoing");
+    const ins = daysTo(c.insuranceUntil), insp = daysTo(c.inspectionUntil), kmLeft = c.nextServiceKm - c.km;
+    const lvl = n => n <= 10 ? "crit" : n <= 30 ? "warn" : "";
+    const ym = isoDate(new Date()).slice(0,7);
+    const rev = db.bookings.filter(b => b.carId === c.id && live(b) && b.status !== "pending" && b.start.slice(0,7) === ym).reduce((s,b)=>s+b.total,0);
+    return `<article class="fcar">
+      <div class="ph"><img src="${esc(c.photo)}" alt="${esc(carName(c))}" loading="lazy" onerror="this.style.visibility='hidden'">${stCar(s)}<span class="plate">${esc(c.plate)}</span></div>
+      <div class="bd">
+        <div class="nm"><div><small>${esc(c.brand)} · ${esc(c.year)}</small><h3>${esc(c.model)}</h3></div><div class="price">${c.price} DH<span>par jour</span></div></div>
+        <div class="facts">
+          <div class="fact"><small>Kilométrage</small><b>${c.km.toLocaleString("fr-FR")} km</b></div>
+          <div class="fact ${kmLeft<=0?"crit":kmLeft<=1000?"warn":""}"><small>Prochaine vidange</small><b>${kmLeft<=0 ? "Dépassée" : `dans ${kmLeft.toLocaleString("fr-FR")} km`}</b></div>
+          <div class="fact ${lvl(ins)}"><small>Assurance</small><b>${fmtDY(c.insuranceUntil)}</b></div>
+          <div class="fact ${lvl(insp)}"><small>Visite technique</small><b>${fmtDY(c.inspectionUntil)}</b></div>
+          <div class="fact"><small>Boîte · carburant</small><b>${esc(c.gear)} · ${esc(c.fuel)}</b></div>
+          <div class="fact"><small>CA ce mois</small><b>${dh(rev)}</b></div>
+        </div>
+        <div class="next">${s==="rented" ? `Louée à <b>${esc(clientById(on.clientId)?.name)}</b> jusqu'au <b>${fmtDT(on.end)}</b>` : s==="maint" ? `En maintenance : <b>${esc(carMaintNow(c).reason)}</b>` : nx ? `Prochaine sortie : <b>${fmtDT(nx.start)}</b>` : "Aucune réservation à venir"}</div>
+        <div class="acts"><button class="btn btn-sm" data-car="${c.id}">Modifier</button><button class="btn btn-sm" data-maint="${c.id}">${IC.wrench}Maintenance</button><button class="btn btn-sm" data-hist="${c.id}">Historique</button><button class="btn btn-sm btn-primary" data-newcar="${c.id}">Réserver</button></div>
+      </div></article>`;
+  }).join("")}</div>`;
+  $("#addCar").onclick = () => carForm(null);
+  $$("[data-maint]").forEach(b => b.onclick = e => { e.stopPropagation(); maintForm(b.dataset.maint); });
+  $$("[data-hist]").forEach(b => b.onclick = e => { e.stopPropagation(); carHistory(b.dataset.hist); });
+  $$("[data-newcar]").forEach(b => b.onclick = e => { e.stopPropagation(); bookingForm(null, { carId:b.dataset.newcar }); });
+  bindCommon();
+}
+
+/* ============================================================
+   VIEW — CLIENTS
+   ============================================================ */
+function vClients(){
+  const q = ui.clSearch.trim().toLowerCase();
+  const stats = c => { const bs = db.bookings.filter(b => b.clientId === c.id && live(b) && b.status !== "pending");
+    return { n: bs.length, spent: bs.reduce((s,b)=>s+b.paid,0), last: bs.sort((a,b)=>new Date(b.start)-new Date(a.start))[0], due: bs.reduce((s,b)=>s+due(b),0) }; };
+  const rows = db.clients.filter(c => !q || [c.name, c.phone, c.city, c.cin, c.passport].join(" ").toLowerCase().includes(q))
+    .map(c => ({ c, s: stats(c) })).sort((a,b) => b.s.spent - a.s.spent);
+  $("#view").innerHTML = `
+  <div class="toolbar"><label class="search">${IC.search}<input class="input" id="clQ" placeholder="Nom, téléphone, CIN…" value="${esc(ui.clSearch)}"></label><span class="grow"></span><button class="btn" id="addClient">${IC.plus}Nouveau client</button></div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Client</th><th>Ville</th><th>Pièce d'identité</th><th class="r">Locations</th><th class="r">Total payé</th><th>Dernière location</th><th></th></tr></thead>
+    <tbody>${rows.map(({c, s}) => `<tr class="click" data-client="${c.id}"><td><b style="color:var(--ivory);font-weight:600">${esc(c.name)}</b><span class="sub num">${esc(c.phone)}</span></td>
+      <td class="muted">${esc(c.city)}</td><td class="num muted">${esc(c.cin || c.passport || "—")}</td><td class="r num">${s.n}</td><td class="r num">${dh(s.spent)}</td>
+      <td class="muted">${s.last ? `${fmtDY(s.last.start)} · ${esc(carById(s.last.carId)?.model)}` : "—"}</td>
+      <td>${c.blacklisted ? `<span class="st st-late">Liste noire</span>` : s.due ? `<span class="st st-pending">Doit ${dh(s.due)}</span>` : ""}</td></tr>`).join("") || `<tr><td colspan="7" class="empty">Aucun client trouvé.</td></tr>`}</tbody>
+  </table></div>`;
+  const qi = $("#clQ"); qi.oninput = () => { ui.clSearch = qi.value; const pos = qi.selectionStart; render(); const n = $("#clQ"); n.focus(); n.setSelectionRange(pos,pos); };
+  $("#addClient").onclick = () => clientForm(null);
+  bindCommon();
+}
+
+/* ============================================================
+   VIEW — FINANCE
+   ============================================================ */
+function monthKey(d){ return isoDate(d).slice(0,7); }
+function monthLabel(k, long){ const [y,m] = k.split("-").map(Number); return new Date(y, m-1, 1).toLocaleDateString("fr-FR", long ? {month:"long", year:"numeric"} : {month:"short"}).replace(".",""); }
+function vFinance(){
+  const k = ui.finMonth;
+  const inMonth = d => String(d).slice(0,7) === k;
+  const bks = db.bookings.filter(b => live(b) && b.status !== "pending" && inMonth(b.start));
+  const rev = bks.reduce((s,b)=>s+b.total,0), cash = bks.reduce((s,b)=>s+b.paid,0);
+  const exps = db.expenses.filter(e => inMonth(e.date)).sort((a,b)=>b.date.localeCompare(a.date));
+  const exp = exps.reduce((s,e)=>s+e.amount,0);
+  const months = Array.from({length:6}, (_, i) => { const [y,m] = k.split("-").map(Number); return monthKey(new Date(y, m-1-5+i, 1)); });
+  const series = months.map(mk => ({ k:mk, label: monthLabel(mk), v: db.bookings.filter(b => live(b) && b.status !== "pending" && b.start.slice(0,7) === mk).reduce((s,b)=>s+b.total,0) }));
+  const byCar = db.cars.map(c => ({ k:c.id, label:c.model, v: bks.filter(b => b.carId === c.id).reduce((s,b)=>s+b.total,0) })).sort((a,b)=>b.v-a.v);
+  const allMonths = [...new Set([...db.bookings.map(b => b.start.slice(0,7)), ...db.expenses.map(e => e.date.slice(0,7))])].sort().reverse().filter(m => m <= monthKey(addDays(new Date(), 40)));
+  $("#view").innerHTML = `
+  <div class="toolbar"><select class="input" id="finM" style="width:auto;min-width:200px">${allMonths.map(m => `<option value="${m}" ${m===k?"selected":""}>${monthLabel(m,true)}</option>`).join("")}</select><span class="grow"></span><button class="btn" id="addExp">${IC.plus}Ajouter une dépense</button></div>
+  <section class="kpis k4">
+    ${kpi("Chiffre d'affaires", dh(rev), `${bks.length} location(s) démarrée(s) ce mois`)}
+    ${kpi("Encaissé", dh(cash), `Reste ${dh(Math.max(0,rev-cash))}`)}
+    ${kpi("Dépenses", dh(exp), `${exps.length} dépense(s)`)}
+    ${kpi("Bénéfice", `<span style="color:${rev-exp>=0?"var(--ivory)":"#ff8a8e"}">${dh(rev-exp)}</span>`, rev ? `Marge ${Math.round((rev-exp)/rev*100)} %` : "—")}
+  </section>
+  <section class="grid-2">
+    <div class="card"><div class="card-head"><h2 class="h-display">Chiffre d'affaires, 6 derniers mois</h2></div>${barChart(series, { highlight:k, unit:"DH" })}</div>
+    <div class="card"><div class="card-head"><h2 class="h-display">CA par voiture · ${monthLabel(k,true)}</h2></div>${hBarChart(byCar)}</div>
+  </section>
+  <section class="card"><div class="card-head"><h2 class="h-display">Dépenses · ${monthLabel(k,true)}</h2><div class="right"><span class="muted num">${dh(exp)}</span></div></div>
+    <div class="table-wrap" style="border:0"><table><thead><tr><th>Date</th><th>Catégorie</th><th>Voiture</th><th>Note</th><th class="r">Montant</th><th></th></tr></thead>
+    <tbody>${exps.map(e => `<tr><td class="num">${fmtD(e.date)}</td><td>${esc(e.category)}</td><td class="muted">${e.carId ? esc(carName(carById(e.carId))) : "Agence"}</td><td class="muted">${esc(e.note)}</td><td class="r num">${dh(e.amount)}</td><td class="r"><button class="btn btn-sm btn-ghost" data-delexp="${e.id}" title="Supprimer" aria-label="Supprimer la dépense">${IC.x}</button></td></tr>`).join("") || `<tr><td colspan="6" class="empty">Aucune dépense ce mois-ci.</td></tr>`}</tbody></table></div>
+  </section>`;
+  $("#finM").onchange = e => { ui.finMonth = e.target.value; render(); };
+  $("#addExp").onclick = () => expenseForm();
+  $$("[data-delexp]").forEach(b => b.onclick = () => { db.expenses = db.expenses.filter(e => e.id !== b.dataset.delexp); refresh(); toast("Dépense supprimée"); });
+  bindChartTips();
+}
+
+/* single-series charts: brand red, one axis, value on hover, table view below */
+function barChart(data, { highlight, unit }){
+  const W = 560, H = 230, pl = 46, pb = 26, pt = 18, max = niceMax(Math.max(...data.map(d => d.v), 1));
+  const bw = (W - pl) / data.length, barW = Math.min(46, bw * .56);
+  const y = v => pt + (H - pt - pb) * (1 - v / max);
+  const ticks = [0, .25, .5, .75, 1].map(f => max * f);
+  return `<div class="chart"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Chiffre d'affaires par mois">
+    <g class="grid">${ticks.map(t => `<line x1="${pl}" x2="${W}" y1="${y(t)}" y2="${y(t)}"/>`).join("")}</g>
+    <g class="axis">${ticks.map(t => `<text x="${pl-8}" y="${y(t)+4}" text-anchor="end">${t>=1000 ? Math.round(t/1000)+"k" : t}</text>`).join("")}
+      ${data.map((d,i) => `<text x="${pl + bw*i + bw/2}" y="${H-6}" text-anchor="middle">${esc(d.label)}</text>`).join("")}</g>
+    ${data.map((d,i) => { const x = pl + bw*i + (bw-barW)/2, yy = y(d.v), h = Math.max(0, H - pb - yy);
+      return `<rect class="hit" x="${pl + bw*i}" y="${pt}" width="${bw}" height="${H-pt-pb}" data-tip="${esc(monthLabel(d.k,true))}" data-val="${dh(d.v)}"/>
+      <path class="bar ${highlight && d.k!==highlight ? "dim" : ""}" d="${roundTop(x, yy, barW, h)}" pointer-events="none"/>
+      ${d.k===highlight ? `<text class="vlabel" x="${x+barW/2}" y="${yy-6}" text-anchor="middle">${Math.round(d.v/100)/10}k</text>` : ""}`; }).join("")}
+  </svg></div>
+  <details class="tbl"><summary>Voir les chiffres</summary><table><tbody>${data.map(d => `<tr><td>${esc(monthLabel(d.k,true))}</td><td class="r num">${dh(d.v)}</td></tr>`).join("")}</tbody></table></details>`;
+}
+function hBarChart(data){
+  const max = niceMax(Math.max(...data.map(d => d.v), 1));
+  const rowH = 30, W = 560, pl = 92, pr = 70, H = data.length * rowH + 6;
+  const x = v => (W - pl - pr) * v / max;
+  return `<div class="chart"><svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Chiffre d'affaires par voiture">
+    ${data.map((d,i) => { const yy = 4 + i*rowH, w = Math.max(0, x(d.v));
+      return `<g><text x="${pl-10}" y="${yy+17}" text-anchor="end" style="fill:var(--text);font-size:12px;font-family:var(--ff-body)">${esc(d.label)}</text>
+      <rect class="hit" x="0" y="${yy}" width="${W}" height="${rowH}" data-tip="${esc(d.label)}" data-val="${dh(d.v)}"/>
+      ${w ? `<path class="bar" d="${roundRight(pl, yy+6, w, 16)}" pointer-events="none"/>` : `<line x1="${pl}" x2="${pl}" y1="${yy+6}" y2="${yy+22}" stroke="rgba(255,255,255,.2)"/>`}
+      <text class="vlabel" x="${pl + w + 8}" y="${yy+18}">${dh(d.v)}</text></g>`; }).join("")}
+  </svg></div>`;
+}
+function niceMax(v){ const p = Math.pow(10, Math.floor(Math.log10(v))); return Math.ceil(v / p * 2) / 2 * p; }
+function roundTop(x, y, w, h){ const r = Math.min(4, h, w/2); if (h <= 0) return ""; return `M${x},${y+h}V${y+r}Q${x},${y} ${x+r},${y}H${x+w-r}Q${x+w},${y} ${x+w},${y+r}V${y+h}Z`; }
+function roundRight(x, y, w, h){ const r = Math.min(4, w); return `M${x},${y}H${x+w-r}Q${x+w},${y} ${x+w},${y+r}V${y+h-r}Q${x+w},${y+h} ${x+w-r},${y+h}H${x}Z`; }
+function bindChartTips(){
+  const tip = $("#tip");
+  $$(".chart .hit").forEach(h => {
+    const show = e => { tip.replaceChildren(); const b = document.createElement("b"); b.textContent = h.dataset.val; const s = document.createElement("span"); s.textContent = h.dataset.tip; tip.append(b, s); tip.classList.add("on");
+      const r = h.getBoundingClientRect(); const px = e && e.clientX != null ? e.clientX : r.left + r.width/2, py = e && e.clientY != null ? e.clientY : r.top;
+      tip.style.left = Math.min(innerWidth - tip.offsetWidth - 8, px + 12) + "px"; tip.style.top = (py - tip.offsetHeight - 10) + "px"; };
+    h.addEventListener("pointermove", show); h.addEventListener("pointerleave", () => tip.classList.remove("on"));
+  });
+}
+
+/* ============================================================
+   VIEW — SETTINGS
+   ============================================================ */
+function vSettings(){
+  $("#view").innerHTML = `
+  <section class="grid-2">
+    <div class="card"><div class="card-head"><h2 class="h-display">Agence</h2></div>
+      <form class="form" id="agForm">
+        <div class="f full"><label for="agN">Nom</label><input class="input" id="agN" value="${esc(db.agency.name)}"></div>
+        <div class="f"><label for="agP">Téléphone / WhatsApp</label><input class="input num" id="agP" value="${esc(db.agency.phone)}"></div>
+        <div class="f"><label for="agD">Caution par défaut (DH)</label><input class="input num" id="agD" type="number" min="0" step="500" value="${db.agency.deposit}"></div>
+        <div class="f full"><button class="btn btn-primary" type="submit">Enregistrer</button></div>
+      </form></div>
+    <div class="card"><div class="card-head"><h2 class="h-display">Données de démo</h2></div>
+      <p class="muted" style="margin-bottom:14px">Cette démo n'a pas de serveur : tout est enregistré dans ce navigateur. Les demandes envoyées depuis le formulaire du site (dans ce même navigateur) arrivent ici « En attente ».</p>
+      <div class="toolbar"><button class="btn" id="exp">Exporter (JSON)</button><button class="btn btn-danger" id="reset">Réinitialiser la démo</button></div></div>
+  </section>`;
+  $("#agForm").onsubmit = e => { e.preventDefault(); db.agency = { name: $("#agN").value.trim() || "Super Fast Car", phone: $("#agP").value.trim(), deposit: +$("#agD").value || 0 }; refresh(); toast("Paramètres enregistrés"); };
+  $("#exp").onclick = () => { const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([JSON.stringify(db, null, 2)], {type:"application/json"})); a.download = `super-fast-car-${isoDate(new Date())}.json`; a.click(); URL.revokeObjectURL(a.href); };
+  $("#reset").onclick = () => { if (!confirm("Remettre toutes les données d'exemple ? Vos modifications seront perdues.")) return; db = seed(); refresh(); toast("Démo réinitialisée"); };
+}
+
+/* ============================================================
+   DRAWER (details & forms)
+   ============================================================ */
+function openDrawer(title, body, foot){
+  const d = $("#drawer");
+  d.innerHTML = `<div class="dr-head"><h3 class="h-display">${title}</h3><button class="btn icon-btn btn-ghost x" aria-label="Fermer">${IC.x}</button></div><div class="dr-body">${body}</div>${foot ? `<div class="dr-foot">${foot}</div>` : ""}`;
+  d.classList.add("on"); $("#overlay").classList.add("on");
+  $(".x", d).onclick = closeDrawer;
+  setTimeout(() => { const f = d.querySelector("input,select,textarea"); if (f && matchMedia("(min-width:901px)").matches) f.focus(); }, 280);
+  return d;
+}
+function closeDrawer(){ $("#drawer").classList.remove("on"); $("#overlay").classList.remove("on"); }
+$("#overlay").onclick = closeDrawer;
+addEventListener("keydown", e => { if (e.key === "Escape") closeDrawer(); });
+
+/* --- booking detail --- */
+function bookingDetail(id){
+  const b = db.bookings.find(x => x.id === id); if (!b) return;
+  const c = carById(b.carId), cl = clientById(b.clientId), n = daysBetween(b.start, b.end);
+  const acts = [];
+  if (b.status === "pending") acts.push(`<button class="btn btn-primary" data-act="confirm" data-id="${b.id}">Confirmer</button>`);
+  if (b.status === "confirmed") acts.push(`<button class="btn btn-primary" data-act="pickup" data-id="${b.id}">Départ de la voiture</button>`);
+  if (b.status === "ongoing") acts.push(`<button class="btn btn-primary" data-act="return" data-id="${b.id}">Retour de la voiture</button>`, `<button class="btn" data-act="extend" data-id="${b.id}">Prolonger</button>`);
+  if (b.status !== "cancelled" && due(b) > 0) acts.push(`<button class="btn" data-act="pay" data-id="${b.id}">${IC.cash}Encaisser</button>`);
+  if (["pending","confirmed"].includes(b.status)) acts.push(`<button class="btn" data-act="edit" data-id="${b.id}">Modifier</button>`, `<button class="btn btn-danger" data-act="cancel" data-id="${b.id}">Annuler</button>`);
+  acts.push(`<button class="btn" data-act="print" data-id="${b.id}">${IC.print}Contrat</button>`);
+  const msg = b.status === "pending" || b.status === "confirmed"
+    ? `Bonjour ${cl?.name?.split(" ")[0]}, votre réservation ${carName(c)} du ${fmtDT(b.start)} au ${fmtDT(b.end)} est confirmée. Total : ${dh(b.total)}. À bientôt — ${db.agency.name}`
+    : `Bonjour ${cl?.name?.split(" ")[0]}, ${db.agency.name} vous contacte au sujet de votre location ${carName(c)}.`;
+  openDrawer(`${esc(carName(c))}`, `
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">${stBk(b)}<span class="muted">Réservée le ${fmtDY(b.createdAt)} · ${esc(b.source)}</span></div>
+    <div class="box"><h4>Client</h4><div style="display:flex;justify-content:space-between;gap:10px;align-items:center"><div><b style="color:var(--ivory)">${esc(cl?.name)}</b>${cl?.blacklisted?` <span class="st st-late">Liste noire</span>`:""}<div class="muted num" style="font-size:.85rem">${esc(cl?.phone)}${cl?.cin ? ` · CIN ${esc(cl.cin)}` : cl?.passport ? ` · Passeport ${esc(cl.passport)}` : ""}</div></div>
+      <a class="btn btn-sm btn-wa" target="_blank" rel="noopener" href="${waLink(cl?.phone, msg)}">${IC.wa}WhatsApp</a></div></div>
+    <div class="box"><h4>Location</h4><dl class="kv">
+      <dt>Départ</dt><dd class="num">${fmtDT(b.start)}</dd><dt>Retour</dt><dd class="num" ${isLate(b)?'style="color:#ff8a8e"':""}>${fmtDT(b.end)}</dd>
+      <dt>Durée</dt><dd>${n} jour(s)</dd><dt>Lieu</dt><dd>${esc(b.pickup)}</dd><dt>Voiture</dt><dd class="num">${esc(c?.plate)}</dd>
+      ${b.kmOut!=null ? `<dt>Km départ</dt><dd class="num">${b.kmOut.toLocaleString("fr-FR")}</dd>` : ""}${b.kmIn!=null ? `<dt>Km retour</dt><dd class="num">${b.kmIn.toLocaleString("fr-FR")} (${(b.kmIn-b.kmOut).toLocaleString("fr-FR")} km)</dd>` : ""}
+      <dt>Caution</dt><dd class="num">${dh(b.deposit)}</dd></dl></div>
+    <div class="box"><h4>Paiement</h4><div class="money"><div><small>Total</small><b>${dh(b.total)}</b></div><div><small>Payé</small><b>${dh(b.paid)}</b></div><div class="${due(b)?"due":""}"><small>Reste</small><b>${b.status==="cancelled" ? "—" : dh(due(b))}</b></div></div>
+      <div class="muted" style="font-size:.8rem;margin-top:8px">${n} j × ${dh(b.pricePerDay)}${b.extras ? ` + ${dh(b.extras)} de frais` : ""}</div></div>
+    ${b.notes ? `<div class="box"><h4>Notes</h4><div style="white-space:pre-wrap">${esc(b.notes)}</div></div>` : ""}
+  `, acts.join(""));
+  bindActs($("#drawer"));
+}
+
+/* --- booking form (new / edit) --- */
+function bookingForm(id, preset = {}){
+  const b = id ? db.bookings.find(x => x.id === id) : null;
+  const t = new Date(); t.setHours(t.getHours()+1, 0, 0, 0);
+  const s0 = b ? b.start : preset.date ? `${preset.date}T10:00` : iso(t);
+  const e0 = b ? b.end : iso(addDays(new Date(s0), 3));
+  const carId = b ? b.carId : preset.carId || db.cars[0].id;
+  openDrawer(b ? "Modifier la réservation" : "Nouvelle réservation", `
+    <form class="form" id="bkForm" novalidate>
+      <div class="f full"><label for="fCar">Voiture</label><select class="input" id="fCar">${db.cars.map(c => `<option value="${c.id}" ${c.id===carId?"selected":""}>${esc(carName(c))} · ${esc(c.plate)} — ${c.price} DH/j</option>`).join("")}</select></div>
+      <div class="f"><label for="fS">Départ</label><input class="input num" id="fS" type="datetime-local" value="${s0}"></div>
+      <div class="f"><label for="fE">Retour</label><input class="input num" id="fE" type="datetime-local" value="${e0}"></div>
+      <div class="f full"><label for="fCl">Client</label><select class="input" id="fCl"><option value="__new">+ Nouveau client</option>${[...db.clients].sort((a,c)=>a.name.localeCompare(c.name)).map(c => `<option value="${c.id}" ${b && b.clientId===c.id ? "selected" : ""}>${esc(c.name)} · ${esc(c.phone)}${c.blacklisted?" · LISTE NOIRE":""}</option>`).join("")}</select></div>
+      <div class="f newcl"><label for="fN">Nom complet</label><input class="input" id="fN" placeholder="ex. Yassine El Amrani"></div>
+      <div class="f newcl"><label for="fP">Téléphone</label><input class="input num" id="fP" placeholder="+212 6…"></div>
+      <div class="f newcl"><label for="fId">CIN ou passeport</label><input class="input" id="fId"></div>
+      <div class="f newcl"><label for="fL">Permis n°</label><input class="input" id="fL"></div>
+      <div class="f"><label for="fPr">Prix / jour (DH)</label><input class="input num" id="fPr" type="number" min="0" value="${b ? b.pricePerDay : carById(carId).price}"></div>
+      <div class="f"><label for="fX">Frais en plus (DH)</label><input class="input num" id="fX" type="number" min="0" value="${b ? b.extras : 0}"><span class="help">Livraison, siège bébé, 2e conducteur…</span></div>
+      <div class="f"><label for="fPay">Avance payée (DH)</label><input class="input num" id="fPay" type="number" min="0" value="${b ? b.paid : 0}"></div>
+      <div class="f"><label for="fDep">Caution (DH)</label><input class="input num" id="fDep" type="number" min="0" step="500" value="${b ? b.deposit : db.agency.deposit}"></div>
+      <div class="f"><label for="fPk">Lieu de remise</label><select class="input" id="fPk">${["Agence","Aéroport Mohammed V","Gare Casa-Port","Livraison à domicile"].map(p => `<option ${b && b.pickup===p?"selected":""}>${p}</option>`).join("")}</select></div>
+      <div class="f"><label for="fSrc">Source</label><select class="input" id="fSrc">${["Agence","WhatsApp","Téléphone","Site web"].map(p => `<option ${b && b.source===p?"selected":""}>${p}</option>`).join("")}</select></div>
+      <div class="f full"><label for="fNo">Notes</label><textarea class="input" id="fNo">${esc(b ? b.notes : "")}</textarea></div>
+      ${b ? "" : `<div class="f full"><label for="fSt">Statut</label><select class="input" id="fSt"><option value="confirmed">Confirmée</option><option value="pending">En attente</option></select></div>`}
+      <div class="f full"><div class="box" id="fSum"></div></div>
+      <div class="f full hidden" id="fErr"></div>
+    </form>`, `<button class="btn btn-primary" id="fSave">${b ? "Enregistrer" : "Créer la réservation"}</button><button class="btn btn-ghost" id="fCancel">Annuler</button>`);
+  const sync = () => {
+    const isNew = $("#fCl").value === "__new";
+    $$(".newcl").forEach(e => e.classList.toggle("hidden", !isNew));
+    const s = $("#fS").value, e = $("#fE").value, n = s && e && new Date(e) > new Date(s) ? daysBetween(s, e) : 0;
+    const total = n * (+$("#fPr").value || 0) + (+$("#fX").value || 0);
+    const cf = s && e ? conflicts($("#fCar").value, s, e, id) : { bk:[], mt:[] };
+    const cl = clientById($("#fCl").value);
+    $("#fSum").innerHTML = `<h4>Résumé</h4><div class="money"><div><small>Durée</small><b>${n} j</b></div><div><small>Total</small><b>${dh(total)}</b></div><div class="${total - (+$("#fPay").value||0) > 0 ? "due":""}"><small>Reste</small><b>${dh(Math.max(0, total - (+$("#fPay").value||0)))}</b></div></div>
+      ${cf.bk.length || cf.mt.length ? `<div class="err" style="margin-top:10px">Voiture déjà prise : ${[...cf.bk.map(x => `${esc(clientById(x.clientId)?.name)} (${fmtD(x.start)} → ${fmtD(x.end)})`), ...cf.mt.map(m => `maintenance (${fmtD(m.from)} → ${fmtD(m.to)})`)].join(", ")}.</div>` : n ? `<div style="margin-top:10px;color:#3cc796;font-size:.85rem;font-weight:600">✓ Voiture disponible sur cette période</div>` : ""}
+      ${cl?.blacklisted ? `<div class="err" style="margin-top:10px">Ce client est sur la liste noire : ${esc(cl.notes || "voir sa fiche")}.</div>` : ""}`;
+  };
+  $("#fCar").onchange = () => { $("#fPr").value = carById($("#fCar").value).price; sync(); };
+  $("#fS").onchange = () => { if (new Date($("#fE").value) <= new Date($("#fS").value)) $("#fE").value = iso(addDays(new Date($("#fS").value), 1)); sync(); };
+  ["#fE","#fCl","#fPr","#fX","#fPay"].forEach(s => { $(s).oninput = sync; $(s).onchange = sync; });
+  sync();
+  $("#fCancel").onclick = closeDrawer;
+  $("#fSave").onclick = () => {
+    const err = m => { const e = $("#fErr"); e.className = "f full err"; e.textContent = m; e.scrollIntoView({block:"nearest"}); };
+    const s = $("#fS").value, e = $("#fE").value, carId = $("#fCar").value;
+    if (!s || !e || new Date(e) <= new Date(s)) return err("Le retour doit être après le départ.");
+    const cf = conflicts(carId, s, e, id);
+    if (cf.bk.length || cf.mt.length) return err("Cette voiture n'est pas libre sur ces dates. Changez les dates ou la voiture.");
+    let clientId = $("#fCl").value;
+    if (clientId === "__new"){
+      const name = $("#fN").value.trim(), phone = $("#fP").value.trim();
+      if (name.length < 2 || phone.replace(/\D/g,"").length < 9) return err("Indiquez le nom et un numéro de téléphone valide du client.");
+      const idv = $("#fId").value.trim();
+      const cl = { id:uid("cl"), name, phone, city:"", cin: /^[A-Za-z]{1,2}\d{5,6}$/.test(idv) ? idv.toUpperCase() : "", passport: /^[A-Za-z]{1,2}\d{5,6}$/.test(idv) ? "" : idv, licence:$("#fL").value.trim(), blacklisted:false, notes:"" };
+      db.clients.push(cl); clientId = cl.id;
+    }
+    const n = daysBetween(s, e), price = +$("#fPr").value || 0, extras = +$("#fX").value || 0;
+    const data = { carId, clientId, start:s, end:e, pricePerDay:price, extras, total: n*price + extras, paid: Math.min(+$("#fPay").value || 0, n*price + extras), deposit:+$("#fDep").value || 0, pickup:$("#fPk").value, source:$("#fSrc").value, notes:$("#fNo").value.trim() };
+    if (b) Object.assign(b, data);
+    else db.bookings.push({ id:uid("bk"), ...data, status:$("#fSt").value, createdAt:iso(new Date()), kmOut:null, kmIn:null });
+    refresh(); closeDrawer(); toast(b ? "Réservation modifiée" : "Réservation créée");
+  };
+}
+
+/* --- departure / return / payment / extend --- */
+function pickupForm(id){
+  const b = db.bookings.find(x => x.id === id), c = carById(b.carId), cl = clientById(b.clientId);
+  const busyNow = db.bookings.find(x => x.carId === c.id && x.status === "ongoing");
+  openDrawer("Départ de la voiture", `
+    <div class="box"><b style="color:var(--ivory)">${esc(carName(c))} · ${esc(c.plate)}</b><div class="muted">${esc(cl?.name)} · retour prévu ${fmtDT(b.end)}</div></div>
+    ${busyNow ? `<div class="err">Attention : cette voiture est encore chez ${esc(clientById(busyNow.clientId)?.name)} (retour prévu ${fmtDT(busyNow.end)}).</div>` : ""}
+    ${carMaintNow(c) ? `<div class="err">Cette voiture est en maintenance : ${esc(carMaintNow(c).reason)}.</div>` : ""}
+    <form class="form" novalidate>
+      <div class="f"><label for="pKm">Kilométrage au départ</label><input class="input num" id="pKm" type="number" value="${c.km}"></div>
+      <div class="f"><label for="pFuel">Carburant</label><select class="input" id="pFuel"><option>Plein</option><option>3/4</option><option>1/2</option><option>1/4</option></select></div>
+      <div class="f"><label for="pPay">Montant encaissé maintenant (DH)</label><input class="input num" id="pPay" type="number" min="0" value="${due(b)}"><span class="help">Reste à payer : ${dh(due(b))}</span></div>
+      <div class="f"><label for="pDep">Caution reçue (DH)</label><input class="input num" id="pDep" type="number" min="0" value="${b.deposit}"></div>
+      <div class="f full"><label><input type="checkbox" id="pDocs" checked> Permis et pièce d'identité vérifiés</label></div>
+    </form>`, `<button class="btn btn-primary" id="pOk">Valider le départ</button><button class="btn btn-ghost" onclick="closeDrawer()">Annuler</button>`);
+  $("#pOk").onclick = () => {
+    b.status = "ongoing"; b.kmOut = +$("#pKm").value || c.km; c.km = Math.max(c.km, b.kmOut);
+    b.paid = Math.min(b.total, b.paid + (+$("#pPay").value || 0)); b.deposit = +$("#pDep").value || 0;
+    b.notes = [b.notes, `Départ : carburant ${$("#pFuel").value}.`].filter(Boolean).join("\n");
+    refresh(); closeDrawer(); toast(`${c.model} est partie avec ${cl?.name}`);
+  };
+}
+function returnForm(id){
+  const b = db.bookings.find(x => x.id === id), c = carById(b.carId), cl = clientById(b.clientId);
+  const lateDays = isLate(b) ? daysBetween(b.end, new Date()) : 0;
+  openDrawer("Retour de la voiture", `
+    <div class="box"><b style="color:var(--ivory)">${esc(carName(c))} · ${esc(c.plate)}</b><div class="muted">${esc(cl?.name)} · prévu ${fmtDT(b.end)}</div></div>
+    ${lateDays ? `<div class="err">Retour en retard de ${lateDays} jour(s) : ${dh(lateDays * b.pricePerDay)} ajoutés par défaut.</div>` : ""}
+    <form class="form" novalidate>
+      <div class="f"><label for="rKm">Kilométrage au retour</label><input class="input num" id="rKm" type="number" value="${(b.kmOut || c.km) + 120*daysBetween(b.start, b.end)}"></div>
+      <div class="f"><label for="rFuel">Carburant</label><select class="input" id="rFuel"><option>Plein</option><option>3/4</option><option>1/2</option><option>1/4</option></select></div>
+      <div class="f"><label for="rX">Frais supplémentaires (DH)</label><input class="input num" id="rX" type="number" min="0" value="${lateDays * b.pricePerDay}"><span class="help">Retard, carburant, dégâts…</span></div>
+      <div class="f"><label for="rPay">Montant encaissé maintenant (DH)</label><input class="input num" id="rPay" type="number" min="0" value="${due(b) + lateDays * b.pricePerDay}"></div>
+      <div class="f full"><label for="rNote">État de la voiture</label><textarea class="input" id="rNote" placeholder="RAS, rayure porte arrière…"></textarea></div>
+      <div class="f full"><label><input type="checkbox" id="rDep" checked> Caution rendue au client</label></div>
+    </form>`, `<button class="btn btn-primary" id="rOk">Valider le retour</button><button class="btn btn-ghost" onclick="closeDrawer()">Annuler</button>`);
+  $("#rX").oninput = () => { $("#rPay").value = due(b) + (+$("#rX").value || 0); };
+  $("#rOk").onclick = () => {
+    const extra = +$("#rX").value || 0;
+    b.extras += extra; b.total += extra; b.status = "completed"; b.kmIn = +$("#rKm").value || null;
+    if (b.kmIn) c.km = Math.max(c.km, b.kmIn);
+    b.paid = Math.min(b.total, b.paid + (+$("#rPay").value || 0));
+    if (lateDays) b.end = iso(new Date());
+    const note = $("#rNote").value.trim();
+    b.notes = [b.notes, `Retour : carburant ${$("#rFuel").value}.${note ? " " + note : ""}${$("#rDep").checked ? "" : " Caution gardée."}`].filter(Boolean).join("\n");
+    refresh(); closeDrawer(); toast(`${c.model} est de retour${due(b) ? ` · reste ${dh(due(b))}` : ""}`);
+  };
+}
+function payForm(id){
+  const b = db.bookings.find(x => x.id === id);
+  openDrawer("Encaisser un paiement", `
+    <div class="box"><div class="money"><div><small>Total</small><b>${dh(b.total)}</b></div><div><small>Payé</small><b>${dh(b.paid)}</b></div><div class="due"><small>Reste</small><b>${dh(due(b))}</b></div></div></div>
+    <form class="form" novalidate><div class="f"><label for="yA">Montant (DH)</label><input class="input num" id="yA" type="number" min="0" value="${due(b)}"></div>
+    <div class="f"><label for="yM">Moyen</label><select class="input" id="yM"><option>Espèces</option><option>Carte</option><option>Virement</option></select></div></form>`,
+    `<button class="btn btn-primary" id="yOk">Encaisser</button><button class="btn btn-ghost" onclick="closeDrawer()">Annuler</button>`);
+  $("#yOk").onclick = () => { const a = Math.max(0, +$("#yA").value || 0); b.paid = Math.min(b.total, b.paid + a); b.notes = [b.notes, `Paiement ${dh(a)} (${$("#yM").value}) le ${fmtD(new Date())}.`].filter(Boolean).join("\n"); refresh(); closeDrawer(); toast(`${dh(a)} encaissés`); };
+}
+function extendForm(id){
+  const b = db.bookings.find(x => x.id === id);
+  openDrawer("Prolonger la location", `
+    <form class="form" novalidate><div class="f full"><label for="xE">Nouvelle date de retour</label><input class="input num" id="xE" type="datetime-local" value="${iso(addDays(new Date(b.end),1))}"></div><div class="f full hidden" id="xErr"></div></form>`,
+    `<button class="btn btn-primary" id="xOk">Prolonger</button><button class="btn btn-ghost" onclick="closeDrawer()">Annuler</button>`);
+  $("#xOk").onclick = () => {
+    const e = $("#xE").value, x = $("#xErr");
+    if (!e || new Date(e) <= new Date(b.start)) { x.className = "f full err"; x.textContent = "Date invalide."; return; }
+    const cf = conflicts(b.carId, b.start, e, b.id);
+    if (cf.bk.length || cf.mt.length) { x.className = "f full err"; x.textContent = "La voiture est réservée ou en maintenance sur cette période."; return; }
+    b.end = e; b.total = daysBetween(b.start, e) * b.pricePerDay + b.extras;
+    refresh(); closeDrawer(); toast("Location prolongée");
+  };
+}
+function cancelBooking(id){
+  const b = db.bookings.find(x => x.id === id);
+  if (!confirm(b.status === "pending" ? "Refuser cette demande ?" : "Annuler cette réservation ?")) return;
+  b.status = "cancelled"; refresh(); closeDrawer(); toast(b.paid ? `Réservation annulée · ${dh(b.paid)} à rembourser` : "Réservation annulée");
+}
+function printContract(id){
+  const b = db.bookings.find(x => x.id === id), c = carById(b.carId), cl = clientById(b.clientId);
+  $("#printArea").innerHTML = `<h1>${esc(db.agency.name)} — Contrat de location</h1><div>${esc(db.agency.phone)} · Casablanca · Contrat n° ${esc(b.id.toUpperCase())}</div>
+    <table><tr><td><b>Client</b></td><td>${esc(cl?.name)}</td><td><b>Téléphone</b></td><td>${esc(cl?.phone)}</td></tr>
+    <tr><td><b>CIN / Passeport</b></td><td>${esc(cl?.cin || cl?.passport || "")}</td><td><b>Permis</b></td><td>${esc(cl?.licence || "")}</td></tr>
+    <tr><td><b>Voiture</b></td><td>${esc(carName(c))}</td><td><b>Immatriculation</b></td><td>${esc(c?.plate)}</td></tr>
+    <tr><td><b>Départ</b></td><td>${fmtDT(b.start)} · ${esc(b.pickup)}</td><td><b>Retour</b></td><td>${fmtDT(b.end)}</td></tr>
+    <tr><td><b>Km départ</b></td><td>${b.kmOut ?? ""}</td><td><b>Km retour</b></td><td>${b.kmIn ?? ""}</td></tr>
+    <tr><td><b>Prix</b></td><td>${daysBetween(b.start,b.end)} j × ${dh(b.pricePerDay)}${b.extras ? ` + ${dh(b.extras)}` : ""}</td><td><b>Total</b></td><td>${dh(b.total)} (payé ${dh(b.paid)})</td></tr>
+    <tr><td><b>Caution</b></td><td colspan="3">${dh(b.deposit)}</td></tr></table>
+    <p>Le locataire déclare avoir reçu le véhicule en bon état et s'engage à le rendre à la date et au lieu convenus, avec le même niveau de carburant.</p>
+    <div class="sig"><span>Signature de l'agence</span><span>Signature du client</span></div>`;
+  print();
+}
+function bindActs(root){
+  $$("[data-act]", root).forEach(btn => btn.onclick = e => {
+    e.stopPropagation();
+    const id = btn.dataset.id, b = db.bookings.find(x => x.id === id);
+    ({
+      confirm: () => { const cf = conflicts(b.carId, b.start, b.end, b.id); if (cf.bk.length || cf.mt.length) { toast("Impossible : la voiture est déjà prise sur ces dates"); return; } b.status = "confirmed"; refresh(); closeDrawer(); toast("Réservation confirmée"); },
+      pickup: () => pickupForm(id), return: () => returnForm(id), pay: () => payForm(id), extend: () => extendForm(id),
+      edit: () => bookingForm(id), cancel: () => cancelBooking(id), print: () => printContract(id),
+    })[btn.dataset.act]();
+  });
+}
+
+/* --- cars --- */
+function carForm(id){
+  const c = id ? carById(id) : null;
+  openDrawer(c ? esc(carName(c)) : "Ajouter une voiture", `
+    <form class="form" id="cForm" novalidate>
+      <div class="f"><label for="cB">Marque</label><input class="input" id="cB" value="${esc(c?.brand)}"></div>
+      <div class="f"><label for="cM">Modèle</label><input class="input" id="cM" value="${esc(c?.model)}"></div>
+      <div class="f"><label for="cPl">Immatriculation</label><input class="input num" id="cPl" value="${esc(c?.plate)}" placeholder="12345-A-6"></div>
+      <div class="f"><label for="cY">Année</label><input class="input num" id="cY" type="number" value="${c?.year || new Date().getFullYear()}"></div>
+      <div class="f"><label for="cP">Prix / jour (DH)</label><input class="input num" id="cP" type="number" min="0" value="${c?.price || 250}"></div>
+      <div class="f"><label for="cK">Kilométrage</label><input class="input num" id="cK" type="number" min="0" value="${c?.km || 0}"></div>
+      <div class="f"><label for="cG">Boîte</label><select class="input" id="cG">${["Manuelle","Automatique"].map(v => `<option ${c?.gear===v?"selected":""}>${v}</option>`).join("")}</select></div>
+      <div class="f"><label for="cF">Carburant</label><select class="input" id="cF">${["Diesel","Essence","Hybride","Électrique"].map(v => `<option ${c?.fuel===v?"selected":""}>${v}</option>`).join("")}</select></div>
+      <div class="f"><label for="cI">Assurance jusqu'au</label><input class="input num" id="cI" type="date" value="${c?.insuranceUntil || isoDate(addDays(new Date(),365))}"></div>
+      <div class="f"><label for="cV">Visite technique avant le</label><input class="input num" id="cV" type="date" value="${c?.inspectionUntil || isoDate(addDays(new Date(),365))}"></div>
+      <div class="f"><label for="cS">Prochaine vidange à (km)</label><input class="input num" id="cS" type="number" min="0" value="${c?.nextServiceKm || 10000}"></div>
+      <div class="f"><label for="cVg">Dernière vignette payée</label><input class="input num" id="cVg" type="number" value="${c?.vignetteYear || new Date().getFullYear()}"></div>
+      <div class="f full"><label for="cN">Notes</label><textarea class="input" id="cN">${esc(c?.notes)}</textarea></div>
+      <div class="f full hidden" id="cErr"></div>
+    </form>`, `<button class="btn btn-primary" id="cOk">Enregistrer</button>${c ? `<button class="btn btn-danger" id="cDel">Retirer de la flotte</button>` : ""}<button class="btn btn-ghost" onclick="closeDrawer()">Annuler</button>`);
+  $("#cOk").onclick = () => {
+    const v = s => $(s).value.trim();
+    if (!v("#cB") || !v("#cM")) { const e = $("#cErr"); e.className = "f full err"; e.textContent = "Indiquez la marque et le modèle."; return; }
+    const data = { brand:v("#cB"), model:v("#cM"), plate:v("#cPl"), year:+v("#cY"), price:+v("#cP")||0, km:+v("#cK")||0, gear:v("#cG"), fuel:v("#cF"),
+      insuranceUntil:v("#cI"), inspectionUntil:v("#cV"), nextServiceKm:+v("#cS")||0, vignetteYear:+v("#cVg"), notes:v("#cN") };
+    if (c) Object.assign(c, data); else db.cars.push({ id:uid("car"), photo:"../images/favicon.svg", maintenance:[], ...data });
+    refresh(); closeDrawer(); toast(c ? "Voiture mise à jour" : "Voiture ajoutée");
+  };
+  if (c) $("#cDel").onclick = () => {
+    if (db.bookings.some(b => b.carId === c.id && ["pending","confirmed","ongoing"].includes(b.status))) { toast("Cette voiture a des réservations en cours ou à venir"); return; }
+    if (!confirm(`Retirer ${carName(c)} de la flotte ?`)) return;
+    db.cars = db.cars.filter(x => x.id !== c.id); refresh(); closeDrawer(); toast("Voiture retirée");
+  };
+}
+function maintForm(id){
+  const c = carById(id);
+  openDrawer(`Maintenance · ${esc(c.model)}`, `
+    <div class="box"><h4>Périodes prévues</h4>${c.maintenance.length ? c.maintenance.map(m => `<div class="row"><div class="main-t"><b>${esc(m.reason)}</b><span>${fmtDY(m.from)} → ${fmtDY(m.to)}</span></div><button class="btn btn-sm btn-ghost" data-delm="${m.id}" aria-label="Supprimer">${IC.x}</button></div>`).join("") : `<div class="muted">Aucune.</div>`}</div>
+    <form class="form" novalidate>
+      <div class="f"><label for="mF">Du</label><input class="input num" id="mF" type="date" value="${isoDate(new Date())}"></div>
+      <div class="f"><label for="mT">Au (inclus)</label><input class="input num" id="mT" type="date" value="${isoDate(addDays(new Date(),1))}"></div>
+      <div class="f full"><label for="mR">Motif</label><input class="input" id="mR" placeholder="Vidange, pneus, carrosserie…"></div>
+      <div class="f"><label for="mC">Coût (DH, optionnel)</label><input class="input num" id="mC" type="number" min="0"></div>
+      <div class="f full hidden" id="mErr"></div>
+    </form>`, `<button class="btn btn-primary" id="mOk">Bloquer ces dates</button><button class="btn btn-ghost" onclick="closeDrawer()">Fermer</button>`);
+  $$("[data-delm]").forEach(b => b.onclick = () => { c.maintenance = c.maintenance.filter(m => m.id !== b.dataset.delm); refresh(); maintForm(id); toast("Période supprimée"); });
+  $("#mOk").onclick = () => {
+    const f = $("#mF").value, t = $("#mT").value, r = $("#mR").value.trim() || "Maintenance", x = $("#mErr");
+    if (!f || !t || t < f) { x.className = "f full err"; x.textContent = "La date de fin doit être après la date de début."; return; }
+    const cf = conflicts(id, f, addDays(t,1)).bk;
+    if (cf.length) { x.className = "f full err"; x.textContent = `Réservations sur ces dates : ${cf.map(b => `${clientById(b.clientId)?.name} (${fmtD(b.start)} → ${fmtD(b.end)})`).join(", ")}. Déplacez-les d'abord.`; return; }
+    c.maintenance.push({ id:uid("mt"), from:f, to:t, reason:r });
+    const cost = +$("#mC").value; if (cost) db.expenses.push({ id:uid("ex"), carId:id, date:f, category:"Entretien", amount:cost, note:r });
+    refresh(); closeDrawer(); toast(`${c.model} bloquée du ${fmtD(f)} au ${fmtD(t)}`);
+  };
+}
+function carHistory(id){
+  const c = carById(id);
+  const bs = db.bookings.filter(b => b.carId === id).sort((a,b) => new Date(b.start) - new Date(a.start));
+  const ex = db.expenses.filter(e => e.carId === id);
+  const rev = bs.filter(b => live(b) && b.status !== "pending").reduce((s,b)=>s+b.total,0), cost = ex.reduce((s,e)=>s+e.amount,0);
+  openDrawer(`Historique · ${esc(c.model)}`, `
+    <div class="box"><div class="money"><div><small>CA total</small><b>${dh(rev)}</b></div><div><small>Dépenses</small><b>${dh(cost)}</b></div><div><small>Locations</small><b>${bs.filter(b=>b.status==="completed").length}</b></div></div></div>
+    <div class="box"><h4>Locations</h4>${bs.slice(0,40).map(b => `<div class="row" data-bk="${b.id}" style="cursor:pointer"><div class="main-t"><b>${esc(clientById(b.clientId)?.name)}</b><span class="num">${fmtD(b.start)} → ${fmtDY(b.end)} · ${dh(b.total)}</span></div>${stBk(b)}</div>`).join("") || `<div class="muted">Aucune.</div>`}</div>`);
+  bindCommon($("#drawer"));
+}
+
+/* --- clients --- */
+function clientDetail(id){
+  const c = clientById(id);
+  const bs = db.bookings.filter(b => b.clientId === id).sort((a,b) => new Date(b.start) - new Date(a.start));
+  const spent = bs.filter(live).reduce((s,b)=>s+b.paid,0);
+  openDrawer(esc(c.name), `
+    <div style="display:flex;gap:8px;flex-wrap:wrap">${c.blacklisted ? `<span class="st st-late">Liste noire</span>` : `<span class="st st-available">Client fiable</span>`}</div>
+    <div class="box"><dl class="kv"><dt>Téléphone</dt><dd class="num">${esc(c.phone)}</dd><dt>Ville</dt><dd>${esc(c.city || "—")}</dd>
+      <dt>${c.cin ? "CIN" : "Passeport"}</dt><dd class="num">${esc(c.cin || c.passport || "—")}</dd><dt>Permis</dt><dd class="num">${esc(c.licence || "—")}</dd>
+      <dt>Locations</dt><dd>${bs.filter(b=>b.status==="completed").length}</dd><dt>Total payé</dt><dd class="num">${dh(spent)}</dd></dl></div>
+    ${c.notes ? `<div class="box"><h4>Notes</h4>${esc(c.notes)}</div>` : ""}
+    <div class="box"><h4>Historique</h4>${bs.map(b => `<div class="row" data-bk="${b.id}" style="cursor:pointer"><div class="main-t"><b>${esc(carName(carById(b.carId)))}</b><span class="num">${fmtD(b.start)} → ${fmtDY(b.end)} · ${dh(b.total)}</span></div>${stBk(b)}</div>`).join("") || `<div class="muted">Aucune location.</div>`}</div>`,
+    `<a class="btn btn-wa" target="_blank" rel="noopener" href="${waLink(c.phone, `Bonjour ${c.name.split(" ")[0]}, ici ${db.agency.name}.`)}">${IC.wa}WhatsApp</a><button class="btn btn-primary" id="clNew">Nouvelle réservation</button><button class="btn" id="clEdit">Modifier</button>`);
+  $("#clNew").onclick = () => { bookingForm(null, {}); $("#fCl").value = id; $("#fCl").dispatchEvent(new Event("change")); };
+  $("#clEdit").onclick = () => clientForm(id);
+  bindCommon($("#drawer"));
+}
+function clientForm(id){
+  const c = id ? clientById(id) : null;
+  openDrawer(c ? "Modifier le client" : "Nouveau client", `
+    <form class="form" novalidate>
+      <div class="f full"><label for="kN">Nom complet</label><input class="input" id="kN" value="${esc(c?.name)}"></div>
+      <div class="f"><label for="kP">Téléphone</label><input class="input num" id="kP" value="${esc(c?.phone)}" placeholder="+212 6…"></div>
+      <div class="f"><label for="kV">Ville</label><input class="input" id="kV" value="${esc(c?.city)}"></div>
+      <div class="f"><label for="kC">CIN</label><input class="input num" id="kC" value="${esc(c?.cin)}"></div>
+      <div class="f"><label for="kPa">Passeport</label><input class="input num" id="kPa" value="${esc(c?.passport)}"></div>
+      <div class="f full"><label for="kL">Permis n°</label><input class="input num" id="kL" value="${esc(c?.licence)}"></div>
+      <div class="f full"><label for="kNo">Notes</label><textarea class="input" id="kNo">${esc(c?.notes)}</textarea></div>
+      <div class="f full"><label><input type="checkbox" id="kB" ${c?.blacklisted?"checked":""}> Liste noire (ne plus louer à ce client)</label></div>
+      <div class="f full hidden" id="kErr"></div>
+    </form>`, `<button class="btn btn-primary" id="kOk">Enregistrer</button><button class="btn btn-ghost" onclick="closeDrawer()">Annuler</button>`);
+  $("#kOk").onclick = () => {
+    const v = s => $(s).value.trim();
+    if (v("#kN").length < 2 || v("#kP").replace(/\D/g,"").length < 9) { const e = $("#kErr"); e.className = "f full err"; e.textContent = "Indiquez le nom et un numéro de téléphone valide."; return; }
+    const data = { name:v("#kN"), phone:v("#kP"), city:v("#kV"), cin:v("#kC").toUpperCase(), passport:v("#kPa"), licence:v("#kL"), notes:v("#kNo"), blacklisted:$("#kB").checked };
+    if (c) Object.assign(c, data); else db.clients.push({ id:uid("cl"), ...data });
+    refresh(); closeDrawer(); toast(c ? "Client mis à jour" : "Client ajouté");
+  };
+}
+
+/* --- expenses --- */
+function expenseForm(){
+  openDrawer("Ajouter une dépense", `
+    <form class="form" novalidate>
+      <div class="f"><label for="eD">Date</label><input class="input num" id="eD" type="date" value="${isoDate(new Date())}"></div>
+      <div class="f"><label for="eA">Montant (DH)</label><input class="input num" id="eA" type="number" min="0"></div>
+      <div class="f"><label for="eC">Catégorie</label><select class="input" id="eC">${["Entretien","Réparation","Carburant","Lavage","Assurance","Vignette","Visite technique","Loyer agence","Salaire","Autre"].map(v => `<option>${v}</option>`).join("")}</select></div>
+      <div class="f"><label for="eV">Voiture</label><select class="input" id="eV"><option value="">Agence (général)</option>${db.cars.map(c => `<option value="${c.id}">${esc(carName(c))}</option>`).join("")}</select></div>
+      <div class="f full"><label for="eN">Note</label><input class="input" id="eN"></div>
+      <div class="f full hidden" id="eErr"></div>
+    </form>`, `<button class="btn btn-primary" id="eOk">Ajouter</button><button class="btn btn-ghost" onclick="closeDrawer()">Annuler</button>`);
+  $("#eOk").onclick = () => {
+    const a = +$("#eA").value;
+    if (!a || a < 0 || !$("#eD").value) { const e = $("#eErr"); e.className = "f full err"; e.textContent = "Indiquez une date et un montant."; return; }
+    db.expenses.push({ id:uid("ex"), carId:$("#eV").value || null, date:$("#eD").value, category:$("#eC").value, amount:a, note:$("#eN").value.trim() });
+    ui.finMonth = $("#eD").value.slice(0,7);
+    refresh(); closeDrawer(); toast("Dépense ajoutée");
+  };
+}
+
+/* ============================================================
+   COMMON BINDINGS & BOOT
+   ============================================================ */
+function bindCommon(root = document){
+  $$("[data-bk]", root).forEach(el => el.onclick = e => { if (e.target.closest("[data-act]")) return; bookingDetail(el.dataset.bk); });
+  $$("[data-car]", root).forEach(el => el.onclick = e => { if (e.target.closest("button:not([data-car])")) return; carForm(el.dataset.car); });
+  $$("[data-client]", root).forEach(el => el.onclick = () => clientDetail(el.dataset.client));
+  $$("[data-go]", root).forEach(el => el.onclick = () => go(el.dataset.go));
+  bindActs(root === document ? $("#view") : root);
+}
+let tt;
+function toast(m){ const t = $("#toast"); t.textContent = m; t.classList.add("on"); clearTimeout(tt); tt = setTimeout(() => t.classList.remove("on"), 2800); }
+
+$("#newBooking").onclick = () => bookingForm(null);
+addEventListener("hashchange", () => { const h = location.hash.slice(1); if (h !== view && VIEWS.some(v => v.id === h)) { view = h; shell(); render(); } });
+addEventListener("storage", e => { if (e.key === INBOX_KEY && e.newValue) { pullInbox(); shell(); render(); } });
+
+load();
+{ const h = location.hash.slice(1); if (VIEWS.some(v => v.id === h)) view = h; }
+shell(); render();
+</script>
+</body>
+</html>
