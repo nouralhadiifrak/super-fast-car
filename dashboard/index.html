@@ -329,6 +329,20 @@ body{font-size:15px}
 .doc.warn b{color:#e0a92e}.doc.crit b{color:#ff8a8e}
 .more-row{display:flex;justify-content:center;margin-top:4px}
 
+.avail{display:grid;gap:12px;padding:18px;border-radius:var(--radius);background:var(--panel);border:1px solid var(--line-2)}
+.avail h2{font-size:1.25rem}
+.avail .f-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto auto;gap:10px;align-items:end}
+.avail .input{min-width:0}
+.avail .res{font-size:.95rem;color:var(--text)}
+.avail .res b{font-family:var(--ff-num);color:var(--ivory)}
+.free-line{display:flex;align-items:center;gap:8px;font-weight:700;font-size:.9rem;color:#3cc796}
+.busy-line{display:flex;align-items:center;gap:8px;font-weight:700;font-size:.9rem;color:#ff8a8e}
+.free-line svg,.busy-line svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.ccar.busy{opacity:.62}
+.ccar.busy:hover{opacity:1}
+.ccar.free{border-color:rgba(25,158,112,.55)}
+.ccar .book-btn{width:100%;margin-top:4px}
+
 /* ---------- mobile ---------- */
 .mnav{display:none}
 @media (max-width:1180px){
@@ -374,6 +388,8 @@ body{font-size:15px}
   .item.compact .it-right{width:auto}
   .item .chev{display:none}
   .quick .btn{min-height:58px;font-size:.78rem}
+  .avail .f-row{grid-template-columns:minmax(0,1fr)}
+  .avail .f-row .btn{width:100%}
   .row{flex-wrap:wrap}
   .row .main-t{flex:1 1 calc(100% - 66px)}
   .row > .st{margin-left:64px}
@@ -535,7 +551,7 @@ function seed(){
   cars.forEach(car => {
     let cur = addDays(t0, -150);
     while (cur < addDays(t0, 26)){
-      cur = addDays(cur, Math.floor(rnd()*4));
+      cur = addDays(cur, cur > t0 ? 2 + Math.floor(rnd()*8) : Math.floor(rnd()*4));   // future: leave room for walk-in clients
       const len = 1 + Math.floor(rnd() * (rnd() < .2 ? 10 : 5));
       const start = new Date(cur); start.setHours(pick([9,10,11,14,16,18]));
       const end = addDays(start, len);
@@ -566,13 +582,13 @@ function seed(){
   }
   expenses.push({ id:uid("ex"), carId:"golf", date:isoDate(addDays(t0,-1)), category:"Entretien", amount:1350, note:"Vidange + plaquettes (en cours)" });
 
-  return { v:1, agency:{ name:"Super Fast Car", phone:"+212 6 61 46 42 22", deposit:3000 }, cars, clients, bookings, expenses, createdAt: iso(new Date()) };
+  return { v:2, agency:{ name:"Super Fast Car", phone:"+212 6 61 46 42 22", deposit:3000 }, cars, clients, bookings, expenses, createdAt: iso(new Date()) };
 }
 
 let db;
 function load(){
   try { db = JSON.parse(localStorage.getItem(STORE_KEY)); } catch(e){ db = null; }
-  if (!db || db.v !== 1) { db = seed(); save(); }
+  if (!db || db.v !== 2) { db = seed(); save(); }
   pullInbox();
 }
 function save(){ try { localStorage.setItem(STORE_KEY, JSON.stringify(db)); } catch(e){} }
@@ -621,6 +637,17 @@ function nextBooking(car){
   const now = new Date();
   return db.bookings.filter(b => b.carId === car.id && ["confirmed","pending"].includes(b.status) && new Date(b.start) >= startOfDay(now))
     .sort((a,b) => new Date(a.start) - new Date(b.start))[0];
+}
+/* earliest start, from `from` on, where the car is free for `durMs` (jumps to the end of each blocking booking or maintenance) */
+function nextFreeSlot(carId, from, durMs){
+  let t = new Date(from);
+  for (let i = 0; i < 40; i++){
+    const cf = conflicts(carId, t, new Date(+t + durMs));
+    if (!cf.bk.length && !cf.mt.length) return t;
+    const ends = [...cf.bk.map(b => new Date(b.end)), ...cf.mt.map(m => addDays(m.to, 1))];
+    t = new Date(Math.max(...ends));
+  }
+  return null;
 }
 function conflicts(carId, start, end, ignoreId){
   const car = carById(carId);
@@ -703,7 +730,7 @@ const VIEWS = [
   { id:"settings", t:"Paramètres",      ic:"gear",  m:"" },
 ];
 let view = "home";
-const ui = { fleetFilter:"all", bkLimit:40, planStart: addDays(startOfDay(new Date()), -2), planDays: 14, bkFilter:"active", bkSearch:"", clSearch:"", finMonth: (()=>{ const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`; })() };
+const ui = { avail:null, fleetFilter:"all", bkLimit:40, planStart: addDays(startOfDay(new Date()), -2), planDays: 14, bkFilter:"active", bkSearch:"", clSearch:"", finMonth: (()=>{ const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`; })() };
 
 function shell(){
   const pend = db.bookings.filter(b => b.status === "pending").length;
@@ -885,26 +912,69 @@ function vBookings(){
    ============================================================ */
 function vFleet(){
   const F = { all:"Toutes", available:"Disponibles", rented:"Louées", maint:"Maintenance" };
-  const cars = db.cars.filter(c => ui.fleetFilter === "all" || carStatus(c) === ui.fleetFilter);
   const al = alerts();
+  const A = ui.avail;                                   // { from, to } once the owner checks a period
+  const t = new Date(); t.setHours(t.getHours() + 1, 0, 0, 0);
+  const defFrom = A ? A.from : iso(t), defTo = A ? A.to : iso(addDays(t, 3));
+  let cars = db.cars.filter(c => A || ui.fleetFilter === "all" || carStatus(c) === ui.fleetFilter);
+  const check = A ? Object.fromEntries(db.cars.map(c => [c.id, conflicts(c.id, A.from, A.to)])) : null;
+  const isFree = c => !check[c.id].bk.length && !check[c.id].mt.length;
+  if (A) cars = [...cars].sort((a, b) => isFree(b) - isFree(a) || a.price - b.price);
+  const nFree = A ? db.cars.filter(isFree).length : 0;
+  const days = A ? daysBetween(A.from, A.to) : 0;
+  const OK = '<svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>', NO = '<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+
   $("#view").innerHTML = `
-  <div class="toolbar">
+  <section class="avail">
+    <h2 class="h-display">Vérifier la disponibilité</h2>
+    <form class="f-row" id="avForm" novalidate>
+      <div class="f"><label for="avF">Du</label><input class="input num" id="avF" type="datetime-local" value="${defFrom}"></div>
+      <div class="f"><label for="avT">Au</label><input class="input num" id="avT" type="datetime-local" value="${defTo}"></div>
+      <button class="btn btn-primary btn-lg" type="submit">Vérifier</button>
+      ${A ? `<button class="btn btn-lg" type="button" id="avClear">Effacer</button>` : ""}
+    </form>
+    <div class="res" id="avRes">${A ? `<b>${nFree}</b> voiture(s) libre(s) sur ${db.cars.length} du <b>${fmtDT(A.from)}</b> au <b>${fmtDT(A.to)}</b> · ${days} jour(s)` : `<span class="muted">Choisissez les dates du client pour voir quelles voitures sont libres.</span>`}</div>
+  </section>
+  ${A ? "" : `<div class="toolbar">
     <div class="chips">${Object.entries(F).map(([k,v]) => `<button class="chip ${ui.fleetFilter===k?"on":""}" data-ff="${k}">${v} <b>${db.cars.filter(c => k==="all" || carStatus(c)===k).length}</b></button>`).join("")}</div>
     <span class="grow"></span><button class="btn btn-lg" id="addCar">${IC.plus}Ajouter une voiture</button>
-  </div>
+  </div>`}
   <div class="cars">${cars.map(c => {
     const s = carStatus(c), nx = nextBooking(c), on = db.bookings.find(b => b.carId === c.id && b.status === "ongoing"), mt = carMaintNow(c);
-    const line = s === "rented" ? `Chez <b>${esc(clientById(on.clientId)?.name)}</b> jusqu'au <b>${fmtD(on.end)}</b>` : s === "maint" ? `<b>${esc(mt.reason)}</b> · jusqu'au ${fmtD(mt.to)}` : nx ? `Libre jusqu'au <b>${fmtD(nx.start)}</b>` : "Libre, rien de prévu";
-    const w = al.filter(a => a.car === c.id).sort((a,b) => (a.lvl==="crit"?0:1) - (b.lvl==="crit"?0:1))[0];
-    return `<article class="ccar" role="button" tabindex="0" data-car="${c.id}">
-      <div class="ph"><img src="${esc(c.photo)}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">${stCar(s)}</div>
-      <div class="bd"><div class="t"><h3>${esc(carName(c))}</h3><span class="pr">${c.price} DH<small> / j</small></span></div>
-        <div class="ln">${line}</div>
-        ${w ? `<div class="warn-line ${w.lvl}">${IC[w.ic]}${esc(w.t.split(" — ")[0])} · ${esc(w.s.replace(/^À faire avant le |^Expire le /,""))}</div>` : ""}
-      </div></article>`;
+    let line, extra = "", cls = "";
+    if (A){
+      if (isFree(c)){
+        cls = "free";
+        line = `<div class="free-line">${OK}Libre sur ces dates</div><div class="ln">${days} j × ${c.price} DH = <b>${dh(days * c.price)}</b></div>`;
+        extra = `<button class="btn btn-primary btn-lg book-btn" data-bookcar="${c.id}">Réserver ces dates</button>`;
+      } else {
+        cls = "busy";
+        const cf = check[c.id];
+        const why = [...cf.bk.map(b => `${esc(clientById(b.clientId)?.name)} (${fmtD(b.start)} → ${fmtD(b.end)})`), ...cf.mt.map(m => `maintenance (${fmtD(m.from)} → ${fmtD(m.to)})`)].join(", ");
+        const nf = nextFreeSlot(c.id, A.from, new Date(A.to) - new Date(A.from));
+        line = `<div class="busy-line">${NO}Pas libre</div><div class="ln">Prise par ${why}</div>${nf ? `<div class="ln">Libre pour ${days} j à partir du <b>${fmtDT(nf)}</b></div>` : ""}`;
+      }
+    } else {
+      line = `<div class="ln">${s === "rented" ? `Chez <b>${esc(clientById(on.clientId)?.name)}</b> jusqu'au <b>${fmtD(on.end)}</b>` : s === "maint" ? `<b>${esc(mt.reason)}</b> · jusqu'au ${fmtD(mt.to)}` : nx ? `Libre jusqu'au <b>${fmtD(nx.start)}</b>` : "Libre, rien de prévu"}</div>`;
+      const w = al.filter(a => a.car === c.id).sort((a,b) => (a.lvl==="crit"?0:1) - (b.lvl==="crit"?0:1))[0];
+      if (w) extra = `<div class="warn-line ${w.lvl}">${IC[w.ic]}${esc(w.t.split(" — ")[0])} · ${esc(w.s.replace(/^À faire avant le |^Expire le /,""))}</div>`;
+    }
+    return `<article class="ccar ${cls}" role="button" tabindex="0" data-car="${c.id}">
+      <div class="ph"><img src="${esc(c.photo)}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">${A ? "" : stCar(s)}</div>
+      <div class="bd"><div class="t"><h3>${esc(carName(c))}</h3><span class="pr">${c.price} DH<small> / j</small></span></div>${line}${extra}</div></article>`;
   }).join("") || `<div class="empty-box">Aucune voiture dans ce filtre.</div>`}</div>`;
+
+  $("#avForm").onsubmit = e => {
+    e.preventDefault();
+    const f = $("#avF").value, to = $("#avT").value;
+    if (!f || !to || new Date(to) <= new Date(f)) { $("#avRes").innerHTML = `<span class="err" style="display:inline-block">La date de retour doit être après la date de départ.</span>`; return; }
+    ui.avail = { from:f, to }; render();
+  };
+  $("#avF").onchange = () => { if (new Date($("#avT").value) <= new Date($("#avF").value)) $("#avT").value = iso(addDays(new Date($("#avF").value), 1)); };
+  const clr = $("#avClear"); if (clr) clr.onclick = () => { ui.avail = null; render(); };
   $$("[data-ff]").forEach(b => b.onclick = () => { ui.fleetFilter = b.dataset.ff; render(); });
-  $("#addCar").onclick = () => carForm(null);
+  const add = $("#addCar"); if (add) add.onclick = () => carForm(null);
+  $$("[data-bookcar]").forEach(b => b.onclick = e => { e.stopPropagation(); bookingForm(null, { carId:b.dataset.bookcar, start:A.from, end:A.to }); });
   bindCommon();
 }
 
@@ -1113,8 +1183,8 @@ function bookingDetail(id){
 function bookingForm(id, preset = {}){
   const b = id ? db.bookings.find(x => x.id === id) : null;
   const t = new Date(); t.setHours(t.getHours()+1, 0, 0, 0);
-  const s0 = b ? b.start : preset.date ? `${preset.date}T10:00` : iso(t);
-  const e0 = b ? b.end : iso(addDays(new Date(s0), 3));
+  const s0 = b ? b.start : preset.start || (preset.date ? `${preset.date}T10:00` : iso(t));
+  const e0 = b ? b.end : preset.end || iso(addDays(new Date(s0), 3));
   const carId = b ? b.carId : preset.carId || db.cars[0].id;
   openDrawer(b ? "Modifier la réservation" : "Nouvelle réservation", `
     <form class="form" id="bkForm" novalidate>
