@@ -266,9 +266,73 @@ details.tbl table{margin-top:8px}
 .toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,140%);opacity:0;visibility:hidden;background:#0c0b0e;border:1px solid var(--line-2);border-radius:12px;padding:12px 18px;z-index:95;font-weight:600;font-size:.88rem;transition:transform .3s cubic-bezier(.2,.7,.2,1);max-width:calc(100% - 32px)}
 .toast.on{transform:translate(-50%,0);opacity:1;visibility:visible}
 
+/* ---------- simple, tappable building blocks ---------- */
+body{font-size:15px}
+.sec{display:grid;gap:12px}
+.sec-head{display:flex;align-items:baseline;gap:12px}
+.sec-head h2{font-size:1.35rem}
+.sec-head .count{font-family:var(--ff-num);font-size:.85rem;color:var(--muted)}
+.sec-head .more{margin-left:auto;font-size:.86rem;font-weight:700;color:var(--accent-2);background:none;border:0;cursor:pointer;padding:8px 0}
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.tile{display:flex;flex-direction:column;gap:6px;padding:18px;border-radius:var(--radius);background:var(--panel);border:1px solid var(--line);cursor:pointer;text-align:left;min-height:118px;position:relative;transition:border-color .2s,background .2s,transform .15s}
+.tile:hover{border-color:var(--line-2);background:var(--panel-2)}
+.tile:active{transform:scale(.98)}
+.tile .n{font-family:var(--ff-num);font-size:2.3rem;font-weight:600;line-height:1;color:var(--ivory);letter-spacing:-.02em}
+.tile .l{font-weight:700;color:var(--text);display:flex;align-items:center;gap:8px}
+.tile .h{font-size:.84rem;color:var(--muted)}
+.tile .chev{position:absolute;right:14px;top:16px}
+.tile.hot{border-color:rgba(201,133,0,.55);background:rgba(201,133,0,.08)}
+.tile.bad{border-color:rgba(225,38,45,.55);background:rgba(225,38,45,.08)}
+.items{display:grid;gap:8px}
+.item{display:flex;align-items:center;gap:14px;min-height:68px;padding:12px 14px;border-radius:14px;background:var(--panel);border:1px solid var(--line);cursor:pointer;transition:border-color .2s,background .2s}
+.item:hover{border-color:var(--line-2);background:var(--panel-2)}
+.item .thumb{width:72px;height:46px;border-radius:9px;object-fit:cover;flex:none;background:#0d0d10}
+.it-main{min-width:0;flex:1;display:grid;gap:2px}
+.it-main b{color:var(--ivory);font-weight:600;font-size:.98rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.it-main span{font-size:.86rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.it-right{display:flex;align-items:center;gap:10px;flex:none}
+.it-amt{font-family:var(--ff-num);font-weight:600;color:var(--ivory);text-align:right;font-size:.92rem}
+.it-amt small{display:block;font-size:.72rem;color:var(--muted);font-weight:500;font-family:var(--ff-body)}
+.chev{width:18px;height:18px;flex:none;stroke:var(--faint);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.datebox{width:54px;flex:none;text-align:center;border-radius:11px;background:var(--panel-3);padding:7px 0;line-height:1.1}
+.datebox b{display:block;font-family:var(--ff-num);font-size:1.2rem;font-weight:600;color:var(--ivory)}
+.datebox small{font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.timebox{width:58px;flex:none;text-align:center;line-height:1.15}
+.timebox b{display:block;font-family:var(--ff-num);font-size:1.05rem;font-weight:600;color:var(--ivory)}
+.timebox small{font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.timebox.dep small{color:#6ba9f0}.timebox.ret small{color:#3cc796}.timebox.late small{color:#ff8a8e}
+.avatar{width:46px;height:46px;border-radius:50%;flex:none;display:grid;place-items:center;background:var(--panel-3);font-weight:700;color:var(--ivory);font-size:.95rem}
+.btn-lg{height:44px;padding:0 18px;font-size:.9rem}
+.empty-box{padding:22px;border-radius:14px;border:1px dashed var(--line-2);text-align:center;color:var(--muted)}
+.cars{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.ccar{border-radius:var(--radius);background:var(--panel);border:1px solid var(--line);overflow:hidden;cursor:pointer;display:flex;flex-direction:column;transition:border-color .2s,transform .15s}
+.ccar:hover{border-color:var(--line-2);transform:translateY(-2px)}
+.ccar .ph{position:relative;aspect-ratio:16/9;background:#0d0d10}
+.ccar .ph img{width:100%;height:100%;object-fit:cover;display:block}
+.ccar .ph .st{position:absolute;left:12px;top:12px;background:rgba(10,10,12,.85)}
+.ccar .bd{padding:14px 16px 16px;display:grid;gap:8px}
+.ccar .t{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.ccar h3{font-family:var(--ff-display);font-weight:400;font-size:1.3rem;color:var(--ivory)}
+.ccar .pr{font-family:var(--ff-num);font-weight:700;color:var(--ivory);white-space:nowrap}
+.ccar .pr small{font-weight:500;color:var(--muted);font-size:.75rem}
+.ccar .ln{font-size:.88rem;color:var(--muted)}
+.ccar .ln b{color:var(--text);font-weight:600}
+.warn-line{display:flex;align-items:center;gap:8px;font-size:.84rem;font-weight:600;color:#e0a92e}
+.warn-line.crit{color:#ff8a8e}
+.warn-line svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;flex:none}
+.quick{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.quick .btn{height:auto;min-height:64px;flex-direction:column;gap:6px;border-radius:14px;white-space:normal;text-align:center;padding:10px 6px}
+.quick .btn svg{width:20px;height:20px}
+.doc{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-top:1px solid var(--line);font-size:.9rem}
+.doc:first-of-type{border-top:0}
+.doc b{font-family:var(--ff-num);font-weight:600;color:var(--ivory)}
+.doc.warn b{color:#e0a92e}.doc.crit b{color:#ff8a8e}
+.more-row{display:flex;justify-content:center;margin-top:4px}
+
 /* ---------- mobile ---------- */
 .mnav{display:none}
 @media (max-width:1180px){
+  .tiles{grid-template-columns:repeat(2,minmax(0,1fr))}
   .kpis{grid-template-columns:repeat(3,minmax(0,1fr))}
   .kpis.k4{grid-template-columns:repeat(2,minmax(0,1fr))}
   .grid-3{grid-template-columns:minmax(0,1fr)}
@@ -302,6 +366,14 @@ details.tbl table{margin-top:8px}
 }
 @media (max-width:520px){
   .demo-pill{display:none}
+  .tile{min-height:104px;padding:14px}
+  .tile .n{font-size:1.9rem}
+  .item{flex-wrap:wrap;gap:10px 12px}
+  .item .thumb{width:58px;height:38px}
+  .item .it-right{width:100%;justify-content:flex-end}
+  .item.compact .it-right{width:auto}
+  .item .chev{display:none}
+  .quick .btn{min-height:58px;font-size:.78rem}
   .row{flex-wrap:wrap}
   .row .main-t{flex:1 1 calc(100% - 66px)}
   .row > .st{margin-left:64px}
@@ -603,6 +675,21 @@ const IC = {
   print:'<svg viewBox="0 0 24 24"><path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="7"/></svg>',
 };
 
+const CHEV = '<svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>';
+const dateBox = d => `<div class="datebox"><b>${new Date(d).getDate()}</b><small>${new Date(d).toLocaleDateString("fr-FR",{month:"short"}).replace(".","")}</small></div>`;
+const initials = n => String(n || "?").split(/\s+/).map(w => w[0]).slice(0,2).join("").toUpperCase();
+/* one tappable row used everywhere: lead (photo/date/avatar) · title + one line · right side · chevron */
+function item({ attrs = "", lead = "", title, sub = "", right = "", cls = "" }){
+  return `<div class="item ${cls}" role="button" tabindex="0" ${attrs}>${lead}<div class="it-main"><b>${title}</b>${sub ? `<span>${sub}</span>` : ""}</div>${right ? `<div class="it-right">${right}</div>` : ""}${CHEV}</div>`;
+}
+function bookingItem(b){
+  const c = carById(b.carId), cl = clientById(b.clientId);
+  const owed = b.status !== "cancelled" && due(b) > 0;
+  return item({ attrs:`data-bk="${b.id}"`, lead: dateBox(b.start), title:`${esc(cl?.name)}`,
+    sub:`${esc(carName(c))} · ${fmtD(b.start)} → ${fmtD(b.end)} (${daysBetween(b.start,b.end)} j)`,
+    right:`${stBk(b)}<div class="it-amt">${dh(b.total)}${owed ? `<small style="color:#e0a92e">reste ${dh(due(b))}</small>` : `<small>${b.status==="cancelled" ? "annulée" : "payé"}</small>`}</div>` });
+}
+
 /* ============================================================
    ROUTER & SHELL
    ============================================================ */
@@ -616,7 +703,7 @@ const VIEWS = [
   { id:"settings", t:"Paramètres",      ic:"gear",  m:"" },
 ];
 let view = "home";
-const ui = { planStart: addDays(startOfDay(new Date()), -2), planDays: 14, bkFilter:"active", bkSearch:"", clSearch:"", finMonth: (()=>{ const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`; })() };
+const ui = { fleetFilter:"all", bkLimit:40, planStart: addDays(startOfDay(new Date()), -2), planDays: 14, bkFilter:"active", bkSearch:"", clSearch:"", finMonth: (()=>{ const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`; })() };
 
 function shell(){
   const pend = db.bookings.filter(b => b.status === "pending").length;
@@ -631,7 +718,7 @@ function go(v){
 function render(){
   const V = VIEWS.find(x => x.id === view);
   $("#viewTitle").textContent = V.t;
-  const sub = { home: new Date().toLocaleDateString("fr-FR",{weekday:"long", day:"numeric", month:"long", year:"numeric"}),
+  const sub = { home: new Date().toLocaleDateString("fr-FR",{weekday:"long", day:"numeric", month:"long"}),
     planning:"Disponibilité de chaque voiture, jour par jour", bookings:"Toutes les demandes et locations", fleet:"Voitures, documents et entretien",
     clients:"Historique et informations des clients", finance:"Chiffre d'affaires, dépenses et bénéfice", settings:"Agence et données de démo" }[view];
   $("#viewSub").textContent = sub;
@@ -643,69 +730,66 @@ function refresh(){ save(); shell(); render(); }
    VIEW — HOME
    ============================================================ */
 function vHome(){
-  const now = new Date(), t0 = startOfDay(now);
+  const now = new Date();
   const st = db.cars.map(carStatus);
   const nAvail = st.filter(s => s==="available").length, nRent = st.filter(s => s==="rented").length, nMaint = st.filter(s => s==="maint").length;
-  const ym = isoDate(now).slice(0,7);
-  const monthRev = db.bookings.filter(b => live(b) && b.status !== "pending" && b.start.slice(0,7) === ym).reduce((s,b) => s + b.total, 0);
-  const monthCash = db.bookings.filter(b => b.start.slice(0,7) === ym).reduce((s,b) => s + b.paid, 0);
-  const occ = occupancy(addDays(t0,-30), t0);
-  const deps = db.bookings.filter(b => ["confirmed","pending"].includes(b.status) && sameDay(b.start, now)).sort((a,b)=>new Date(a.start)-new Date(b.start));
-  const rets = db.bookings.filter(b => b.status === "ongoing" && (sameDay(b.end, now) || isLate(b))).sort((a,b)=>new Date(a.end)-new Date(b.end));
+  const deps = db.bookings.filter(b => ["confirmed","pending"].includes(b.status) && sameDay(b.start, now));
+  const rets = db.bookings.filter(b => b.status === "ongoing" && (sameDay(b.end, now) || isLate(b)));
+  const today = [...deps.map(b => ({ b, t:new Date(b.start), kind:"dep" })), ...rets.map(b => ({ b, t:new Date(b.end), kind: isLate(b) ? "late" : "ret" }))].sort((a,b) => a.t - b.t);
   const pend = db.bookings.filter(b => b.status === "pending").sort((a,b)=>new Date(a.start)-new Date(b.start));
-  const al = alerts();
+  const al = alerts(), crit = al.filter(a => a.lvl === "crit").length;
+  const hello = now.getHours() < 18 ? "Bonjour" : "Bonsoir";
 
   $("#view").innerHTML = `
-  <section class="kpis">
-    ${kpi("Disponibles", `${nAvail}<small> / ${db.cars.length}</small>`, `${nRent} louée(s) · ${nMaint} en maintenance`, "available")}
-    ${kpi("Départs aujourd'hui", deps.length, deps.length ? deps.map(b => fmtT(b.start)).join(" · ") : "Aucun départ prévu")}
-    ${kpi("Retours aujourd'hui", rets.length, rets.filter(isLate).length ? `${rets.filter(isLate).length} en retard` : "À l'heure")}
-    ${kpi("CA du mois", `${Math.round(monthRev/1000*10)/10}<small> k DH</small>`, `Encaissé : ${dh(monthCash)}`)}
-    <div class="kpi"><div class="lbl">Occupation (30 j)</div><div class="val">${occ}<small> %</small></div><div class="bar-meter"><i style="width:${occ}%"></i></div></div>
+  <section class="tiles">
+    <button class="tile" data-fleet="available"><span class="l"><i class="dot" style="background:var(--st-available)"></i>Disponibles</span><span class="n">${nAvail}<small class="muted" style="font-size:1rem"> / ${db.cars.length}</small></span><span class="h">Prêtes à louer maintenant</span>${CHEV}</button>
+    <button class="tile" data-fleet="rented"><span class="l"><i class="dot" style="background:var(--st-rented)"></i>Louées</span><span class="n">${nRent}</span><span class="h">${nMaint ? `${nMaint} en maintenance` : "Chez des clients"}</span>${CHEV}</button>
+    <button class="tile ${pend.length ? "hot" : ""}" data-bkf="pending"><span class="l"><i class="dot" style="background:var(--st-pending)"></i>À confirmer</span><span class="n">${pend.length}</span><span class="h">${pend.length ? "Demandes en attente" : "Rien à traiter"}</span>${CHEV}</button>
+    <button class="tile ${crit ? "bad" : ""}" id="allAlerts"><span class="l"><i class="dot" style="background:${crit ? "#ff6b70" : "var(--faint)"}"></i>Alertes</span><span class="n">${al.length}</span><span class="h">${crit ? `${crit} urgente(s)` : al.length ? "À surveiller" : "Tout est en ordre"}</span>${CHEV}</button>
   </section>
 
-  <section class="grid-2">
-    <div class="card">
-      <div class="card-head"><h2 class="h-display">Départs du jour</h2><div class="right"><span class="muted num">${deps.length}</span></div></div>
-      <div class="list">${deps.length ? deps.map(b => bkRow(b, "dep")).join("") : `<div class="empty">Aucune voiture ne part aujourd'hui.</div>`}</div>
-    </div>
-    <div class="card">
-      <div class="card-head"><h2 class="h-display">Retours du jour</h2><div class="right"><span class="muted num">${rets.length}</span></div></div>
-      <div class="list">${rets.length ? rets.map(b => bkRow(b, "ret")).join("") : `<div class="empty">Aucun retour prévu aujourd'hui.</div>`}</div>
-    </div>
+  <section class="sec">
+    <div class="sec-head"><h2 class="h-display">Aujourd'hui</h2><span class="count">${today.length ? `${deps.length} départ(s) · ${rets.length} retour(s)` : ""}</span><button class="more" data-go="planning">Planning →</button></div>
+    <div class="items">${today.length ? today.map(({b, t, kind}) => {
+      const c = carById(b.carId), cl = clientById(b.clientId);
+      const lead = `<div class="timebox ${kind}"><b>${kind === "late" ? fmtD(t) : fmtT(t)}</b><small>${kind === "dep" ? "Départ" : kind === "late" ? "Retard" : "Retour"}</small></div>`;
+      const btn = kind === "dep" ? (b.status === "pending" ? `<button class="btn btn-lg" data-act="confirm" data-id="${b.id}">Confirmer</button>` : `<button class="btn btn-lg btn-primary" data-act="pickup" data-id="${b.id}">Départ</button>`)
+        : `<button class="btn btn-lg btn-primary" data-act="return" data-id="${b.id}">Retour</button>`;
+      return item({ attrs:`data-bk="${b.id}"`, lead, title:`${esc(carName(c))} · ${esc(cl?.name)}`, sub: kind === "dep" ? esc(b.pickup) : kind === "late" ? `Devait rentrer le ${fmtDT(b.end)}` : `Retour prévu à ${fmtT(b.end)}`, right: btn });
+    }).join("") : `<div class="empty-box">Aucun départ ni retour aujourd'hui.</div>`}</div>
   </section>
 
-  <section class="grid-3">
-    <div class="card">
-      <div class="card-head"><h2 class="h-display">Demandes en attente</h2><div class="right"><button class="btn btn-sm" data-go="bookings">Tout voir</button></div></div>
-      <div class="list">${pend.length ? pend.map(b => bkRow(b, "pend")).join("") : `<div class="empty">Aucune demande à traiter.</div>`}</div>
-    </div>
-    <div class="card">
-      <div class="card-head"><h2 class="h-display">Alertes</h2><div class="right"><span class="muted num">${al.length}</span></div></div>
-      <div>${al.length ? al.slice(0,7).map(a => `<div class="alert ${a.lvl}" ${a.bk?`data-bk="${a.bk}"`:""} ${a.car?`data-car="${a.car}"`:""} style="cursor:pointer"><span class="ic">${IC[a.ic]}</span><div><b>${esc(a.t)}</b><span>${esc(a.s)}</span></div></div>`).join("") : `<div class="empty">Tout est en ordre.</div>`}</div>
-    </div>
+  <section class="sec">
+    <div class="sec-head"><h2 class="h-display">Demandes à confirmer</h2><span class="count">${pend.length}</span>${pend.length > 3 ? `<button class="more" data-bkf="pending">Tout voir →</button>` : ""}</div>
+    <div class="items">${pend.length ? pend.slice(0,3).map(b => { const c = carById(b.carId), cl = clientById(b.clientId);
+      return item({ attrs:`data-bk="${b.id}"`, lead: dateBox(b.start), title:`${esc(cl?.name)}${b.source === "Site web" ? ` <span class="muted" style="font-weight:500;font-size:.8rem">· via le site</span>` : ""}`, sub:`${esc(carName(c))} · ${daysBetween(b.start,b.end)} j · ${dh(b.total)}`,
+        right:`<button class="btn btn-lg btn-primary" data-act="confirm" data-id="${b.id}">Confirmer</button><button class="btn btn-lg icon-btn btn-ghost" data-act="cancel" data-id="${b.id}" aria-label="Refuser" title="Refuser">${IC.x}</button>` }); }).join("")
+      : `<div class="empty-box">Aucune demande en attente.</div>`}</div>
   </section>
 
-  <section class="card">
-    <div class="card-head"><h2 class="h-display">État de la flotte</h2><div class="right"><button class="btn btn-sm" data-go="fleet">Gérer la flotte</button></div></div>
-    <div class="list">${db.cars.map(c => {
-      const s = carStatus(c), on = db.bookings.find(b => b.carId === c.id && b.status === "ongoing"), nx = nextBooking(c), mt = carMaintNow(c);
-      const info = s === "rented" ? `Chez ${esc(clientById(on.clientId)?.name)} · retour ${fmtDT(on.end)}` : s === "maint" ? `${esc(mt.reason)} · jusqu'au ${fmtD(mt.to)}` : nx ? `Prochaine sortie : ${fmtDT(nx.start)}` : "Libre, aucune réservation à venir";
-      return `<div class="row" data-car="${c.id}" style="cursor:pointer"><img class="thumb" src="${esc(c.photo)}" alt="" loading="lazy"><div class="main-t"><b>${esc(carName(c))} <span class="muted num" style="font-weight:500;font-size:.8rem">· ${esc(c.plate)}</span></b><span>${info}</span></div>${stCar(s)}</div>`;
-    }).join("")}</div>
+  <section class="sec">
+    <div class="sec-head"><h2 class="h-display">Alertes</h2><span class="count">${al.length}</span>${al.length > 3 ? `<button class="more" id="allAlerts2">Voir les ${al.length} →</button>` : ""}</div>
+    <div class="items">${al.length ? al.slice(0,3).map(alertItem).join("") : `<div class="empty-box">Tout est en ordre.</div>`}</div>
   </section>`;
+  $$("[data-fleet]").forEach(t => t.onclick = () => { ui.fleetFilter = t.dataset.fleet; go("fleet"); });
+  $$("[data-bkf]").forEach(t => t.onclick = () => { ui.bkFilter = t.dataset.bkf; go("bookings"); });
+  ["#allAlerts","#allAlerts2"].forEach(sel => { const el = $(sel); if (el) el.onclick = alertsDrawer; });
   bindCommon();
+}
+function alertItem(a){
+  const color = a.lvl === "crit" ? "#ff8a8e" : a.lvl === "warn" ? "#e0a92e" : "#6ba9f0";
+  const bg = a.lvl === "crit" ? "rgba(225,38,45,.14)" : a.lvl === "warn" ? "rgba(201,133,0,.14)" : "rgba(57,135,229,.14)";
+  return item({ attrs: a.bk ? `data-bk="${a.bk}"` : `data-car="${a.car}"`, cls:"compact",
+    lead:`<span class="avatar" style="color:${color};background:${bg}">${IC[a.ic].replace("<svg", `<svg width="20" height="20" style="stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"`)}</span>`,
+    title: esc(a.t), sub: esc(a.s) });
+}
+function alertsDrawer(){
+  const al = alerts();
+  openDrawer("Alertes", `<div class="items">${al.map(alertItem).join("") || `<div class="empty-box">Tout est en ordre.</div>`}</div>`);
+  bindCommon($("#drawer"));
 }
 function kpi(lbl, val, hint, dot){
   return `<div class="kpi"><div class="lbl">${dot ? `<i class="dot" style="background:var(--st-${dot})"></i>` : ""}${lbl}</div><div class="val num">${val}</div><div class="hint">${hint}</div></div>`;
-}
-function bkRow(b, mode){
-  const c = carById(b.carId), cl = clientById(b.clientId);
-  const when = mode === "dep" ? `Départ ${fmtT(b.start)} · ${esc(b.pickup)}` : mode === "ret" ? (isLate(b) ? `Retour prévu ${fmtDT(b.end)}` : `Retour ${fmtT(b.end)}`) : `${fmtD(b.start)} → ${fmtD(b.end)} · ${daysBetween(b.start,b.end)} j · ${dh(b.total)}`;
-  const act = mode === "dep" ? (b.status === "pending" ? `<button class="btn btn-sm" data-act="confirm" data-id="${b.id}">Confirmer</button>` : `<button class="btn btn-sm btn-primary" data-act="pickup" data-id="${b.id}">Départ</button>`)
-    : mode === "ret" ? `<button class="btn btn-sm btn-primary" data-act="return" data-id="${b.id}">Retour</button>`
-    : `<button class="btn btn-sm btn-primary" data-act="confirm" data-id="${b.id}">Confirmer</button><button class="btn btn-sm btn-ghost" data-act="cancel" data-id="${b.id}" title="Refuser">${IC.x}</button>`;
-  return `<div class="row"><img class="thumb" src="${esc(c?.photo)}" alt="" loading="lazy"><div class="main-t" data-bk="${b.id}" style="cursor:pointer"><b>${esc(cl?.name)} · ${esc(carName(c))}</b><span>${when}${b.source==="Site web" && mode==="pend" ? " · via le site" : ""}</span></div>${mode==="ret" ? stBk(b) : ""}<div class="actions">${act}</div></div>`;
 }
 function occupancy(from, to){
   const total = db.cars.length * Math.round((to - from) / DAY);
@@ -773,29 +857,25 @@ function vPlanning(){
    VIEW — BOOKINGS
    ============================================================ */
 function vBookings(){
-  const F = { active:"À venir & en cours", pending:"En attente", ongoing:"En cours", confirmed:"Confirmées", completed:"Terminées", cancelled:"Annulées", all:"Toutes" };
-  const match = (b, f) => f === "all" ? true : f === "active" ? ["pending","confirmed","ongoing"].includes(b.status) : b.status === f;
+  const F = { active:"À venir", ongoing:"En cours", pending:"À confirmer", completed:"Terminées", all:"Toutes" };
+  const match = (b, f) => f === "all" ? true : f === "active" ? ["pending","confirmed"].includes(b.status) : b.status === f;
+  if (!F[ui.bkFilter]) ui.bkFilter = "active";
   const q = ui.bkSearch.trim().toLowerCase();
+  const past = ["completed","all"].includes(ui.bkFilter);
   const rows = db.bookings.filter(b => match(b, ui.bkFilter)).filter(b => {
     if (!q) return true; const c = carById(b.carId), cl = clientById(b.clientId);
     return [cl?.name, cl?.phone, carName(c), c?.plate].join(" ").toLowerCase().includes(q);
-  }).sort((a,b) => ui.bkFilter === "completed" || ui.bkFilter === "cancelled" || ui.bkFilter === "all" ? new Date(b.start) - new Date(a.start) : new Date(a.start) - new Date(b.start));
+  }).sort((a,b) => past ? new Date(b.start) - new Date(a.start) : new Date(a.start) - new Date(b.start));
   $("#view").innerHTML = `
   <div class="toolbar">
     <div class="chips">${Object.entries(F).map(([k,v]) => `<button class="chip ${ui.bkFilter===k?"on":""}" data-f="${k}">${v} <b>${db.bookings.filter(b => match(b,k)).length}</b></button>`).join("")}</div>
     <span class="grow"></span>
-    <label class="search">${IC.search}<input class="input" id="bkQ" placeholder="Client, téléphone, voiture, plaque…" value="${esc(ui.bkSearch)}"></label>
+    <label class="search">${IC.search}<input class="input" id="bkQ" placeholder="Chercher un client, une voiture…" value="${esc(ui.bkSearch)}"></label>
   </div>
-  <div class="table-wrap"><table>
-    <thead><tr><th>Client</th><th>Voiture</th><th>Période</th><th>Statut</th><th class="r">Total</th><th class="r">Reste</th><th>Source</th></tr></thead>
-    <tbody>${rows.length ? rows.slice(0,200).map(b => { const c = carById(b.carId), cl = clientById(b.clientId);
-      return `<tr class="click" data-bk="${b.id}"><td><b style="color:var(--ivory);font-weight:600">${esc(cl?.name)}</b><span class="sub num">${esc(cl?.phone)}</span></td>
-      <td>${esc(carName(c))}<span class="sub num">${esc(c?.plate)}</span></td>
-      <td class="num">${fmtD(b.start)} → ${fmtD(b.end)}<span class="sub">${daysBetween(b.start,b.end)} jour(s) · ${esc(b.pickup)}</span></td>
-      <td>${stBk(b)}</td><td class="r num">${dh(b.total)}</td><td class="r num" style="color:${due(b) && b.status!=="cancelled" ? "#e0a92e" : "var(--muted)"}">${b.status==="cancelled" ? "—" : dh(due(b))}</td><td class="muted">${esc(b.source)}</td></tr>`; }).join("")
-      : `<tr><td colspan="7" class="empty">Aucune réservation ne correspond.</td></tr>`}</tbody>
-  </table></div>`;
-  $$("[data-f]").forEach(b => b.onclick = () => { ui.bkFilter = b.dataset.f; render(); });
+  <div class="items">${rows.length ? rows.slice(0, ui.bkLimit).map(bookingItem).join("") : `<div class="empty-box">Aucune réservation ici.</div>`}</div>
+  ${rows.length > ui.bkLimit ? `<div class="more-row"><button class="btn btn-lg" id="bkMore">Afficher plus (${rows.length - ui.bkLimit})</button></div>` : ""}`;
+  $$("[data-f]").forEach(b => b.onclick = () => { ui.bkFilter = b.dataset.f; ui.bkLimit = 40; render(); });
+  const more = $("#bkMore"); if (more) more.onclick = () => { ui.bkLimit += 40; render(); };
   const qi = $("#bkQ"); qi.oninput = () => { ui.bkSearch = qi.value; const pos = qi.selectionStart; render(); const n = $("#bkQ"); n.focus(); n.setSelectionRange(pos,pos); };
   bindCommon();
 }
@@ -804,37 +884,62 @@ function vBookings(){
    VIEW — FLEET
    ============================================================ */
 function vFleet(){
+  const F = { all:"Toutes", available:"Disponibles", rented:"Louées", maint:"Maintenance" };
+  const cars = db.cars.filter(c => ui.fleetFilter === "all" || carStatus(c) === ui.fleetFilter);
+  const al = alerts();
   $("#view").innerHTML = `
-  <div class="toolbar"><div class="legend">
-    <span>${stCar("available")}</span><span>${stCar("rented")}</span><span>${stCar("maint")}</span></div>
-    <span class="grow"></span><button class="btn" id="addCar">${IC.plus}Ajouter une voiture</button></div>
-  <div class="fleet">${db.cars.map(c => {
-    const s = carStatus(c), nx = nextBooking(c), on = db.bookings.find(b => b.carId === c.id && b.status === "ongoing");
-    const ins = daysTo(c.insuranceUntil), insp = daysTo(c.inspectionUntil), kmLeft = c.nextServiceKm - c.km;
-    const lvl = n => n <= 10 ? "crit" : n <= 30 ? "warn" : "";
-    const ym = isoDate(new Date()).slice(0,7);
-    const rev = db.bookings.filter(b => b.carId === c.id && live(b) && b.status !== "pending" && b.start.slice(0,7) === ym).reduce((s,b)=>s+b.total,0);
-    return `<article class="fcar">
-      <div class="ph"><img src="${esc(c.photo)}" alt="${esc(carName(c))}" loading="lazy" onerror="this.style.visibility='hidden'">${stCar(s)}<span class="plate">${esc(c.plate)}</span></div>
-      <div class="bd">
-        <div class="nm"><div><small>${esc(c.brand)} · ${esc(c.year)}</small><h3>${esc(c.model)}</h3></div><div class="price">${c.price} DH<span>par jour</span></div></div>
-        <div class="facts">
-          <div class="fact"><small>Kilométrage</small><b>${c.km.toLocaleString("fr-FR")} km</b></div>
-          <div class="fact ${kmLeft<=0?"crit":kmLeft<=1000?"warn":""}"><small>Prochaine vidange</small><b>${kmLeft<=0 ? "Dépassée" : `dans ${kmLeft.toLocaleString("fr-FR")} km`}</b></div>
-          <div class="fact ${lvl(ins)}"><small>Assurance</small><b>${fmtDY(c.insuranceUntil)}</b></div>
-          <div class="fact ${lvl(insp)}"><small>Visite technique</small><b>${fmtDY(c.inspectionUntil)}</b></div>
-          <div class="fact"><small>Boîte · carburant</small><b>${esc(c.gear)} · ${esc(c.fuel)}</b></div>
-          <div class="fact"><small>CA ce mois</small><b>${dh(rev)}</b></div>
-        </div>
-        <div class="next">${s==="rented" ? `Louée à <b>${esc(clientById(on.clientId)?.name)}</b> jusqu'au <b>${fmtDT(on.end)}</b>` : s==="maint" ? `En maintenance : <b>${esc(carMaintNow(c).reason)}</b>` : nx ? `Prochaine sortie : <b>${fmtDT(nx.start)}</b>` : "Aucune réservation à venir"}</div>
-        <div class="acts"><button class="btn btn-sm" data-car="${c.id}">Modifier</button><button class="btn btn-sm" data-maint="${c.id}">${IC.wrench}Maintenance</button><button class="btn btn-sm" data-hist="${c.id}">Historique</button><button class="btn btn-sm btn-primary" data-newcar="${c.id}">Réserver</button></div>
+  <div class="toolbar">
+    <div class="chips">${Object.entries(F).map(([k,v]) => `<button class="chip ${ui.fleetFilter===k?"on":""}" data-ff="${k}">${v} <b>${db.cars.filter(c => k==="all" || carStatus(c)===k).length}</b></button>`).join("")}</div>
+    <span class="grow"></span><button class="btn btn-lg" id="addCar">${IC.plus}Ajouter une voiture</button>
+  </div>
+  <div class="cars">${cars.map(c => {
+    const s = carStatus(c), nx = nextBooking(c), on = db.bookings.find(b => b.carId === c.id && b.status === "ongoing"), mt = carMaintNow(c);
+    const line = s === "rented" ? `Chez <b>${esc(clientById(on.clientId)?.name)}</b> jusqu'au <b>${fmtD(on.end)}</b>` : s === "maint" ? `<b>${esc(mt.reason)}</b> · jusqu'au ${fmtD(mt.to)}` : nx ? `Libre jusqu'au <b>${fmtD(nx.start)}</b>` : "Libre, rien de prévu";
+    const w = al.filter(a => a.car === c.id).sort((a,b) => (a.lvl==="crit"?0:1) - (b.lvl==="crit"?0:1))[0];
+    return `<article class="ccar" role="button" tabindex="0" data-car="${c.id}">
+      <div class="ph"><img src="${esc(c.photo)}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">${stCar(s)}</div>
+      <div class="bd"><div class="t"><h3>${esc(carName(c))}</h3><span class="pr">${c.price} DH<small> / j</small></span></div>
+        <div class="ln">${line}</div>
+        ${w ? `<div class="warn-line ${w.lvl}">${IC[w.ic]}${esc(w.t.split(" — ")[0])} · ${esc(w.s.replace(/^À faire avant le |^Expire le /,""))}</div>` : ""}
       </div></article>`;
-  }).join("")}</div>`;
+  }).join("") || `<div class="empty-box">Aucune voiture dans ce filtre.</div>`}</div>`;
+  $$("[data-ff]").forEach(b => b.onclick = () => { ui.fleetFilter = b.dataset.ff; render(); });
   $("#addCar").onclick = () => carForm(null);
-  $$("[data-maint]").forEach(b => b.onclick = e => { e.stopPropagation(); maintForm(b.dataset.maint); });
-  $$("[data-hist]").forEach(b => b.onclick = e => { e.stopPropagation(); carHistory(b.dataset.hist); });
-  $$("[data-newcar]").forEach(b => b.onclick = e => { e.stopPropagation(); bookingForm(null, { carId:b.dataset.newcar }); });
   bindCommon();
+}
+
+/* one sheet per car: state, quick actions, documents, upcoming rentals */
+function carDetail(id){
+  const c = carById(id); if (!c) return;
+  const s = carStatus(c), on = db.bookings.find(b => b.carId === id && b.status === "ongoing"), mt = carMaintNow(c);
+  const up = db.bookings.filter(b => b.carId === id && ["pending","confirmed"].includes(b.status)).sort((a,b)=>new Date(a.start)-new Date(b.start));
+  const lvl = n => n <= 10 ? "crit" : n <= 30 ? "warn" : "";
+  const kmLeft = c.nextServiceKm - c.km;
+  openDrawer(esc(carName(c)), `
+    <img src="${esc(c.photo)}" alt="" style="width:100%;aspect-ratio:16/8;object-fit:cover;border-radius:14px;background:#0d0d10" onerror="this.remove()">
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">${stCar(s)}<span class="num muted">${esc(c.plate)} · ${c.price} DH / jour</span></div>
+    ${s === "rented" ? item({ attrs:`data-bk="${on.id}"`, lead:`<span class="avatar">${initials(clientById(on.clientId)?.name)}</span>`, title:`Chez ${esc(clientById(on.clientId)?.name)}`, sub:`Retour ${fmtDT(on.end)}`, right: isLate(on) ? `<span class="st st-late">En retard</span>` : "" })
+      : s === "maint" ? `<div class="box"><b style="color:var(--ivory)">${esc(mt.reason)}</b><div class="muted">Jusqu'au ${fmtDY(mt.to)}</div></div>` : ""}
+    <div class="quick">
+      <button class="btn" id="qBook">${IC.plus}Réserver</button>
+      <button class="btn" id="qMaint">${IC.wrench}Maintenance</button>
+      <button class="btn" id="qEdit">${IC.doc}Modifier</button>
+    </div>
+    <div class="box"><h4>Documents & entretien</h4>
+      <div class="doc ${lvl(daysTo(c.insuranceUntil))}"><span>Assurance</span><b>${fmtDY(c.insuranceUntil)}</b></div>
+      <div class="doc ${lvl(daysTo(c.inspectionUntil))}"><span>Visite technique</span><b>${fmtDY(c.inspectionUntil)}</b></div>
+      <div class="doc ${kmLeft<=0?"crit":kmLeft<=1000?"warn":""}"><span>Prochaine vidange</span><b>${kmLeft<=0 ? "dépassée" : `dans ${kmLeft.toLocaleString("fr-FR")} km`}</b></div>
+      <div class="doc ${c.vignetteYear < new Date().getFullYear() ? "warn" : ""}"><span>Vignette</span><b>${c.vignetteYear}</b></div>
+      <div class="doc"><span>Kilométrage</span><b>${c.km.toLocaleString("fr-FR")} km</b></div>
+    </div>
+    <div class="sec"><div class="sec-head"><h2 class="h-display" style="font-size:1.15rem">À venir</h2><span class="count">${up.length}</span></div>
+      <div class="items">${up.length ? up.map(bookingItem).join("") : `<div class="empty-box">Aucune réservation à venir.</div>`}</div></div>
+    <button class="btn btn-lg" id="qHist">Voir tout l'historique</button>`);
+  $("#qBook").onclick = () => bookingForm(null, { carId:id });
+  $("#qMaint").onclick = () => maintForm(id);
+  $("#qEdit").onclick = () => carForm(id);
+  $("#qHist").onclick = () => carHistory(id);
+  bindCommon($("#drawer"));
 }
 
 /* ============================================================
@@ -843,18 +948,15 @@ function vFleet(){
 function vClients(){
   const q = ui.clSearch.trim().toLowerCase();
   const stats = c => { const bs = db.bookings.filter(b => b.clientId === c.id && live(b) && b.status !== "pending");
-    return { n: bs.length, spent: bs.reduce((s,b)=>s+b.paid,0), last: bs.sort((a,b)=>new Date(b.start)-new Date(a.start))[0], due: bs.reduce((s,b)=>s+due(b),0) }; };
+    return { n: bs.length, spent: bs.reduce((s,b)=>s+b.paid,0), due: bs.reduce((s,b)=>s+due(b),0) }; };
   const rows = db.clients.filter(c => !q || [c.name, c.phone, c.city, c.cin, c.passport].join(" ").toLowerCase().includes(q))
     .map(c => ({ c, s: stats(c) })).sort((a,b) => b.s.spent - a.s.spent);
   $("#view").innerHTML = `
-  <div class="toolbar"><label class="search">${IC.search}<input class="input" id="clQ" placeholder="Nom, téléphone, CIN…" value="${esc(ui.clSearch)}"></label><span class="grow"></span><button class="btn" id="addClient">${IC.plus}Nouveau client</button></div>
-  <div class="table-wrap"><table>
-    <thead><tr><th>Client</th><th>Ville</th><th>Pièce d'identité</th><th class="r">Locations</th><th class="r">Total payé</th><th>Dernière location</th><th></th></tr></thead>
-    <tbody>${rows.map(({c, s}) => `<tr class="click" data-client="${c.id}"><td><b style="color:var(--ivory);font-weight:600">${esc(c.name)}</b><span class="sub num">${esc(c.phone)}</span></td>
-      <td class="muted">${esc(c.city)}</td><td class="num muted">${esc(c.cin || c.passport || "—")}</td><td class="r num">${s.n}</td><td class="r num">${dh(s.spent)}</td>
-      <td class="muted">${s.last ? `${fmtDY(s.last.start)} · ${esc(carById(s.last.carId)?.model)}` : "—"}</td>
-      <td>${c.blacklisted ? `<span class="st st-late">Liste noire</span>` : s.due ? `<span class="st st-pending">Doit ${dh(s.due)}</span>` : ""}</td></tr>`).join("") || `<tr><td colspan="7" class="empty">Aucun client trouvé.</td></tr>`}</tbody>
-  </table></div>`;
+  <div class="toolbar"><label class="search">${IC.search}<input class="input" id="clQ" placeholder="Nom, téléphone, CIN…" value="${esc(ui.clSearch)}"></label><span class="grow"></span><button class="btn btn-lg" id="addClient">${IC.plus}Nouveau client</button></div>
+  <div class="items">${rows.map(({c, s}) => item({ attrs:`data-client="${c.id}"`, lead:`<span class="avatar">${initials(c.name)}</span>`, title: esc(c.name),
+      sub:`${esc(c.phone)}${c.city ? ` · ${esc(c.city)}` : ""}`,
+      right:`${c.blacklisted ? `<span class="st st-late">Liste noire</span>` : s.due ? `<span class="st st-pending">Doit ${dh(s.due)}</span>` : ""}<div class="it-amt">${dh(s.spent)}<small>${s.n} location(s)</small></div>` })).join("")
+    || `<div class="empty-box">Aucun client trouvé.</div>`}</div>`;
   const qi = $("#clQ"); qi.oninput = () => { ui.clSearch = qi.value; const pos = qi.selectionStart; render(); const n = $("#clQ"); n.focus(); n.setSelectionRange(pos,pos); };
   $("#addClient").onclick = () => clientForm(null);
   bindCommon();
@@ -1238,7 +1340,7 @@ function carHistory(id){
   const rev = bs.filter(b => live(b) && b.status !== "pending").reduce((s,b)=>s+b.total,0), cost = ex.reduce((s,e)=>s+e.amount,0);
   openDrawer(`Historique · ${esc(c.model)}`, `
     <div class="box"><div class="money"><div><small>CA total</small><b>${dh(rev)}</b></div><div><small>Dépenses</small><b>${dh(cost)}</b></div><div><small>Locations</small><b>${bs.filter(b=>b.status==="completed").length}</b></div></div></div>
-    <div class="box"><h4>Locations</h4>${bs.slice(0,40).map(b => `<div class="row" data-bk="${b.id}" style="cursor:pointer"><div class="main-t"><b>${esc(clientById(b.clientId)?.name)}</b><span class="num">${fmtD(b.start)} → ${fmtDY(b.end)} · ${dh(b.total)}</span></div>${stBk(b)}</div>`).join("") || `<div class="muted">Aucune.</div>`}</div>`);
+    <div class="items">${bs.slice(0,40).map(bookingItem).join("") || `<div class="empty-box">Aucune location.</div>`}</div>`);
   bindCommon($("#drawer"));
 }
 
@@ -1253,7 +1355,7 @@ function clientDetail(id){
       <dt>${c.cin ? "CIN" : "Passeport"}</dt><dd class="num">${esc(c.cin || c.passport || "—")}</dd><dt>Permis</dt><dd class="num">${esc(c.licence || "—")}</dd>
       <dt>Locations</dt><dd>${bs.filter(b=>b.status==="completed").length}</dd><dt>Total payé</dt><dd class="num">${dh(spent)}</dd></dl></div>
     ${c.notes ? `<div class="box"><h4>Notes</h4>${esc(c.notes)}</div>` : ""}
-    <div class="box"><h4>Historique</h4>${bs.map(b => `<div class="row" data-bk="${b.id}" style="cursor:pointer"><div class="main-t"><b>${esc(carName(carById(b.carId)))}</b><span class="num">${fmtD(b.start)} → ${fmtDY(b.end)} · ${dh(b.total)}</span></div>${stBk(b)}</div>`).join("") || `<div class="muted">Aucune location.</div>`}</div>`,
+    <div class="sec"><div class="sec-head"><h2 class="h-display" style="font-size:1.15rem">Locations</h2><span class="count">${bs.length}</span></div><div class="items">${bs.map(bookingItem).join("") || `<div class="empty-box">Aucune location.</div>`}</div></div>`,
     `<a class="btn btn-wa" target="_blank" rel="noopener" href="${waLink(c.phone, `Bonjour ${c.name.split(" ")[0]}, ici ${db.agency.name}.`)}">${IC.wa}WhatsApp</a><button class="btn btn-primary" id="clNew">Nouvelle réservation</button><button class="btn" id="clEdit">Modifier</button>`);
   $("#clNew").onclick = () => { bookingForm(null, {}); $("#fCl").value = id; $("#fCl").dispatchEvent(new Event("change")); };
   $("#clEdit").onclick = () => clientForm(id);
@@ -1307,7 +1409,8 @@ function expenseForm(){
    ============================================================ */
 function bindCommon(root = document){
   $$("[data-bk]", root).forEach(el => el.onclick = e => { if (e.target.closest("[data-act]")) return; bookingDetail(el.dataset.bk); });
-  $$("[data-car]", root).forEach(el => el.onclick = e => { if (e.target.closest("button:not([data-car])")) return; carForm(el.dataset.car); });
+  $$("[data-car]", root).forEach(el => el.onclick = e => { if (e.target.closest("button:not([data-car])")) return; carDetail(el.dataset.car); });
+  $$('[role="button"]', root).forEach(el => el.onkeydown = e => { if ((e.key === "Enter" || e.key === " ") && e.target === el) { e.preventDefault(); el.click(); } });
   $$("[data-client]", root).forEach(el => el.onclick = () => clientDetail(el.dataset.client));
   $$("[data-go]", root).forEach(el => el.onclick = () => go(el.dataset.go));
   bindActs(root === document ? $("#view") : root);
